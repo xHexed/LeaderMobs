@@ -10,7 +10,6 @@ import org.bukkit.entity.Entity;
 
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.regex.Matcher;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 import static com.github.xhexed.leadermobs.Utils.*;
@@ -64,8 +63,7 @@ public class MobListener {
         final String mainMessage = config.getString("Messages.MobDead.message", "");
         for (final Double dam : pos) {
             String msgCopy = mainMessage;
-            final Matcher place_prefix = PLACE_COLOR.matcher(msgCopy != null ? msgCopy : "");
-            msgCopy = place_prefix.replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlaceColors." + place : "PlaceColors.default", ""));
+            msgCopy = PLACE_PREFIX.matcher(msgCopy != null ? msgCopy : "").replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlaceColors." + place : "PlaceColors.default", ""));
             msgCopy = DAMAGE_POS.matcher(msgCopy).replaceAll(Integer.toString(place));
             final String name = damageToValue.get(dam);
             msgCopy = PLAYER_NAME.matcher(msgCopy).replaceAll(name);

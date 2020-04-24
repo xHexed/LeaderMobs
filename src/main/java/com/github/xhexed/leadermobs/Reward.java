@@ -73,7 +73,7 @@ public class Reward extends Thread {
                 entry.getValue().stream()
                         .map(command -> PLAYER_NAME.matcher(command).replaceAll(Objects.requireNonNull(Bukkit.getPlayer(data.get(place))).getName()))
                         .map(command -> DAMAGE_POS.matcher(command).replaceAll(place.toString()))
-                        .forEach(command -> instance.getServer().dispatchCommand(Bukkit.getConsoleSender(), command));
+                        .forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command));
             }
         }
     }

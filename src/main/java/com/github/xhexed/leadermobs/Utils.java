@@ -14,7 +14,7 @@ public class Utils {
     public static final Pattern LEVEL = Pattern.compile("%mob_level%");
     public static final Pattern PLAYER_NAME = Pattern.compile("%player_name%");
     public static final Pattern NAME = Pattern.compile("%mob_name%");
-    public static final Pattern PLACE_COLOR = Pattern.compile("%place_color%");
+    public static final Pattern PLACE_PREFIX = Pattern.compile("%place_prefix%");
     public static final Pattern POS_X = Pattern.compile("%x%");
     public static final Pattern POS_Y = Pattern.compile("%y%");
     public static final Pattern POS_Z = Pattern.compile("%z%");

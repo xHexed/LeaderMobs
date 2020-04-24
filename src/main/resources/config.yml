@@ -21,7 +21,7 @@ Messages:
     header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
     footer: "&8&l&m---&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m---"
     #Placeholders avalable: %player_name%, %damage%, %percentage%
-    message: "    %place_color%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+    message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
   ToggleON: "&8<&a!&8>&7 You have successfully &aenabled&7 the broadcaster messages!"
   ToggleOFF: "&8<&c!&8>&7 You have successfully &cdisabled&7 the broadcaster messages!"
 
