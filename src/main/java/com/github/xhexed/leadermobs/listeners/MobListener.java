@@ -19,7 +19,7 @@ public class MobListener {
     public static final Map<Entity, HashMap<String, Double>> data = new HashMap<>();
 
     public static void onMobSpawn(final String mobname, final int x, final int y, final int z) {
-        if (LeaderMobs.broadcast) return;
+        if (!LeaderMobs.broadcast) return;
         for (String message : getInstance().getConfig().getStringList("Messages.MobSpawn.messages")) {
             message = NAME.matcher(message).replaceAll(ChatColor.stripColor(mobname));
             message = POS_X.matcher(message).replaceAll(Integer.toString(x));

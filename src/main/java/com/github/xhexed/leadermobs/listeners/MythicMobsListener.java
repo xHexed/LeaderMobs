@@ -32,7 +32,7 @@ public class MythicMobsListener implements Listener {
     public void onDamage(final EntityDamageByEntityEvent event) {
         final Entity entity = event.getEntity();
         if (!helper.isMythicMob(entity)) return;
-        if (config.getBoolean("Blacklist.Whitelist") != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(entity).getType().getInternalName())) return;
+        if (config.getBoolean("Blacklist.Whitelist", false) != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(entity).getType().getInternalName())) return;
         final Entity damager = event.getDamager();
         if (damager.hasMetadata("NPC") || !(damager instanceof Player)) return;
         MobListener.onMobDamage((Player) damager, entity, event.getFinalDamage());
