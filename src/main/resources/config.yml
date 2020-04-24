@@ -1,0 +1,34 @@
+version: 1
+debug: false
+
+PlayersRequired: 1 #This is to prevent spam if there's only 1 or 2 people killing the boss privately, there's no limit!
+PlacesToBroadcast: 10 #How much places to broadcast.
+PlacePrefix:
+  1: "&a"
+  2: "&b"
+  3: "&e"
+  default: "&6"
+
+Messages:
+  broadcast: true
+  #Placeholders avalable: %place_color%, %place%, %mob_name%, %percentage%
+  MobSpawn:
+    messages:
+      - "&8&l&m------<--------------->------"
+      - "   &8<&a!&8> &7Mob named: %mob_name% spawned at (x: %x%, y: %y%, z: %z%)"
+      - "&8&l&m------<--------------->------"
+  MobDead:
+    header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
+    footer: "&8&l&m---&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m---"
+    #Placeholders avalable: %player_name%, %damage%, %percentage%
+    message: "    %place_color%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+  ToggleON: "&8<&a!&8>&7 You have successfully &aenabled&7 the broadcaster messages!"
+  ToggleOFF: "&8<&c!&8>&7 You have successfully &cdisabled&7 the broadcaster messages!"
+
+Blacklist:
+  #Should the blacklist acted as whitelist?
+  Whitelist: false
+  Boss:
+    - "test"
+  MythicMobs:
+    - "test"
