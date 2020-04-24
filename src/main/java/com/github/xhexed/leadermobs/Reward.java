@@ -1,6 +1,8 @@
 package com.github.xhexed.leadermobs;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -44,6 +46,8 @@ public class Reward extends Thread {
                     instance.debug("Place: " + key + ", commands: " + reward_command);
                 }
             });
+            final Server server = instance.getServer();
+            final CommandSender sender = instance.getServer().getConsoleSender();
             for (final Map.Entry<Integer, List<String>> entry : rewards_final.entrySet()) {
                 final Integer place = entry.getKey();
                 if (data.get(place) == null) continue;
@@ -51,7 +55,7 @@ public class Reward extends Thread {
                     instance.debug("Pos to exec reward: " + place + " - " + data.get(place));
                     command = PLAYER_NAME.matcher(command).replaceAll(Objects.requireNonNull(Bukkit.getPlayer(data.get(place))).getName());
                     command = DAMAGE_POS.matcher(command).replaceAll(place.toString());
-                    instance.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+                    server.dispatchCommand(sender, command);
                     instance.debug("Executed reward command: " + command + ", for boss: " + mobname);
                 }
             }
@@ -73,7 +77,7 @@ public class Reward extends Thread {
                 entry.getValue().stream()
                         .map(command -> PLAYER_NAME.matcher(command).replaceAll(Objects.requireNonNull(Bukkit.getPlayer(data.get(place))).getName()))
                         .map(command -> DAMAGE_POS.matcher(command).replaceAll(place.toString()))
-                        .forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command));
+                        .forEach(command -> Bukkit.getServer().dispatchCommand(instance.getServer().getConsoleSender(), command));
             }
         }
     }

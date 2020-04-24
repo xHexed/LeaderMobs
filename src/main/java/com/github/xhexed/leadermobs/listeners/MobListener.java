@@ -1,5 +1,6 @@
 package com.github.xhexed.leadermobs.listeners;
 
+import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.Reward;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,6 +19,7 @@ public class MobListener {
     public static final Map<Entity, HashMap<String, Double>> data = new HashMap<>();
 
     public static void onMobSpawn(final String mobname, final int x, final int y, final int z) {
+        if (LeaderMobs.broadcast) return;
         for (String message : getInstance().getConfig().getStringList("Messages.MobSpawn.messages")) {
             message = NAME.matcher(message).replaceAll(ChatColor.stripColor(mobname));
             message = POS_X.matcher(message).replaceAll(Integer.toString(x));
@@ -63,12 +65,13 @@ public class MobListener {
         final String mainMessage = config.getString("Messages.MobDead.message", "");
         for (final Double dam : pos) {
             String msgCopy = mainMessage;
-            msgCopy = PLACE_PREFIX.matcher(msgCopy != null ? msgCopy : "").replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlaceColors." + place : "PlaceColors.default", ""));
+            msgCopy = PLACE_PREFIX.matcher(msgCopy != null ? msgCopy : "").replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlacePrefix." + place : "PlacePrefix.default", ""));
             msgCopy = DAMAGE_POS.matcher(msgCopy).replaceAll(Integer.toString(place));
             final String name = damageToValue.get(dam);
             msgCopy = PLAYER_NAME.matcher(msgCopy).replaceAll(name);
             final DecimalFormat format = new DecimalFormat("#.##");
             msgCopy = DAMAGE.matcher(msgCopy).replaceAll(format.format(dam));
+            getInstance().debug(dam + "" + health);
             msgCopy = PERCENTAGE.matcher(msgCopy).replaceAll(format.format(getPercentage(dam, health)));
             msgCopy = replacePlaceholder(Bukkit.getPlayer(name), msgCopy);
             sendMessage(ChatColor.translateAlternateColorCodes('&', msgCopy));
