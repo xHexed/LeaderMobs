@@ -71,7 +71,7 @@ public class MobListener {
             msgCopy = PLAYER_NAME.matcher(msgCopy).replaceAll(name);
             final DecimalFormat format = new DecimalFormat("#.##");
             msgCopy = DAMAGE.matcher(msgCopy).replaceAll(format.format(dam));
-            getInstance().debug(dam + "" + health);
+            getInstance().debug(dam + " " + health);
             msgCopy = PERCENTAGE.matcher(msgCopy).replaceAll(format.format(getPercentage(dam, health)));
             msgCopy = replacePlaceholder(Bukkit.getPlayer(name), msgCopy);
             sendMessage(ChatColor.translateAlternateColorCodes('&', msgCopy));
