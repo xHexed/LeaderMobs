@@ -51,7 +51,7 @@
     <repositories>
         <repository>
             <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/public/</url>
         </repository>
         <repository>
             <id>placeholderapi</id>
@@ -60,6 +60,10 @@
         <repository>
             <id>mvdw-software</id>
             <url>http://repo.mvdw-software.be/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>nexus</id>
+            <url>http://mvn.lumine.io/repository/maven-public/</url>
         </repository>
     </repositories>
     <dependencies>
