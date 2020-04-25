@@ -27,12 +27,12 @@ public class MobListener {
         }
 
         Bukkit.getOnlinePlayers().forEach((p) -> {
-            sendTitle(p, getMobSpawnMessage(mobName, x, y, z, config.getString("Messages.MobSpawn.title.title", "")),
-                    getMobSpawnMessage(mobName, x, y, z, config.getString("Messages.MobSpawn.title.subTitle", "")),
+            sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(mobName, x, y, z, config.getString("Messages.MobSpawn.title.title", ""))),
+                    ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(mobName, x, y, z, config.getString("Messages.MobSpawn.title.subTitle", ""))),
                     config.getInt("Messages.MobSpawn.title.fadeIn", 0),
                     config.getInt("Messages.MobSpawn.title.stay", 0),
                     config.getInt("Messages.MobSpawn.title.fadeOut", 0));
-            sendActionBar(p, getMobSpawnMessage(mobName, x, y, z, config.getString("Messages.MobSpawn.actionbar.message", "")));
+            sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(mobName, x, y, z, config.getString("Messages.MobSpawn.actionbar.message", ""))));
         });
     }
 
@@ -93,12 +93,12 @@ public class MobListener {
         sendMessage(footer);
 
         Bukkit.getOnlinePlayers().forEach((p) -> {
-            sendTitle(p, getMobDeathMessage(mobName, config.getString("Messages.MobDead.title.title", "")),
-                    getMobDeathMessage(mobName, config.getString("Messages.MobDead.title.subTitle", "")),
+            sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(mobName, config.getString("Messages.MobDead.title.title", ""))),
+                    ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(mobName, config.getString("Messages.MobDead.title.subTitle", ""))),
                     config.getInt("Messages.MobDead.title.fadeIn", 0),
                     config.getInt("Messages.MobDead.title.stay", 0),
                     config.getInt("Messages.MobDead.title.fadeOut", 0));
-            sendActionBar(p, getMobDeathMessage(mobName, config.getString("Messages.MobDead.actionbar.message", "")));
+            sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(mobName, config.getString("Messages.MobDead.actionbar.message", ""))));
         });
 
         new Reward(internalName, rewards);
