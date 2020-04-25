@@ -29,10 +29,33 @@ public class LeaderMobs extends JavaPlugin {
 
     public static LeaderMobs getInstance() { return instance; }
 
+    public void updateConfig() {
+        final FileConfiguration config = getConfig();
+        switch (config.getString("version", "")) {
+            case "":
+                config.addDefault("Messages.MobSpawn.title.title", "%mob_name% spawned");
+                config.addDefault("Messages.MobSpawn.title.subTitle", "x: %x%, y: %y%, z: %z%");
+                config.addDefault("Messages.MobSpawn.title.fadeIn", 1);
+                config.addDefault("Messages.MobSpawn.title.stay", 1);
+                config.addDefault("Messages.MobSpawn.title.fadeOut", 1);
+                config.addDefault("Messages.MobSpawn.actionbar.message", "%mob_name% spawned");
+                config.addDefault("Messages.MobDead.title.title", "%mob_name% spawned");
+                config.addDefault("Messages.MobDead.title.subTitle", "x: %x%, y: %y%, z: %z%");
+                config.addDefault("Messages.MobDead.title.fadeIn", 1);
+                config.addDefault("Messages.MobDead.title.stay", 1);
+                config.addDefault("Messages.MobDead.title.fadeOut", 1);
+                config.addDefault("Messages.MobDead.actionbar.message", "%mob_name% spawned");
+
+                config.set("version", "2");
+                saveConfig();
+        }
+    }
+    
     @Override
     public void onEnable() {
         reload();
-
+        updateConfig();
+        
         final PluginManager manager = getServer().getPluginManager();
         final Logger logger = getLogger();
         if (manager.isPluginEnabled("Boss")) {
