@@ -2,18 +2,21 @@ package com.github.xhexed.leadermobs.commands;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public class Commands implements CommandExecutor {
+public class Commands implements CommandExecutor, TabCompleter {
     private String c(final String text) { return ChatColor.translateAlternateColorCodes('&', text); }
+    private static final List<String> commands = Collections.singletonList("reload");
+    private static final List<String> playerCommands = Collections.singletonList("toggle");
 
     @Override
     public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, @NotNull final String[] args) {
@@ -78,5 +81,23 @@ public class Commands implements CommandExecutor {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull final CommandSender commandSender, @NotNull final Command command, @NotNull final String s, @NotNull final String[] strings) {
+        if (strings.length > 1) {
+            return null;
+        }
+
+        final List<String> commandList = new ArrayList<>(commands);
+        if (commandSender instanceof Player) {
+            commandList.addAll(playerCommands);
+        }
+
+        final List<String> completions = new ArrayList<>();
+        StringUtil.copyPartialMatches(strings[0], commandList, completions);
+        Collections.sort(completions);
+
+        return completions;
     }
 }

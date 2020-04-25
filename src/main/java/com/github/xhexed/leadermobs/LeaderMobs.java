@@ -3,7 +3,7 @@ package com.github.xhexed.leadermobs;
 import com.github.xhexed.leadermobs.commands.Commands;
 import com.github.xhexed.leadermobs.listeners.BossListener;
 import com.github.xhexed.leadermobs.listeners.MythicMobsListener;
-import org.bukkit.Bukkit;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
@@ -31,27 +31,7 @@ public class LeaderMobs extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        instance = this;
-
-        saveDefaultConfig();
-        if (!new File(getDataFolder(), "rewards.yml").exists()) {
-            saveResource("rewards.yml", true);
-        }
-
-        final File datafile = new File(getDataFolder(), "data.yml");
-        if (!datafile.exists()) {
-            try {
-                datafile.createNewFile();
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-        }
-        playerdata = datafile;
-
-        final FileConfiguration config = getConfig();
-
-        debug          = config.getBoolean("debug");
-        broadcast = config.getBoolean("Messages.broadcast");
+        reload();
 
         final PluginManager manager = getServer().getPluginManager();
         final Logger logger = getLogger();
@@ -78,7 +58,32 @@ public class LeaderMobs extends JavaPlugin {
             mvdw = true;
         }
 
-        Objects.requireNonNull(getCommand("lm")).setExecutor(new Commands());
+        final PluginCommand command = Objects.requireNonNull(getCommand("lm"));
+        command.setExecutor(new Commands());
+        command.setTabCompleter(new Commands());
+    }
+
+    public void reload() {
+        instance = this;
+        saveDefaultConfig();
+        if (!new File(getDataFolder(), "rewards.yml").exists()) {
+            saveResource("rewards.yml", true);
+        }
+
+        final File datafile = new File(getDataFolder(), "data.yml");
+        if (!datafile.exists()) {
+            try {
+                datafile.createNewFile();
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
+        }
+        playerdata = datafile;
+
+        final FileConfiguration config = getConfig();
+
+        debug          = config.getBoolean("debug");
+        broadcast = config.getBoolean("Messages.broadcast");
 
         if (debug) {
             final File Debugfolder = new File(getDataFolder() + "/debugs");
@@ -88,7 +93,7 @@ public class LeaderMobs extends JavaPlugin {
             try {
                 final SimpleDateFormat df = new SimpleDateFormat("MM-dd-hh");
                 final String file = "debug_" + df.format(new Date()) + ".txt";
-                logger.info("Debug mode is on, out file: " + file);
+                getLogger().info("Debug mode is on, out file: " + file);
                 debugfile = new File(getDataFolder() + "/debugs", file);
                 final BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(debugfile, true));
                 writer.write(("Server version: " + getServer().getVersion() + '\n').getBytes());
@@ -99,11 +104,6 @@ public class LeaderMobs extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-    }
-
-    public void reload() {
-        Bukkit.getPluginManager().disablePlugin(this);
-        Bukkit.getPluginManager().enablePlugin(this);
     }
 
     @Override
