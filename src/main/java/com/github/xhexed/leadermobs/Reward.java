@@ -27,23 +27,23 @@ public class Reward extends Thread {
         final LeaderMobs instance = LeaderMobs.getInstance();
         final Map<Integer, List<String>> rewards_final = new HashMap<>();
         if (LeaderMobs.debug && data != null) {
-            instance.debug("Start calculating rewards for mob: " + mobname);
+            Utils.debug("Start calculating rewards for mob: " + mobname);
             for (final Map.Entry<Integer, String> entry : data.entrySet()) {
-                instance.debug("Data: Place " + entry.getKey() + ", name: " + entry.getValue());
+                Utils.debug("Data: Place " + entry.getKey() + ", name: " + entry.getValue());
             }
             for (final Integer ignored : data.keySet()) {
                 final YamlConfiguration rconfig = YamlConfiguration.loadConfiguration(new File(instance.getDataFolder(), "rewards.yml"));
                 if (!rconfig.contains(mobname)) {
-                    instance.debug("Rewards for boss: " + mobname + " not found...");
+                    Utils.debug("Rewards for boss: " + mobname + " not found...");
                     interrupt();
                     return;
                 }
                 setRewards(rewards_final, rconfig);
             }
-            instance.debug("Starting calculating final rewards for boss: " + mobname);
+            Utils.debug("Starting calculating final rewards for boss: " + mobname);
             rewards_final.forEach((key, value) -> {
                 for (final String reward_command : value) {
-                    instance.debug("Place: " + key + ", commands: " + reward_command);
+                    Utils.debug("Place: " + key + ", commands: " + reward_command);
                 }
             });
             final Server server = instance.getServer();
@@ -52,11 +52,11 @@ public class Reward extends Thread {
                 final Integer place = entry.getKey();
                 if (data.get(place) == null) continue;
                 for (String command : entry.getValue()) {
-                    instance.debug("Pos to exec reward: " + place + " - " + data.get(place));
+                    Utils.debug("Pos to exec reward: " + place + " - " + data.get(place));
                     command = PLAYER_NAME.matcher(command).replaceAll(Objects.requireNonNull(Bukkit.getPlayer(data.get(place))).getName());
                     command = DAMAGE_POS.matcher(command).replaceAll(place.toString());
                     server.dispatchCommand(sender, command);
-                    instance.debug("Executed reward command: " + command + ", for boss: " + mobname);
+                    Utils.debug("Executed reward command: " + command + ", for boss: " + mobname);
                 }
             }
         }

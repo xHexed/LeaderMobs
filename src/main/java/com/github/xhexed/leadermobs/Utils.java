@@ -8,6 +8,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.*;
@@ -22,6 +26,7 @@ public class Utils {
     public static final Pattern DAMAGE_POS = Pattern.compile("%place%");
     public static final Pattern DAMAGE = Pattern.compile("%damage%");
     public static final Pattern PERCENTAGE = Pattern.compile("%percentage%");
+    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("[%](mob_)([^%]+)[%]");
 
     public static float getPercentage(final Double damage, final Double health) { return (float) (damage / health * 100.0f); }
 
@@ -65,11 +70,39 @@ public class Utils {
         message = POS_Y.matcher(message).replaceAll(Integer.toString(y));
         message = POS_Z.matcher(message).replaceAll(Integer.toString(z));
         message = replacePlaceholder(null, message);
+        final Matcher m = PLACEHOLDER_PATTERN.matcher(message);
+        while (m.find()) {
+            final String format = m.group(1);
+            final int index = format.indexOf("_");
+            if (index <= 0 || index >= format.length()) continue;
+            final String params = format.substring(index + 1);
+            debug(params);
+            message = message.replaceAll(Pattern.quote(m.group()), Matcher.quoteReplacement(onPlaceholderRequest(params)));
+        }
         return message;
+    }
+
+    private static String onPlaceholderRequest(String params) {
+        if (params.startsWith("top_")) {
+            params = params.substring(params.indexOf("top_"));
+            //TODO: Get top players
+        }
+        return params;
     }
 
     public static String getMobDeathMessage(final String mobname, String message) {
         message = NAME.matcher(message).replaceAll(ChatColor.stripColor(mobname));
         return message;
+    }
+
+    public static void debug(final String text) {
+        if (!debug) return;
+        try (final BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(debugfile, true))) {
+            writer.write(('\n' + text).getBytes());
+            writer.flush();
+        }
+        catch (final IOException e) {
+            e.printStackTrace();
+        }
     }
 }

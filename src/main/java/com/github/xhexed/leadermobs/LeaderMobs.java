@@ -25,7 +25,7 @@ public class LeaderMobs extends JavaPlugin {
     public static boolean papi;
     public static boolean mvdw;
     private static LeaderMobs instance;
-    private static File debugfile;
+    public static File debugfile;
 
     public static LeaderMobs getInstance() { return instance; }
 
@@ -135,14 +135,4 @@ public class LeaderMobs extends JavaPlugin {
         HandlerList.unregisterAll(this);
     }
 
-    public void debug(final String text) {
-        if (!debug) return;
-        try (final BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(debugfile, true))) {
-            writer.write(('\n' + text).getBytes());
-            writer.flush();
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

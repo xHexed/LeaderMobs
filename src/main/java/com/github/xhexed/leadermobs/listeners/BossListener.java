@@ -1,5 +1,6 @@
 package com.github.xhexed.leadermobs.listeners;
 
+import com.github.xhexed.leadermobs.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -39,8 +40,8 @@ public class BossListener implements Listener {
         if (damager.hasMetadata("NPC") || !(damager instanceof Player)) return;
 
         MobListener.onMobDamage((Player) damager, entity, event.getFinalDamage());
-        getInstance().debug("Final damage for boss:" + ChatColor.stripColor(entity.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
-        getInstance().debug("Data: " + MobListener.data);
+        Utils.debug("Final damage for boss:" + ChatColor.stripColor(entity.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
+        Utils.debug("Data: " + MobListener.data);
     }
 
     @EventHandler

@@ -80,7 +80,7 @@ public class MobListener {
             message = PLAYER_NAME.matcher(message).replaceAll(name);
             final DecimalFormat format = new DecimalFormat("#.##");
             message = DAMAGE.matcher(message).replaceAll(format.format(dam));
-            getInstance().debug(dam + " " + health);
+            debug(dam + " " + health);
             message = PERCENTAGE.matcher(message).replaceAll(format.format(getPercentage(dam, health)));
             message = replacePlaceholder(Bukkit.getPlayer(name), message);
             sendMessage(ChatColor.translateAlternateColorCodes('&', message));
@@ -102,7 +102,7 @@ public class MobListener {
         });
 
         new Reward(internalName, rewards);
-        getInstance().debug("Final data: " + data);
+        debug("Final data: " + data);
         data.remove(entity);
     }
 }

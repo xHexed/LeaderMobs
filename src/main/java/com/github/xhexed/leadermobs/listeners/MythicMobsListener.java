@@ -1,5 +1,6 @@
 package com.github.xhexed.leadermobs.listeners;
 
+import com.github.xhexed.leadermobs.Utils;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.api.bukkit.BukkitAPIHelper;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
@@ -36,8 +37,8 @@ public class MythicMobsListener implements Listener {
         final Entity damager = event.getDamager();
         if (damager.hasMetadata("NPC") || !(damager instanceof Player)) return;
         MobListener.onMobDamage((Player) damager, entity, event.getFinalDamage());
-        getInstance().debug("Damage for boss: " + ChatColor.stripColor(entity.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
-        getInstance().debug("Data: " + MobListener.data);
+        Utils.debug("Damage for boss: " + ChatColor.stripColor(entity.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
+        Utils.debug("Data: " + MobListener.data);
     }
     
     @EventHandler
