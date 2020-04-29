@@ -1,6 +1,5 @@
 package com.github.xhexed.leadermobs.listeners;
 
-import com.github.xhexed.leadermobs.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,6 +15,7 @@ import org.mineacademy.boss.api.event.BossDeathEvent;
 import org.mineacademy.boss.api.event.BossSpawnEvent;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
+import static com.github.xhexed.leadermobs.Utils.debug;
 
 public class BossListener implements Listener {
     private final FileConfiguration config = getInstance().getConfig();
@@ -25,7 +25,7 @@ public class BossListener implements Listener {
         final String bossName = event.getBoss().getName();
         if (config.getBoolean("Blacklist.Whitelist", false) != config.getStringList("Blacklist.Boss").contains(bossName)) return;
         final Location loc = event.getEntity().getLocation();
-        MobListener.onMobSpawn(bossName, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+        MobListener.onMobSpawn(event.getEntity(), bossName);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -39,9 +39,9 @@ public class BossListener implements Listener {
         final Entity damager = event.getDamager();
         if (damager.hasMetadata("NPC") || !(damager instanceof Player)) return;
 
-        MobListener.onMobDamage((Player) damager, entity, event.getFinalDamage());
-        Utils.debug("Final damage for boss:" + ChatColor.stripColor(entity.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
-        Utils.debug("Data: " + MobListener.data);
+        MobListener.onPlayerDamage((Player) damager, entity, event.getFinalDamage());
+        debug("Final damage for boss:" + ChatColor.stripColor(entity.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
+        debug("Data: " + MobListener.data);
     }
 
     @EventHandler

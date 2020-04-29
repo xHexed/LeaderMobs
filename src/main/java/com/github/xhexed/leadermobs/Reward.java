@@ -13,10 +13,10 @@ import static com.github.xhexed.leadermobs.Utils.DAMAGE_POS;
 import static com.github.xhexed.leadermobs.Utils.PLAYER_NAME;
 
 public class Reward extends Thread {
-    private final HashMap<Integer, String> data;
+    private final Map<Integer, String> data;
     private final String mobname;
 
-    public Reward(final String mobname, final HashMap<Integer, String> data) {
+    public Reward(final String mobname, final Map<Integer, String> data) {
         this.data      = data;
         this.mobname = mobname;
         start();

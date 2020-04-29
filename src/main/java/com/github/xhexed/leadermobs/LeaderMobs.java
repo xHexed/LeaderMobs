@@ -31,8 +31,8 @@ public class LeaderMobs extends JavaPlugin {
 
     public void updateConfig() {
         final FileConfiguration config = getConfig();
-        switch (config.getString("version", "")) {
-            case "":
+        switch (config.getString("version", "none")) {
+            case "none":
                 config.addDefault("Messages.MobSpawn.title.title", "%mob_name% spawned");
                 config.addDefault("Messages.MobSpawn.title.subTitle", "x: %x%, y: %y%, z: %z%");
                 config.addDefault("Messages.MobSpawn.title.fadeIn", 1);
