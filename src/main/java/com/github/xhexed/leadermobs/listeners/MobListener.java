@@ -8,12 +8,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 import static com.github.xhexed.leadermobs.Utils.*;
@@ -21,7 +23,7 @@ import static com.github.xhexed.leadermobs.Utils.*;
 public class MobListener {
     public static final Map<Entity, MobDamageInfo> data = new HashMap<>();
 
-    public static void onMobSpawn(final Entity entity, final String mobName) {
+    static void onMobSpawn(final Entity entity, final String mobName) {
         final Location location = entity.getLocation();
         final int x = location.getBlockX();
         final int y = location.getBlockY();
@@ -44,7 +46,7 @@ public class MobListener {
         });
     }
 
-    public static void onPlayerDamage(final Player player, final Entity entity, final Double damage) {
+    static void onPlayerDamage(final AnimalTamer player, final Entity entity, final Double damage) {
         final Map<String, Double> damageDealtList = data.containsKey(entity) ? data.get(entity).getDamageDealt() : new HashMap<>();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
         if (damageDealtList.containsKey(player.getName())) {
@@ -56,7 +58,7 @@ public class MobListener {
         data.put(entity, new MobDamageInfo(damageDealtList, new HashMap<>()));
     }
 
-    public static void onMobDamage(final Entity entity, final Player player, final Double damage) {
+    static void onMobDamage(final Entity entity, final AnimalTamer player, final Double damage) {
         final Map<String, Double> damageTakenList = data.containsKey(entity) ? data.get(entity).getDamageTaken() : new HashMap<>();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
         if (damageTakenList.containsKey(player.getName())) {
@@ -68,7 +70,7 @@ public class MobListener {
         data.put(entity, new MobDamageInfo(new HashMap<>(), damageTakenList));
     }
 
-    public static void onMobDeath(final Entity entity, final String mobName, final String internalName, final double health) {
+    static void onMobDeath(final Entity entity, final String mobName, final String internalName, final double health) {
         final FileConfiguration config = getInstance().getConfig();
         if (!data.containsKey(entity)) return;
         final MobDamageInfo damageInfo = data.get(entity);
@@ -79,9 +81,7 @@ public class MobListener {
         header = replacePlaceholder(null, header);
         sendMessage(header);
 
-        final List<Pair<Double, String>> damageDealtList = new ArrayList<>();
-        damageInfo.getDamageDealt().forEach((p, d) -> damageDealtList.add(new Pair<>(d, p)));
-        damageDealtList.sort((f, s) -> s.getKey().compareTo(f.getKey()));
+        final List<Pair<Double, String>> damageDealtList = damageInfo.getTopDamageDealt();
 
         final Map<Integer, String> damageDealtRewards = new HashMap<>();
         final String mainMessage = config.getString("Messages.MobDead.damageDealt.message", "");
@@ -118,9 +118,7 @@ public class MobListener {
             sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageDealt.actionbar.message", ""))));
         });
 
-        final List<Pair<Double, String>> damageTakenList = new ArrayList<>();
-        damageInfo.getDamageTaken().forEach((p, d) -> damageTakenList.add(new Pair<>(d, p)));
-        damageTakenList.sort((f, s) -> s.getKey().compareTo(f.getKey()));
+        final List<Pair<Double, String>> damageTakenList = damageInfo.getTopDamageTaken();
 
         String footer = config.getString("Messages.MobDead.damageDealt.footer", "");
         footer = NAME.matcher(footer != null ? footer : "").replaceAll(ChatColor.stripColor(mobName));
@@ -154,7 +152,7 @@ public class MobListener {
             message = PERCENTAGE.matcher(message).replaceAll(format.format(getPercentage(damage, health)));
             message = replacePlaceholder(Bukkit.getPlayer(name), message);
 
-            //sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            sendMessage(ChatColor.translateAlternateColorCodes('&', message));
         }
 
         Bukkit.getOnlinePlayers().forEach((p) -> {

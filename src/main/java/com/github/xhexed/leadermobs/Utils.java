@@ -1,6 +1,5 @@
 package com.github.xhexed.leadermobs;
 
-import com.github.xhexed.leadermobs.data.MobDamageInfo;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -13,7 +12,6 @@ import org.bukkit.entity.Player;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,9 +22,9 @@ public class Utils {
     public static final Pattern PLAYER_NAME = Pattern.compile("%player_name%");
     public static final Pattern NAME = Pattern.compile("%mob_name%");
     public static final Pattern PLACE_PREFIX = Pattern.compile("%place_prefix%");
-    public static final Pattern POS_X = Pattern.compile("%x%");
-    public static final Pattern POS_Y = Pattern.compile("%y%");
-    public static final Pattern POS_Z = Pattern.compile("%z%");
+    private static final Pattern POS_X = Pattern.compile("%x%");
+    private static final Pattern POS_Y = Pattern.compile("%y%");
+    private static final Pattern POS_Z = Pattern.compile("%z%");
     public static final Pattern DAMAGE_POS = Pattern.compile("%place%");
     public static final Pattern DAMAGE = Pattern.compile("%damage%");
     public static final Pattern PERCENTAGE = Pattern.compile("%percentage%");
@@ -55,7 +53,7 @@ public class Utils {
             player.sendTitle(title, subTitle, fadeIn, stay, fadeOut);
         }
         catch (final NoClassDefFoundError ignored) {
-            Bukkit.getConsoleSender().sendMessage("Tried to send title message but not successful. Try using newer version.");
+            Bukkit.getConsoleSender().sendMessage("Title message sent unsuccessful. Try using newer version.");
         }
     }
 
@@ -64,7 +62,7 @@ public class Utils {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
         }
         catch (final NoClassDefFoundError ignored) {
-            Bukkit.getConsoleSender().sendMessage("Tried to send actionbar message but not successful. Try using spigot with newer version.");
+            Bukkit.getConsoleSender().sendMessage("Actionbar message sent unccessful. Try using spigot (or its forks) with newer version.");
         }
     }
 
@@ -78,11 +76,11 @@ public class Utils {
         return message;
     }
 
-    public static String replaceMobPlaceholder(String message, final Entity entity) {
+    private static String replaceMobPlaceholder(String message, final Entity entity) {
         final Matcher m = PLACEHOLDER_PATTERN.matcher(message);
         while (m.find()) {
             final String format = m.group(1);
-            final int index = format.indexOf("_");
+            final int index = format.indexOf('_');
             if (index <= 0 || index >= format.length()) continue;
             final String params = format.substring(index + 1);
             debugConsole(params);
@@ -91,24 +89,28 @@ public class Utils {
         return message;
     }
 
-    public static String onPlaceholderRequest(String params, final Entity entity) {
+    private static String onPlaceholderRequest(String params, final Entity entity) {
         if (params.startsWith("top_dealt_")) {
             params = params.substring(params.indexOf("top_dealt_"));
             debugConsole(params);
 
             final int pos;
-            try {
-                pos = Integer.parseInt(params);
-            }
-            catch (final NumberFormatException ignored) {
-                return "";
-            }
+            try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
-            final MobDamageInfo info = data.get(entity);
-            final Map<String, Double> list = info.getDamageDealt();
-            //TODO: Get top players
+            try { return data.get(entity).getTopDamageDealt().get(pos).getValue(); }
+            catch (final IndexOutOfBoundsException ignored) { return ""; }
         }
-        return params;
+        if (params.startsWith("top_taken_")) {
+            params = params.substring(params.indexOf("top_taken_"));
+            debugConsole(params);
+
+            final int pos;
+            try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
+
+            try { return data.get(entity).getTopDamageTaken().get(pos).getValue(); }
+            catch (final IndexOutOfBoundsException ignored) { return ""; }
+        }
+        return "";
     }
 
     public static String getMobDeathMessage(final Entity entity, final String mobname, String message) {
@@ -129,7 +131,7 @@ public class Utils {
         }
     }
 
-    public static void debugConsole(final String text) {
+    private static void debugConsole(final String text) {
         System.out.println(text);
     }
 }

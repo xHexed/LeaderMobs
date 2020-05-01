@@ -6,7 +6,6 @@ import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent;
 import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,10 +31,9 @@ public class MythicMobsListener implements Listener {
     public void onDamage(final EntityDamageByEntityEvent event) {
         final Entity victim = event.getEntity();
         final Entity damager = event.getDamager();
-        if (damager.hasMetadata("NPC") || victim.hasMetadata("NPC")) return;
 
         if (damager instanceof Player) {
-            if (!helper.isMythicMob(victim)) return;
+            if (damager.hasMetadata("NPC") || !helper.isMythicMob(victim)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
                     != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(victim).getType().getInternalName())) return;
             MobListener.onPlayerDamage((Player) damager, victim, event.getFinalDamage());
@@ -44,11 +42,11 @@ public class MythicMobsListener implements Listener {
         }
 
         if (victim instanceof Player) {
-            if (!helper.isMythicMob(damager)) return;
+            if (victim.hasMetadata("NPC") || !helper.isMythicMob(damager)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
                     != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(damager).getType().getInternalName())) return;
             MobListener.onMobDamage(damager, (Player) victim, event.getFinalDamage());
-            debug("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
+            debug("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
             debug("Data: " + MobListener.data);
         }
     }

@@ -1,16 +1,34 @@
 #Placeholders avalable: %player_name%, %place%
+version: 0
+
 SkeletalMinion: #Boss name
-  1: #Place (top damage)
-    rewards: #Can have unlimited commands!
-    - "msg %player_name% You've dealt most damage!"
-  2: #Place #2
-    rewards:
-    - "msg %player_name% You've dealt the 2nd most damage!"
+  dealt:
+    1: #Place (top damage)
+      rewards: #Can have unlimited commands!
+      - "msg %player_name% You've dealt most damage!"
+    2: #Place #2
+      rewards:
+      - "msg %player_name% You've dealt the 2nd most damage!"
+  taken:
+    1: #Place (top damage)
+      rewards: #Can have unlimited commands!
+      - "msg %player_name% You've taken most damage!"
+    2: #Place #2
+      rewards:
+      - "msg %player_name% You've taken the 2nd most damage!"
 
 SkeletalKnight: #Another boss name
-  1:
-    rewards:
-    - "msg %player_name% You've dealt most damage!"
-  2:
-    rewards:
-    - "msg %player_name% You've dealt the 2nd most damage!"
+  dealt:
+    1:
+      rewards:
+      - "msg %player_name% You've dealt most damage!"
+    2:
+      rewards:
+      - "msg %player_name% You've dealt the 2nd most damage!"
+  taken:
+    1:
+      rewards:
+      - "msg %player_name% You've taken most damage!"
+    2:
+      rewards:
+      - "msg %player_name% You've taken the 2nd most damage!"
