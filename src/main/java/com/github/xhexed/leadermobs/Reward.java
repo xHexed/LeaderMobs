@@ -58,7 +58,7 @@ public class Reward extends Thread {
     }
 
     private void setRewards(final Map<? super Integer, ? super List<String>> rewards, final ConfigurationSection config) {
-        Objects.requireNonNull(config.getConfigurationSection(mobname + "dealt")).getKeys(false)
+        Objects.requireNonNull(config.getConfigurationSection(mobname + ".dealt")).getKeys(false)
                 .forEach(place -> rewards.put(
                         Integer.parseInt(place),
                         new ArrayList<>(config.getStringList(mobname + ".dealt." + place + ".rewards"))));
