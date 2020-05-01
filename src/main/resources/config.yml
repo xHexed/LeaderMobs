@@ -48,14 +48,14 @@ Messages:
       footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
       #Placeholders avalable: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
       message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
-        title:
-          title: "%mob_name% died."
-          subTitle: "1st damage dealt: %mob_top_taken_1%"
-          fadeIn: 1
-          stay: 1
-          fadeOut: 1
-        actionbar:
-          message: "%mob_name% died"
+      title:
+        title: "%mob_name% died."
+        subTitle: "1st damage dealt: %mob_top_taken_1%"
+        fadeIn: 1
+        stay: 1
+        fadeOut: 1
+      actionbar:
+        message: "%mob_name% died"
     damageTaken:
       header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
       footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
