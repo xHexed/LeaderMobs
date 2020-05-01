@@ -81,7 +81,7 @@ public class MobListener {
         for (int place = 1; place <= damageDealtList.size(); place++) {
             if (place >= config.getInt("PlacesToBroadcast")) break;
 
-            final Pair<Double, UUID> info = damageDealtList.get(place);
+            final Pair<Double, UUID> info = damageDealtList.get(place - 1);
 
             final Double damage = info.getKey();
             final UUID uuid = info.getValue();
@@ -124,7 +124,7 @@ public class MobListener {
         for (int place = 1; place <= damageTakenList.size(); place++) {
             if (place >= config.getInt("PlacesToBroadcast")) break;
 
-            final Pair<Double, UUID> info = damageTakenList.get(place);
+            final Pair<Double, UUID> info = damageTakenList.get(place - 1);
 
             final Double damage = info.getKey();
             final UUID uuid = info.getValue();
