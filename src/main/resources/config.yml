@@ -11,7 +11,7 @@ PlacePrefix:
   default: "&6"
 
 Damage:
-  required: 0 #How much damage the player has to deal to get included to the leaderboard, set to 0 to disable
+  required: 0 #How much damage the player has to dealt to get included to the leaderboard, set to 0 to disable
 
 Warmup:
   damage: 1 #How much damage the mob have to take to start the leaderboard, set to 0 to disable
@@ -19,6 +19,7 @@ Warmup:
     interval: 600 #Time for the leaderboard to reset, set to 0 to disable
 
 Reset:
+  resetHealth: true #Will the boss reset its health?
   damage: 1 #How much damage the mob have to take for the leaderboard to not get cleared
   interval: 600 #Time for the leaderboard to reset
 
@@ -41,15 +42,15 @@ Messages:
     actionbar:
       message: "%mob_name% spawned"
   MobDead:
-    #Placeholders avalable: "mob_top_taken_{pos}", "mob_top_dealt_{pos}"
+    #Placeholders avalable: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
     damageDealt:
       header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
-        footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
-        #Placeholders avalable: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
-        message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+      footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
+      #Placeholders avalable: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
+      message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
         title:
           title: "%mob_name% died."
-          subTitle: "Rewards are being given..."
+          subTitle: "1st damage dealt: %mob_top_taken_1%"
           fadeIn: 1
           stay: 1
           fadeOut: 1
@@ -61,7 +62,7 @@ Messages:
       message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
       title:
         title: "%mob_name% died."
-        subTitle: "Rewards are being given..."
+        subTitle: "1st damage taken: %mob_top_taken_1%"
         fadeIn: 1
         stay: 1
         fadeOut: 1
