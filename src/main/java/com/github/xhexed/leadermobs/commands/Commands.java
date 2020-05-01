@@ -54,8 +54,8 @@ public class Commands implements CommandExecutor, TabCompleter {
                             return true;
                         }
                         final YamlConfiguration cnf = YamlConfiguration.loadConfiguration(LeaderMobs.playerdata);
-                        if (cnf.getString(sender.getName()) == null) {
-                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.ToggleOFF")));
+                        if (cnf.contains(sender.getName())) {
+                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.Toggle.Off")));
                             cnf.set(sender.getName(), false);
                             try {
                                 cnf.save(LeaderMobs.playerdata);
@@ -64,19 +64,16 @@ public class Commands implements CommandExecutor, TabCompleter {
                             }
                             return true;
                         }
-                        if (cnf.getBoolean(sender.getName())) {
-                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.ToggleOFF")));
+                        if (cnf.getBoolean(sender.getName(), false)) {
+                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.Toggle.Off")));
                             cnf.set(sender.getName(), false);
                         }
                         else {
-                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.ToggleON")));
+                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.Toggle.On")));
                             cnf.set(sender.getName(), true);
                         }
-                        try {
-                            cnf.save(LeaderMobs.playerdata);
-                        } catch (final IOException e) {
-                            e.printStackTrace();
-                        }
+
+                        try { cnf.save(LeaderMobs.playerdata); } catch (final IOException e) { e.printStackTrace(); }
                     }
                 }
             }

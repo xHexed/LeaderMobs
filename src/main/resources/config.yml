@@ -67,8 +67,9 @@ Messages:
         fadeOut: 1
       actionbar:
         message: "%mob_name% died"
-  ToggleON: "&8<&a!&8>&7 You have successfully &aenabled&7 the broadcaster messages!"
-  ToggleOFF: "&8<&c!&8>&7 You have successfully &cdisabled&7 the broadcaster messages!"
+  Toggle:
+    On: "&8<&a!&8>&7 You have successfully &aenabled&7 the broadcaster messages!"
+    Off: "&8<&c!&8>&7 You have successfully &cdisabled&7 the broadcaster messages!"
 
 Blacklist:
   #Should the blacklist acted as whitelist?

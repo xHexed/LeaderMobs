@@ -7,15 +7,13 @@ import javafx.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 
-import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 import static com.github.xhexed.leadermobs.Utils.*;
@@ -47,27 +45,27 @@ public class MobListener {
     }
 
     static void onPlayerDamage(final AnimalTamer player, final Entity entity, final Double damage) {
-        final Map<String, Double> damageDealtList = data.containsKey(entity) ? data.get(entity).getDamageDealt() : new HashMap<>();
+        final Map<UUID, Double> damageDealtList = data.containsKey(entity) ? data.get(entity).getDamageDealt() : new HashMap<>();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
-        if (damageDealtList.containsKey(player.getName())) {
-            damageDealtList.put(player.getName(), damageDealtList.get(player.getName()) + damageFinal);
+        if (damageDealtList.containsKey(player.getUniqueId())) {
+            damageDealtList.put(player.getUniqueId(), damageDealtList.get(player.getUniqueId()) + damageFinal);
         }
         else {
-            damageDealtList.put(player.getName(), damageFinal);
+            damageDealtList.put(player.getUniqueId(), damageFinal);
         }
-        data.put(entity, new MobDamageInfo(damageDealtList, new HashMap<>()));
+        data.put(entity, new MobDamageInfo(damageDealtList, data.get(entity).getDamageTaken()));
     }
 
     static void onMobDamage(final Entity entity, final AnimalTamer player, final Double damage) {
-        final Map<String, Double> damageTakenList = data.containsKey(entity) ? data.get(entity).getDamageTaken() : new HashMap<>();
+        final Map<UUID, Double> damageTakenList = data.containsKey(entity) ? data.get(entity).getDamageTaken() : new HashMap<>();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
-        if (damageTakenList.containsKey(player.getName())) {
-            damageTakenList.put(player.getName(), damageTakenList.get(player.getName()) + damageFinal);
+        if (damageTakenList.containsKey(player.getUniqueId())) {
+            damageTakenList.put(player.getUniqueId(), damageTakenList.get(player.getUniqueId()) + damageFinal);
         }
         else {
-            damageTakenList.put(player.getName(), damageFinal);
+            damageTakenList.put(player.getUniqueId(), damageFinal);
         }
-        data.put(entity, new MobDamageInfo(new HashMap<>(), damageTakenList));
+        data.put(entity, new MobDamageInfo(data.get(entity).getDamageDealt(), damageTakenList));
     }
 
     static void onMobDeath(final Entity entity, final String mobName, final String internalName, final double health) {
@@ -81,31 +79,29 @@ public class MobListener {
         header = replacePlaceholder(null, header);
         sendMessage(header);
 
-        final List<Pair<Double, String>> damageDealtList = damageInfo.getTopDamageDealt();
+        final List<Pair<Double, UUID>> damageDealtList = damageInfo.getTopDamageDealt();
 
-        final Map<Integer, String> damageDealtRewards = new HashMap<>();
+        final List<UUID> topList = new ArrayList<>();
         final String mainMessage = config.getString("Messages.MobDead.damageDealt.message", "");
 
         for (int place = 1; place <= damageDealtList.size(); place++) {
             if (place >= config.getInt("PlacesToBroadcast")) break;
 
-            final Pair<Double, String> info = damageDealtList.get(place);
+            final Pair<Double, UUID> info = damageDealtList.get(place);
 
             final Double damage = info.getKey();
-            final String name = info.getValue();
+            final UUID uuid = info.getValue();
+            final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
 
-            damageDealtRewards.put(place, name);
+            topList.add(uuid);
 
             String message = mainMessage;
             message = PLACE_PREFIX.matcher(message != null ? message : "").replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlacePrefix." + place : "PlacePrefix.default", ""));
             message = DAMAGE_POS.matcher(message).replaceAll(Integer.toString(place));
-            message = PLAYER_NAME.matcher(message).replaceAll(name);
-            final DecimalFormat format = new DecimalFormat("#.##");
-            message = DAMAGE.matcher(message).replaceAll(format.format(damage));
-            debug(damage + " " + health);
-            message = PERCENTAGE.matcher(message).replaceAll(format.format(getPercentage(damage, health)));
-            message = replacePlaceholder(Bukkit.getPlayer(name), message);
-
+            message = PLAYER_NAME.matcher(message).replaceAll(player.getName());
+            message = DAMAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(damage));
+            message = PERCENTAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(getPercentage(damage, health)));
+            message = replacePlaceholder(player, message);
             sendMessage(ChatColor.translateAlternateColorCodes('&', message));
         }
 
@@ -118,8 +114,6 @@ public class MobListener {
             sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageDealt.actionbar.message", ""))));
         });
 
-        final List<Pair<Double, String>> damageTakenList = damageInfo.getTopDamageTaken();
-
         String footer = config.getString("Messages.MobDead.damageDealt.footer", "");
         footer = NAME.matcher(footer != null ? footer : "").replaceAll(ChatColor.stripColor(mobName));
         footer = replacePlaceholder(null, footer);
@@ -130,27 +124,27 @@ public class MobListener {
         _header = replacePlaceholder(null, _header);
         sendMessage(_header);
 
-        final Map<Integer, String> damageTakenRewards = new HashMap<>();
+        final List<Pair<Double, UUID>> damageTakenList = damageInfo.getTopDamageTaken();
+        final Map<Integer, UUID> damageTakenRewards = new HashMap<>();
 
         for (int place = 1; place <= damageTakenList.size(); place++) {
             if (place >= config.getInt("PlacesToBroadcast")) break;
 
-            final Pair<Double, String> info = damageTakenList.get(place);
+            final Pair<Double, UUID> info = damageTakenList.get(place);
 
             final Double damage = info.getKey();
-            final String name = info.getValue();
+            final UUID uuid = info.getValue();
 
-            damageTakenRewards.put(place, name);
+            damageTakenRewards.put(place, uuid);
 
             String message = mainMessage;
             message = PLACE_PREFIX.matcher(message != null ? message : "").replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlacePrefix." + place : "PlacePrefix.default", ""));
             message = DAMAGE_POS.matcher(message).replaceAll(Integer.toString(place));
-            message = PLAYER_NAME.matcher(message).replaceAll(name);
-            final DecimalFormat format = new DecimalFormat("#.##");
-            message = DAMAGE.matcher(message).replaceAll(format.format(damage));
+            message = PLAYER_NAME.matcher(message).replaceAll(Bukkit.getOfflinePlayer(uuid).getName());
+            message = DAMAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(damage));
             debug(damage + " " + health);
-            message = PERCENTAGE.matcher(message).replaceAll(format.format(getPercentage(damage, health)));
-            message = replacePlaceholder(Bukkit.getPlayer(name), message);
+            message = PERCENTAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(getPercentage(damage, health)));
+            message = replacePlaceholder(Bukkit.getPlayer(uuid), message);
 
             sendMessage(ChatColor.translateAlternateColorCodes('&', message));
         }
@@ -169,7 +163,8 @@ public class MobListener {
         _footer = replacePlaceholder(null, _footer);
         sendMessage(_footer);
 
-        new Reward(internalName, damageDealtRewards);
+        new Reward(internalName, topList);
+
         debug("Final data: " + data);
         data.remove(entity);
     }

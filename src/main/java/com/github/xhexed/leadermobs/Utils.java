@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +30,7 @@ public class Utils {
     public static final Pattern DAMAGE = Pattern.compile("%damage%");
     public static final Pattern PERCENTAGE = Pattern.compile("%percentage%");
     private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("[%](lm_)([^%]+)[%]");
+    public static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#.##");
 
     public static float getPercentage(final Double damage, final Double health) { return (float) (damage / health * 100.0f); }
 
@@ -71,8 +73,8 @@ public class Utils {
         message = POS_X.matcher(message).replaceAll(Integer.toString(x));
         message = POS_Y.matcher(message).replaceAll(Integer.toString(y));
         message = POS_Z.matcher(message).replaceAll(Integer.toString(z));
-        message = replacePlaceholder(null, message);
         message = replaceMobPlaceholder(message, entity);
+        message = replacePlaceholder(null, message);
         return message;
     }
 
@@ -97,7 +99,7 @@ public class Utils {
             final int pos;
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
-            try { return data.get(entity).getTopDamageDealt().get(pos).getValue(); }
+            try { return Bukkit.getOfflinePlayer(data.get(entity).getTopDamageDealt().get(pos).getValue()).getName(); }
             catch (final IndexOutOfBoundsException ignored) { return ""; }
         }
         if (params.startsWith("top_taken_")) {
@@ -107,7 +109,7 @@ public class Utils {
             final int pos;
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
-            try { return data.get(entity).getTopDamageTaken().get(pos).getValue(); }
+            try { return Bukkit.getOfflinePlayer(data.get(entity).getTopDamageTaken().get(pos).getValue()).getName(); }
             catch (final IndexOutOfBoundsException ignored) { return ""; }
         }
         return "";
@@ -115,8 +117,8 @@ public class Utils {
 
     public static String getMobDeathMessage(final Entity entity, final String mobname, String message) {
         message = NAME.matcher(message).replaceAll(ChatColor.stripColor(mobname));
-        message = replacePlaceholder(null, message);
         message = replaceMobPlaceholder(message, entity);
+        message = replacePlaceholder(null, message);
         return message;
     }
 

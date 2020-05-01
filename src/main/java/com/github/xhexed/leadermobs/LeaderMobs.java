@@ -31,7 +31,7 @@ public class LeaderMobs extends JavaPlugin {
 
     private void updateConfig() {
         final FileConfiguration config = getConfig();
-        switch (config.getInt("version", 0)) {
+        switch (config.getInt("version", 1)) {
             case 1:
                 config.addDefault("Messages.MobSpawn.title.title", "%mob_name% spawned");
                 config.addDefault("Messages.MobSpawn.title.subTitle", "x: %x%, y: %y%, z: %z%");
@@ -47,13 +47,15 @@ public class LeaderMobs extends JavaPlugin {
                 config.addDefault("Messages.MobDead.actionbar.message", "%mob_name% spawned");
             case 2:
                 //TODO: Update config :(
-                config.set("version", 2);
+                config.set("version", 3);
                 saveConfig();
         }
     }
     
     @Override
     public void onEnable() {
+        instance = this;
+        saveDefaultConfig();
         reload();
         updateConfig();
         
@@ -88,8 +90,7 @@ public class LeaderMobs extends JavaPlugin {
     }
 
     public void reload() {
-        instance = this;
-        saveDefaultConfig();
+        reloadConfig();
         if (!new File(getDataFolder(), "rewards.yml").exists()) {
             saveResource("rewards.yml", true);
         }
