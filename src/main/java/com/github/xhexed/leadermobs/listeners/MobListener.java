@@ -136,7 +136,6 @@ public class MobListener {
             message = DAMAGE_POS.matcher(message).replaceAll(Integer.toString(place));
             message = PLAYER_NAME.matcher(message).replaceAll(Bukkit.getOfflinePlayer(uuid).getName());
             message = DAMAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(damage));
-            debug(damage + " " + health);
             message = PERCENTAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(getPercentage(damage, health)));
             message = replacePlaceholder(Bukkit.getPlayer(uuid), message);
 
