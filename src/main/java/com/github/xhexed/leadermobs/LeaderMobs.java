@@ -21,18 +21,18 @@ import java.util.logging.Logger;
 public class LeaderMobs extends JavaPlugin {
     public static File playerdata;
     public static boolean broadcast;
-    public static boolean debug;
-    public static boolean papi;
-    public static boolean mvdw;
+    static boolean debug;
+    static boolean papi;
+    static boolean mvdw;
     private static LeaderMobs instance;
-    public static File debugfile;
+    static File debugfile;
 
     public static LeaderMobs getInstance() { return instance; }
 
-    public void updateConfig() {
+    private void updateConfig() {
         final FileConfiguration config = getConfig();
-        switch (config.getString("version", "none")) {
-            case "none":
+        switch (config.getInt("version", 0)) {
+            case 1:
                 config.addDefault("Messages.MobSpawn.title.title", "%mob_name% spawned");
                 config.addDefault("Messages.MobSpawn.title.subTitle", "x: %x%, y: %y%, z: %z%");
                 config.addDefault("Messages.MobSpawn.title.fadeIn", 1);
@@ -45,8 +45,9 @@ public class LeaderMobs extends JavaPlugin {
                 config.addDefault("Messages.MobDead.title.stay", 1);
                 config.addDefault("Messages.MobDead.title.fadeOut", 1);
                 config.addDefault("Messages.MobDead.actionbar.message", "%mob_name% spawned");
-
-                config.set("version", "2");
+            case 2:
+                //TODO: Update config :(
+                config.set("version", 2);
                 saveConfig();
         }
     }

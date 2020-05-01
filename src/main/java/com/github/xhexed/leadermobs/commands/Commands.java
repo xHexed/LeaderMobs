@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class Commands implements CommandExecutor, TabCompleter {
             return null;
         }
 
-        final List<String> commandList = new ArrayList<>(commands);
+        final Collection<String> commandList = new ArrayList<>(commands);
         if (commandSender instanceof Player) {
             commandList.addAll(playerCommands);
         }
