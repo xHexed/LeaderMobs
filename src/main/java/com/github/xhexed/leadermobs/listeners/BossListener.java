@@ -36,7 +36,7 @@ public class BossListener implements Listener {
             if (damager.hasMetadata("NPC") || !BossAPI.isBoss(victim)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
                     != config.getStringList("Blacklist.Boss").contains(BossAPI.getBoss(entity).getName())) return;
-            MobListener.onPlayerDamage((Player) damager, victim, event.getFinalDamage());
+            MobListener.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
             debug("Data: " + MobListener.data);
         }
@@ -45,13 +45,13 @@ public class BossListener implements Listener {
             if (victim.hasMetadata("NPC") || !BossAPI.isBoss(damager)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
                     != config.getStringList("Blacklist.Boss").contains(BossAPI.getBoss(entity).getName())) return;
-            MobListener.onMobDamage(damager, (Player) victim, event.getFinalDamage());
+            MobListener.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
             debug("Data: " + MobListener.data);
         }
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onDeath(final BossDeathEvent e) {
         final Boss boss = e.getBoss();
         MobListener.onMobDeath(e.getEntity(), boss.getSettings().getCustomName(), boss.getName(), boss.getSettings().getHealth());

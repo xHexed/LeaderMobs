@@ -9,7 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 
@@ -22,6 +21,8 @@ public class MobListener {
     public static final Map<Entity, MobDamageInfo> data = new HashMap<>();
 
     static void onMobSpawn(final Entity entity, final String mobName) {
+        data.put(entity, new MobDamageInfo(new HashMap<>(), new HashMap<>()));
+
         final Location location = entity.getLocation();
         final int x = location.getBlockX();
         final int y = location.getBlockY();
@@ -44,27 +45,20 @@ public class MobListener {
         });
     }
 
-    static void onPlayerDamage(final AnimalTamer player, final Entity entity, final Double damage) {
-        final Map<UUID, Double> damageDealtList = data.containsKey(entity) ? data.get(entity).getDamageDealt() : new HashMap<>();
+    static void onPlayerDamage(final UUID uuid, final Entity entity, final Double damage) {
+        final MobDamageInfo mobInfo = data.get(entity);
+        final Map<UUID, Double> damageDealtList = mobInfo.getDamageDealt();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
-        if (damageDealtList.containsKey(player.getUniqueId())) {
-            damageDealtList.put(player.getUniqueId(), damageDealtList.get(player.getUniqueId()) + damageFinal);
-        }
-        else {
-            damageDealtList.put(player.getUniqueId(), damageFinal);
-        }
-        data.put(entity, new MobDamageInfo(damageDealtList, data.get(entity).getDamageTaken()));
+        damageDealtList.put(uuid, damageDealtList.containsKey(uuid) ?
+                damageDealtList.get(uuid) + damageFinal : damageFinal);
+        data.put(entity, new MobDamageInfo(damageDealtList, mobInfo.getDamageTaken()));
     }
 
-    static void onMobDamage(final Entity entity, final AnimalTamer player, final Double damage) {
+    static void onMobDamage(final Entity entity, final UUID uuid, final Double damage) {
         final Map<UUID, Double> damageTakenList = data.containsKey(entity) ? data.get(entity).getDamageTaken() : new HashMap<>();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
-        if (damageTakenList.containsKey(player.getUniqueId())) {
-            damageTakenList.put(player.getUniqueId(), damageTakenList.get(player.getUniqueId()) + damageFinal);
-        }
-        else {
-            damageTakenList.put(player.getUniqueId(), damageFinal);
-        }
+        damageTakenList.put(uuid, damageTakenList.containsKey(uuid) ?
+                damageTakenList.get(uuid) + damageFinal : damageFinal);
         data.put(entity, new MobDamageInfo(data.get(entity).getDamageDealt(), damageTakenList));
     }
 

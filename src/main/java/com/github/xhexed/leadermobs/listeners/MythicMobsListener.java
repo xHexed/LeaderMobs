@@ -36,7 +36,7 @@ public class MythicMobsListener implements Listener {
             if (damager.hasMetadata("NPC") || !helper.isMythicMob(victim)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
                     != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(victim).getType().getInternalName())) return;
-            MobListener.onPlayerDamage((Player) damager, victim, event.getFinalDamage());
+            MobListener.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
             debug("Data: " + MobListener.data);
         }
@@ -45,13 +45,13 @@ public class MythicMobsListener implements Listener {
             if (victim.hasMetadata("NPC") || !helper.isMythicMob(damager)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
                     != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(damager).getType().getInternalName())) return;
-            MobListener.onMobDamage(damager, (Player) victim, event.getFinalDamage());
+            MobListener.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
             debug("Data: " + MobListener.data);
         }
     }
     
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onDeath(final MythicMobDeathEvent e) {
         final ActiveMob mob = e.getMob();
         MobListener.onMobDeath(e.getEntity(), mob.getDisplayName(), e.getMobType().getInternalName(), e.getMobType().getHealth().get());
