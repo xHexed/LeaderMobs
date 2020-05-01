@@ -43,11 +43,11 @@ public class Utils {
     }
 
     public static void sendMessage(final String message) {
-        for (final Player p : Bukkit.getOnlinePlayers()) {
+        Bukkit.getOnlinePlayers().forEach(p -> {
             final YamlConfiguration datacf = YamlConfiguration.loadConfiguration(playerdata);
-            if (datacf.getString(p.getName()) != null && !datacf.getBoolean(p.getName())) continue;
+            if (datacf.getString(p.getName()) != null && !datacf.getBoolean(p.getName())) return;
             p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-        }
+        });
     }
 
     public static void sendTitle(final Player player, final String title, final String subTitle, final int fadeIn, final int stay, final int fadeOut) {

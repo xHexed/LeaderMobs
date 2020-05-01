@@ -2,6 +2,7 @@ package com.github.xhexed.leadermobs.listeners;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.Reward;
+import com.github.xhexed.leadermobs.Utils;
 import com.github.xhexed.leadermobs.data.MobDamageInfo;
 import javafx.util.Pair;
 import org.bukkit.Bukkit;
@@ -30,10 +31,9 @@ public class MobListener {
 
         final FileConfiguration config = getInstance().getConfig();
         if (!LeaderMobs.broadcast) return;
-        for (String message : config.getStringList("Messages.MobSpawn.messages")) {
-            message = getMobSpawnMessage(entity, mobName, x, y, z, message);
-            sendMessage(message);
-        }
+        config.getStringList("Messages.MobSpawn.messages").stream()
+                .map(message -> getMobSpawnMessage(entity, mobName, x, y, z, message))
+                .forEach(Utils::sendMessage);
 
         Bukkit.getOnlinePlayers().forEach((p) -> {
             sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(entity, mobName, x, y, z, config.getString("Messages.MobSpawn.title.title", ""))),
