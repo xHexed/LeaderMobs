@@ -24,7 +24,7 @@ public class MythicMobsListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onSpawn(final MythicMobSpawnEvent event) {
         if (config.getBoolean("Blacklist.Whitelist", false) != config.getStringList("Blacklist.MythicMobs").contains(event.getMobType().getInternalName())) return;
-        MobListener.onMobSpawn(event.getEntity(), event.getMob().getDisplayName());
+        MobListener.onMobSpawn(event.getEntity(), event.getMobType().getDisplayName().get());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -52,8 +52,17 @@ public class MythicMobsListener implements Listener {
     }
     
     @EventHandler(ignoreCancelled = true)
-    public void onDeath(final MythicMobDeathEvent e) {
-        final ActiveMob mob = e.getMob();
-        MobListener.onMobDeath(e.getEntity(), mob.getDisplayName(), e.getMobType().getInternalName(), e.getMobType().getHealth().get());
+    public void onDeath(final MythicMobDeathEvent event) {
+        final ActiveMob mob = event.getMob();
+
+        Object health;
+        try {
+            health = event.getMobType().getHealth().get();
+        }
+        catch (final NoClassDefFoundError e) {
+            health = event.getMobType().getHealth();
+        }
+
+        MobListener.onMobDeath(event.getEntity(), mob.getDisplayName(), event.getMobType().getInternalName(), (Double) health);
     }
 }
