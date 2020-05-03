@@ -43,7 +43,7 @@ public class Reward {
             final UUID uuid = topList.get(i);
             final String player = Bukkit.getOfflinePlayer(uuid).getName();
             debug("Giving reward for " + player);
-            rewards.get(i).stream()
+            rewards.get(i + 1).stream()
                     .map(command -> PLAYER_NAME.matcher(command).replaceAll(player))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
                     .forEach(command -> {
