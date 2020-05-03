@@ -30,7 +30,7 @@ public class MobDamageInfo {
     }
 
     public List<Pair<Double, UUID>> getTopDamageTaken() {
-        final List<Pair<Double, UUID>> topDamageTaken = calculateTop(this.topDamageTaken.getKey(), damageTaken, topDamageDealt.getValue());
+        final List<Pair<Double, UUID>> topDamageTaken = calculateTop(this.topDamageTaken.getKey(), damageTaken, this.topDamageTaken.getValue());
         this.topDamageTaken = new Pair<>(topDamageTaken, true);
         return topDamageTaken;
     }
