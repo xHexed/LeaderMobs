@@ -46,7 +46,7 @@ public class Utils {
         Bukkit.getOnlinePlayers().forEach(p -> {
             final YamlConfiguration datacf = YamlConfiguration.loadConfiguration(playerdata);
             if (datacf.getString(p.getName()) != null && !datacf.getBoolean(p.getName())) return;
-            p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            p.sendMessage(replacePlaceholder(p, ChatColor.translateAlternateColorCodes('&', message)));
         });
     }
 
@@ -59,7 +59,7 @@ public class Utils {
         }
     }
 
-    public static void sendActionBar(final Player player, final String message) {
+    public static void sendActionBar(@SuppressWarnings("TypeMayBeWeakened") final Player player, final String message) {
         try {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
         }
@@ -78,7 +78,7 @@ public class Utils {
         return message;
     }
 
-    private static String replaceMobPlaceholder(String message, final Entity entity) {
+    public static String replaceMobPlaceholder(String message, final Entity entity) {
         final Matcher m = PLACEHOLDER_PATTERN.matcher(message);
         while (m.find()) {
             final String format = m.group(1);

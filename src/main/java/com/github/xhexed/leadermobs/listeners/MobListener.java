@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
@@ -68,36 +69,17 @@ public class MobListener {
         final MobDamageInfo damageInfo = data.get(entity);
         if (damageInfo.getDamageDealt().keySet().size() < config.getInt("PlayersRequired")) return;
 
-        String header = config.getString("Messages.MobDead.damageDealt.header", "");
-        header = NAME.matcher(header != null ? header : "").replaceAll(ChatColor.stripColor(mobName));
-        header = replacePlaceholder(null, header);
-        sendMessage(header);
+        String damageDealtHeader = config.getString("Messages.MobDead.damageDealt.header", "");
+        damageDealtHeader = NAME.matcher(damageDealtHeader != null ? damageDealtHeader : "").replaceAll(ChatColor.stripColor(mobName));
+        damageDealtHeader = replaceMobPlaceholder(damageDealtHeader, entity);
+        sendMessage(damageDealtHeader);
 
         final List<Pair<Double, UUID>> damageDealtList = damageInfo.getTopDamageDealt();
 
-        final List<UUID> topList = new ArrayList<>();
-        final String mainMessage = config.getString("Messages.MobDead.damageDealt.message", "");
+        final List<UUID> topDealtList = new ArrayList<>();
+        final String dealtMessage = config.getString("Messages.MobDead.damageDealt.message", "");
 
-        for (int place = 1; place <= damageDealtList.size(); place++) {
-            if (place >= config.getInt("PlacesToBroadcast")) break;
-
-            final Pair<Double, UUID> info = damageDealtList.get(place - 1);
-
-            final Double damage = info.getKey();
-            final UUID uuid = info.getValue();
-            final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-
-            topList.add(uuid);
-
-            String message = mainMessage;
-            message = PLACE_PREFIX.matcher(message != null ? message : "").replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlacePrefix." + place : "PlacePrefix.default", ""));
-            message = DAMAGE_POS.matcher(message).replaceAll(Integer.toString(place));
-            message = PLAYER_NAME.matcher(message).replaceAll(player.getName());
-            message = DAMAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(damage));
-            message = PERCENTAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(getPercentage(damage, health)));
-            message = replacePlaceholder(player, message);
-            sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-        }
+        sendPlaceMessage(health, config, damageDealtList, topDealtList, dealtMessage);
 
         Bukkit.getOnlinePlayers().forEach((p) -> {
             sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageDealt.title.title", ""))),
@@ -108,39 +90,21 @@ public class MobListener {
             sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageDealt.actionbar.message", ""))));
         });
 
-        String footer = config.getString("Messages.MobDead.damageDealt.footer", "");
-        footer = NAME.matcher(footer != null ? footer : "").replaceAll(ChatColor.stripColor(mobName));
-        footer = replacePlaceholder(null, footer);
-        sendMessage(footer);
+        String damageDealtFooter = config.getString("Messages.MobDead.damageDealt.footer", "");
+        damageDealtFooter = NAME.matcher(damageDealtFooter != null ? damageDealtFooter : "").replaceAll(ChatColor.stripColor(mobName));
+        damageDealtFooter = replaceMobPlaceholder(damageDealtFooter, entity);
+        sendMessage(damageDealtFooter);
 
-        String _header = config.getString("Messages.MobDead.damageTaken.header", "");
-        _header = NAME.matcher(_header != null ? _header : "").replaceAll(ChatColor.stripColor(mobName));
-        _header = replacePlaceholder(null, _header);
-        sendMessage(_header);
+        String damageTakenheader = config.getString("Messages.MobDead.damageTaken.header", "");
+        damageTakenheader = NAME.matcher(damageTakenheader != null ? damageTakenheader : "").replaceAll(ChatColor.stripColor(mobName));
+        damageTakenheader = replaceMobPlaceholder(damageTakenheader, entity);
+        sendMessage(damageTakenheader);
 
         final List<Pair<Double, UUID>> damageTakenList = damageInfo.getTopDamageTaken();
-        final Map<Integer, UUID> damageTakenRewards = new HashMap<>();
+        final List<UUID> topTakenList = new ArrayList<>();
 
-        for (int place = 1; place <= damageTakenList.size(); place++) {
-            if (place >= config.getInt("PlacesToBroadcast")) break;
-
-            final Pair<Double, UUID> info = damageTakenList.get(place - 1);
-
-            final Double damage = info.getKey();
-            final UUID uuid = info.getValue();
-
-            damageTakenRewards.put(place, uuid);
-
-            String message = mainMessage;
-            message = PLACE_PREFIX.matcher(message != null ? message : "").replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlacePrefix." + place : "PlacePrefix.default", ""));
-            message = DAMAGE_POS.matcher(message).replaceAll(Integer.toString(place));
-            message = PLAYER_NAME.matcher(message).replaceAll(Bukkit.getOfflinePlayer(uuid).getName());
-            message = DAMAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(damage));
-            message = PERCENTAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(getPercentage(damage, health)));
-            message = replacePlaceholder(Bukkit.getPlayer(uuid), message);
-
-            sendMessage(ChatColor.translateAlternateColorCodes('&', message));
-        }
+        final String takenMessage = config.getString("Messages.MobDead.damageTaken.message", "");
+        sendPlaceMessage(health, config, damageTakenList, topTakenList, takenMessage);
 
         Bukkit.getOnlinePlayers().forEach((p) -> {
             sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageTaken.title.title", ""))),
@@ -151,14 +115,37 @@ public class MobListener {
             sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageTaken.actionbar.message", ""))));
         });
 
-        String _footer = config.getString("Messages.MobDead.damageTaken.footer", "");
-        _footer = NAME.matcher(_footer != null ? _footer : "").replaceAll(ChatColor.stripColor(mobName));
-        _footer = replacePlaceholder(null, _footer);
-        sendMessage(_footer);
+        String damageTakenFooter = config.getString("Messages.MobDead.damageTaken.footer", "");
+        damageTakenFooter = NAME.matcher(damageTakenFooter != null ? damageTakenFooter : "").replaceAll(ChatColor.stripColor(mobName));
+        damageTakenFooter = replaceMobPlaceholder(damageTakenFooter, entity);
+        sendMessage(damageTakenFooter);
 
-        new Reward(internalName, topList);
+        new Reward(internalName, topDealtList, topTakenList);
 
         debug("Final data: " + data);
         data.remove(entity);
+    }
+
+    private static void sendPlaceMessage(final double health, final ConfigurationSection config, final List<Pair<Double, UUID>> damageDealtList, final Collection<UUID> topDealtList, final String dealtMessage) {
+        for (int place = 1; place <= damageDealtList.size(); place++) {
+            if (place >= config.getInt("PlacesToBroadcast")) break;
+
+            final Pair<Double, UUID> info = damageDealtList.get(place - 1);
+
+            final Double damage = info.getKey();
+            final UUID uuid = info.getValue();
+            final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
+
+            topDealtList.add(uuid);
+
+            String message = dealtMessage;
+            message = PLACE_PREFIX.matcher(message != null ? message : "").replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlacePrefix." + place : "PlacePrefix.default", ""));
+            message = DAMAGE_POS.matcher(message).replaceAll(Integer.toString(place));
+            message = PLAYER_NAME.matcher(message).replaceAll(player.getName());
+            message = DAMAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(damage));
+            message = PERCENTAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(getPercentage(damage, health)));
+            message = replacePlaceholder(player, message);
+            sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        }
     }
 }

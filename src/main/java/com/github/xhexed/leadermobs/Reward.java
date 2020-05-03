@@ -3,76 +3,60 @@ package com.github.xhexed.leadermobs;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.*;
 import java.util.stream.IntStream;
 
-import static com.github.xhexed.leadermobs.Utils.DAMAGE_POS;
-import static com.github.xhexed.leadermobs.Utils.PLAYER_NAME;
-import static com.github.xhexed.leadermobs.Utils.debug;
+import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
+import static com.github.xhexed.leadermobs.Utils.*;
 
-public class Reward extends Thread {
-    private final List<UUID> topList;
+public class Reward {
     private final String mobname;
+    private final Server server = Bukkit.getServer();
+    private final CommandSender sender = Bukkit.getConsoleSender();
+    private final FileConfiguration config = YamlConfiguration.loadConfiguration(new File(getInstance().getDataFolder(), "rewards.yml"));
 
-    public Reward(final String mobname, final List<UUID> topList) {
-        this.mobname = mobname;
-        this.topList = topList;
-        start();
-    }
-
-    @Override
-    public final void start() {
-        final LeaderMobs instance = LeaderMobs.getInstance();
-        final Map<Integer, List<String>> rewards = new HashMap<>();
-        debug("Start calculating rewards for mob: " + mobname);
-
+    public Reward(final String mobname, final List<UUID> topDealtList, final List<UUID> topTakenList) {
+        this.mobname      = mobname;
         debug("Place list: ");
-        topList.forEach((uuid) -> debug(Bukkit.getOfflinePlayer(uuid).getName() + ", "));
+        topDealtList.forEach((uuid) -> debug(Bukkit.getOfflinePlayer(uuid).getName() + ", "));
 
-        final YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(instance.getDataFolder(), "rewards.yml"));
         if (!config.contains(mobname)) {
             debug("Rewards for boss: " + mobname + " not found...");
-            interrupt();
             return;
         }
-        setRewards(rewards, config);
 
-        debug("Starting calculating final rewards for boss: " + mobname);
-        rewards.forEach((key, value) -> value.stream().map(reward_command -> "Place: " + key + ", commands: " + reward_command).forEach(Utils::debug));
-        final Server server = Bukkit.getServer();
-        final CommandSender sender = Bukkit.getConsoleSender();
+        final Map<Integer, List<String>> dealtRewards = new HashMap<>();
+        final Map<Integer, List<String>> takenRewards = new HashMap<>();
+        setRewards(dealtRewards, ".dealt");
+        setRewards(takenRewards, ".taken");
+
+        giveRewards(dealtRewards, topDealtList);
+        giveRewards(takenRewards, topTakenList);
+    }
+
+    private void giveRewards(final Map<Integer, List<String>> rewards, final List<UUID> topList) {
         IntStream.range(0, topList.size()).forEach(i -> {
             final UUID uuid = topList.get(i);
+            final String player = Bukkit.getOfflinePlayer(uuid).getName();
+            debug("Giving reward for " + player);
             rewards.get(i).stream()
-                    .map(command -> PLAYER_NAME.matcher(command).replaceAll(Objects.requireNonNull(Bukkit.getOfflinePlayer(uuid)).getName()))
+                    .map(command -> PLAYER_NAME.matcher(command).replaceAll(player))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
                     .forEach(command -> {
-                        debug("Pos to exec reward: " + i + " - " + uuid);
+                        debug("Place: " + i + "command:" + command);
                         server.dispatchCommand(sender, command);
-                        debug("Executed reward command: " + command);
-                    });
-        });
-        rewards.forEach((place, value) -> {
-            final UUID uuid = topList.get(place - 1);
-            value.stream()
-                    .map(command -> PLAYER_NAME.matcher(command).replaceAll(Objects.requireNonNull(Bukkit.getOfflinePlayer(uuid)).getName()))
-                    .map(command -> DAMAGE_POS.matcher(command).replaceAll(place.toString()))
-                    .forEach(command -> {
-                        debug("Pos to exec reward: " + place + " - " + uuid);
-                        server.dispatchCommand(sender, command);
-                        debug("Executed reward command: " + command);
                     });
         });
     }
 
-    private void setRewards(final Map<? super Integer, ? super List<String>> rewards, final ConfigurationSection config) {
-        Objects.requireNonNull(config.getConfigurationSection(mobname + ".dealt")).getKeys(false)
+    private void setRewards(final Map<? super Integer, ? super List<String>> rewards, final String path) {
+        Objects.requireNonNull(config.getConfigurationSection(mobname + path)).getKeys(false)
                 .forEach(place -> rewards.put(
                         Integer.parseInt(place),
-                        new ArrayList<>(config.getStringList(mobname + ".dealt." + place + ".rewards"))));
+                        new ArrayList<>(config.getStringList(mobname + path + place + ".rewards"))));
     }
 }
