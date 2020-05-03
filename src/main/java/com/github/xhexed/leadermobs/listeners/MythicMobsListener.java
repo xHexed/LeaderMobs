@@ -55,16 +55,13 @@ public class MythicMobsListener implements Listener {
     public void onDeath(final MythicMobDeathEvent event) {
         final ActiveMob mob = event.getMob();
 
-        Object health;
-        try {
-            health = event.getMobType().getHealth().get();
-        }
-        catch (final NoClassDefFoundError e) {
-            health = event.getMobType().getHealth();
-        }
-
+        final Object health = event.getMobType().getHealth();
+        //noinspection ConstantConditions
         if (health instanceof Double) {
             MobListener.onMobDeath(event.getEntity(), mob.getDisplayName(), event.getMobType().getInternalName(), (Double) health);
+        }
+        else {
+            MobListener.onMobDeath(event.getEntity(), mob.getDisplayName(), event.getMobType().getInternalName(), event.getMobType().getHealth().get());
         }
     }
 }
