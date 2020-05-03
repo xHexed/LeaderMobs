@@ -5,6 +5,7 @@ import com.github.xhexed.leadermobs.listeners.BossListener;
 import com.github.xhexed.leadermobs.listeners.MythicMobsListener;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,7 +20,8 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class LeaderMobs extends JavaPlugin {
-    public static File playerdata;
+    public static File dataFile;
+    public static FileConfiguration playerData;
     public static boolean broadcast;
     static boolean debug;
     static boolean papi;
@@ -103,7 +105,7 @@ public class LeaderMobs extends JavaPlugin {
                 e.printStackTrace();
             }
         }
-        playerdata = datafile;
+        playerData = YamlConfiguration.loadConfiguration(datafile);
 
         final FileConfiguration config = getConfig();
 

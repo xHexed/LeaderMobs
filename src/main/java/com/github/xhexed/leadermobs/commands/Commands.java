@@ -3,7 +3,7 @@ package com.github.xhexed.leadermobs.commands;
 import com.github.xhexed.leadermobs.LeaderMobs;
 import org.bukkit.ChatColor;
 import org.bukkit.command.*;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
@@ -53,18 +53,8 @@ public class Commands implements CommandExecutor, TabCompleter {
                             sender.sendMessage(c("&cYou don't have permission!"));
                             return true;
                         }
-                        final YamlConfiguration cnf = YamlConfiguration.loadConfiguration(LeaderMobs.playerdata);
-                        if (cnf.contains(sender.getName())) {
-                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.Toggle.Off")));
-                            cnf.set(sender.getName(), false);
-                            try {
-                                cnf.save(LeaderMobs.playerdata);
-                            } catch (final IOException e) {
-                                e.printStackTrace();
-                            }
-                            return true;
-                        }
-                        if (cnf.getBoolean(sender.getName(), false)) {
+                        final FileConfiguration cnf = LeaderMobs.playerData;
+                        if (!cnf.contains(sender.getName()) || cnf.getBoolean(sender.getName())) {
                             sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.Toggle.Off")));
                             cnf.set(sender.getName(), false);
                         }
@@ -73,7 +63,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                             cnf.set(sender.getName(), true);
                         }
 
-                        try { cnf.save(LeaderMobs.playerdata); } catch (final IOException e) { e.printStackTrace(); }
+                        try { cnf.save(LeaderMobs.dataFile); } catch (final IOException e) { e.printStackTrace(); }
                     }
                 }
             }

@@ -5,7 +5,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -44,7 +44,7 @@ public class Utils {
 
     public static void sendMessage(final String message) {
         Bukkit.getOnlinePlayers().forEach(p -> {
-            final YamlConfiguration datacf = YamlConfiguration.loadConfiguration(playerdata);
+            final FileConfiguration datacf = playerData;
             if (datacf.getString(p.getName()) != null && !datacf.getBoolean(p.getName())) return;
             p.sendMessage(replacePlaceholder(p, ChatColor.translateAlternateColorCodes('&', message)));
         });
