@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static com.github.xhexed.leadermobs.Utils.DAMAGE_POS;
 import static com.github.xhexed.leadermobs.Utils.PLAYER_NAME;
@@ -44,6 +45,17 @@ public class Reward extends Thread {
         rewards.forEach((key, value) -> value.stream().map(reward_command -> "Place: " + key + ", commands: " + reward_command).forEach(Utils::debug));
         final Server server = Bukkit.getServer();
         final CommandSender sender = Bukkit.getConsoleSender();
+        IntStream.range(0, topList.size()).forEach(i -> {
+            final UUID uuid = topList.get(i);
+            rewards.get(i).stream()
+                    .map(command -> PLAYER_NAME.matcher(command).replaceAll(Objects.requireNonNull(Bukkit.getOfflinePlayer(uuid)).getName()))
+                    .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
+                    .forEach(command -> {
+                        debug("Pos to exec reward: " + i + " - " + uuid);
+                        server.dispatchCommand(sender, command);
+                        debug("Executed reward command: " + command);
+                    });
+        });
         rewards.forEach((place, value) -> {
             final UUID uuid = topList.get(place - 1);
             value.stream()
