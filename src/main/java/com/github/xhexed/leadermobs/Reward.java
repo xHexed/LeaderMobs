@@ -57,6 +57,6 @@ public class Reward {
         Objects.requireNonNull(config.getConfigurationSection(mobname + path)).getKeys(false)
                 .forEach(place -> rewards.put(
                         Integer.parseInt(place),
-                        new ArrayList<>(config.getStringList(mobname + path + place + ".rewards"))));
+                        new ArrayList<>(config.getStringList(mobname + path + "." + place + ".rewards"))));
     }
 }
