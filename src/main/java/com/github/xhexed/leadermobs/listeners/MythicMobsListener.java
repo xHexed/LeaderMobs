@@ -63,6 +63,8 @@ public class MythicMobsListener implements Listener {
             health = event.getMobType().getHealth();
         }
 
-        MobListener.onMobDeath(event.getEntity(), mob.getDisplayName(), event.getMobType().getInternalName(), (Double) health);
+        if (health instanceof Double) {
+            MobListener.onMobDeath(event.getEntity(), mob.getDisplayName(), event.getMobType().getInternalName(), (Double) health);
+        }
     }
 }

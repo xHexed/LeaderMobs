@@ -34,12 +34,14 @@ Messages:
     - "   &8<&a!&8> &7Mob named: %mob_name% spawned at (x: %x%, y: %y%, z: %z%)"
     - "&8&l&m------<--------------->------"
     title:
+      enabled: true
       title: "%mob_name% spawned"
       subTitle: "x: %x%, y: %y%, z: %z%"
       fadeIn: 1
       stay: 1
       fadeOut: 1
     actionbar:
+      enabled: true
       message: "%mob_name% spawned"
   MobDead:
     #Placeholders avalable: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
@@ -49,24 +51,28 @@ Messages:
       #Placeholders avalable: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
       message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
       title:
+        enabled: true
         title: "%mob_name% died."
         subTitle: "1st damage dealt: %mob_top_taken_1%"
         fadeIn: 1
         stay: 1
         fadeOut: 1
       actionbar:
+        enabled: true
         message: "%mob_name% died"
     damageTaken:
       header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
       footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
       message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
       title:
+        enabled: true
         title: "%mob_name% died."
         subTitle: "1st damage taken: %mob_top_taken_1%"
         fadeIn: 1
         stay: 1
         fadeOut: 1
       actionbar:
+        enabled: true
         message: "%mob_name% died"
   Toggle:
     On: "&8<&a!&8>&7 You have successfully &aenabled&7 the broadcaster messages!"

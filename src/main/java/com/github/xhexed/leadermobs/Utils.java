@@ -5,7 +5,6 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -44,13 +43,13 @@ public class Utils {
 
     public static void sendMessage(final String message) {
         Bukkit.getOnlinePlayers().forEach(p -> {
-            final FileConfiguration datacf = playerData;
-            if (datacf.getString(p.getName()) != null && !datacf.getBoolean(p.getName())) return;
+            if (!playerData.getBoolean(p.getName(), true)) return;
             p.sendMessage(replacePlaceholder(p, ChatColor.translateAlternateColorCodes('&', message)));
         });
     }
 
     public static void sendTitle(final Player player, final String title, final String subTitle, final int fadeIn, final int stay, final int fadeOut) {
+        if (playerData.getBoolean(player.getName())) return;
         try {
             player.sendTitle(title, subTitle, fadeIn, stay, fadeOut);
         }
@@ -59,7 +58,8 @@ public class Utils {
         }
     }
 
-    public static void sendActionBar(@SuppressWarnings("TypeMayBeWeakened") final Player player, final String message) {
+    public static void sendActionBar(final Player player, final String message) {
+        if (playerData.getBoolean(player.getName())) return;
         try {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
         }

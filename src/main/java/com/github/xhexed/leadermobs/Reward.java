@@ -25,7 +25,7 @@ public class Reward {
         topDealtList.forEach((uuid) -> debug(Bukkit.getOfflinePlayer(uuid).getName() + ", "));
 
         if (!config.contains(mobname)) {
-            debug("Rewards for boss: " + mobname + " not found...");
+            debug("Rewards for mob: " + mobname + " not found...");
             return;
         }
 

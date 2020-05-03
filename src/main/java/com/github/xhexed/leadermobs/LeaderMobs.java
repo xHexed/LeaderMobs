@@ -33,7 +33,7 @@ public class LeaderMobs extends JavaPlugin {
 
     private void updateConfig() {
         final FileConfiguration config = getConfig();
-        switch (config.getInt("version", 1)) {
+        switch (config.getInt("version", 0)) {
             case 1:
                 config.addDefault("Messages.MobSpawn.title.title", "%mob_name% spawned");
                 config.addDefault("Messages.MobSpawn.title.subTitle", "x: %x%, y: %y%, z: %z%");
