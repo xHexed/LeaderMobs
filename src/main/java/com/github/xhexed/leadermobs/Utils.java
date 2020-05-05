@@ -81,12 +81,8 @@ public class Utils {
     public static String replaceMobPlaceholder(String message, final Entity entity) {
         final Matcher m = PLACEHOLDER_PATTERN.matcher(message);
         while (m.find()) {
-            final String format = m.group(1);
-            debugConsole("Placeholder requested: " + format);
-            final int index = format.indexOf('_');
-            if (index <= 0 || index >= format.length()) continue;
-            final String params = format.substring(index + 1);
-            debugConsole(params);
+            final String params = m.group(2);
+            debugConsole("Placeholder requested: " + params);
             message = message.replaceAll(Pattern.quote(m.group()), Matcher.quoteReplacement(onPlaceholderRequest(params, entity)));
         }
         return message;

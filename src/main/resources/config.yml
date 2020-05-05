@@ -26,7 +26,6 @@ Reset:
 Messages:
   #Should the plugin broadcast the messages when mob spawns or dies
   broadcast: true
-
   #Placeholders avalable: %place_color%, %place%, %mob_name%, %percentage%
   MobSpawn:
     messages:
@@ -37,9 +36,9 @@ Messages:
       enabled: true
       title: "%mob_name% spawned"
       subTitle: "x: %x%, y: %y%, z: %z%"
-      fadeIn: 1
-      stay: 1
-      fadeOut: 1
+      fadeIn: 10
+      stay: 10
+      fadeOut: 10
     actionbar:
       enabled: true
       message: "%mob_name% spawned"
@@ -54,9 +53,9 @@ Messages:
         enabled: true
         title: "%mob_name% died."
         subTitle: "1st damage dealt: %mob_top_taken_1%"
-        fadeIn: 1
-        stay: 1
-        fadeOut: 1
+        fadeIn: 10
+        stay: 10
+        fadeOut: 10
       actionbar:
         enabled: true
         message: "%mob_name% died"
@@ -68,9 +67,9 @@ Messages:
         enabled: true
         title: "%mob_name% died."
         subTitle: "1st damage taken: %mob_top_taken_1%"
-        fadeIn: 1
-        stay: 1
-        fadeOut: 1
+        fadeIn: 10
+        stay: 10
+        fadeOut: 10
       actionbar:
         enabled: true
         message: "%mob_name% died"
