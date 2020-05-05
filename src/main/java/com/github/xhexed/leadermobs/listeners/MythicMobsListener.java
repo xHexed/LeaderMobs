@@ -4,7 +4,7 @@ import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.api.bukkit.BukkitAPIHelper;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent;
-import io.lumine.xikage.mythicmobs.mobs.ActiveMob;
+import io.lumine.xikage.mythicmobs.mobs.MythicMob;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -53,15 +53,7 @@ public class MythicMobsListener implements Listener {
     
     @EventHandler(ignoreCancelled = true)
     public void onDeath(final MythicMobDeathEvent event) {
-        final ActiveMob mob = event.getMob();
-
-        final Object health = event.getMobType().getHealth();
-        //noinspection ConstantConditions
-        if (health instanceof Double) {
-            MobListener.onMobDeath(event.getEntity(), mob.getDisplayName(), event.getMobType().getInternalName(), (Double) health);
-        }
-        else {
-            MobListener.onMobDeath(event.getEntity(), mob.getDisplayName(), event.getMobType().getInternalName(), event.getMobType().getHealth().get());
-        }
+        final MythicMob mobs = event.getMobType();
+        MobListener.onMobDeath(event.getEntity(), event.getMob().getDisplayName(), mobs.getInternalName(), mobs.getHealth().get());
     }
 }
