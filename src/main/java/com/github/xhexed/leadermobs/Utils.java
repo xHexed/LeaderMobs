@@ -28,7 +28,7 @@ public class Utils {
     public static final Pattern DAMAGE_POS = Pattern.compile("%place%");
     public static final Pattern DAMAGE = Pattern.compile("%damage%");
     public static final Pattern PERCENTAGE = Pattern.compile("%percentage%");
-    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("[%](lm_)([^%]+)[%]");
+    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("[%](mob_)([^%]+)[%]");
     public static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#.##");
 
     public static float getPercentage(final Double damage, final Double health) { return (float) (damage / health * 100.0f); }
@@ -82,6 +82,7 @@ public class Utils {
         final Matcher m = PLACEHOLDER_PATTERN.matcher(message);
         while (m.find()) {
             final String format = m.group(1);
+            debugConsole("Placeholder requested: " + format);
             final int index = format.indexOf('_');
             if (index <= 0 || index >= format.length()) continue;
             final String params = format.substring(index + 1);
