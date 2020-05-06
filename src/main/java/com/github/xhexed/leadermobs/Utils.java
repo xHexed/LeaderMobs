@@ -1,5 +1,6 @@
 package com.github.xhexed.leadermobs;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -35,7 +36,7 @@ public class Utils {
 
     public static String replacePlaceholder(final OfflinePlayer player, String string) {
         if (papi)
-            string = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, string);
+            string = PlaceholderAPI.setPlaceholders(player, string);
         if (mvdw)
             string = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, string);
         return string;
@@ -90,8 +91,7 @@ public class Utils {
 
     private static String onPlaceholderRequest(String params, final Entity entity) {
         if (params.startsWith("top_dealt_")) {
-            params = params.substring(params.indexOf("top_dealt_"));
-            debugConsole(params);
+            params = params.substring(10);
 
             final int pos;
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
@@ -100,8 +100,7 @@ public class Utils {
             catch (final IndexOutOfBoundsException ignored) { return ""; }
         }
         if (params.startsWith("top_taken_")) {
-            params = params.substring(params.indexOf("top_taken_"));
-            debugConsole(params);
+            params = params.substring(10);
 
             final int pos;
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
