@@ -7,11 +7,12 @@ import io.lumine.xikage.mythicmobs.mobs.MythicMob;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 
-public class LegacyMythicMobsListener {
+public class LegacyMythicMobsListener implements Listener {
     private final FileConfiguration config = getInstance().getConfig();
 
     @EventHandler(ignoreCancelled = true)
