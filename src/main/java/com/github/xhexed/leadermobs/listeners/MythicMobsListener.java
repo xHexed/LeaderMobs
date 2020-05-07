@@ -1,11 +1,13 @@
 package com.github.xhexed.leadermobs.listeners;
 
+import com.github.xhexed.leadermobs.handler.MobHandler;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.api.bukkit.BukkitAPIHelper;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent;
 import io.lumine.xikage.mythicmobs.mobs.MythicMob;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -24,36 +26,40 @@ public class MythicMobsListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onSpawn(final MythicMobSpawnEvent event) {
         if (config.getBoolean("Blacklist.Whitelist", false) != config.getStringList("Blacklist.MythicMobs").contains(event.getMobType().getInternalName())) return;
-        MobListener.onMobSpawn(event.getEntity(), event.getMobType().getDisplayName().get());
+        MobHandler.onMobSpawn(event.getEntity(), event.getMobType().getDisplayName().get());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(final EntityDamageByEntityEvent event) {
+        handleDamageEvent(event, config);
+    }
+
+    static void handleDamageEvent(final EntityDamageByEntityEvent event, final ConfigurationSection config) {
         final Entity victim = event.getEntity();
         final Entity damager = event.getDamager();
 
         if (damager instanceof Player) {
-            if (damager.hasMetadata("NPC") || !helper.isMythicMob(victim)) return;
+            if (damager.hasMetadata("NPC") || !MythicMobsListener.helper.isMythicMob(victim)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
-                    != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(victim).getType().getInternalName())) return;
-            MobListener.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
+                    != config.getStringList("Blacklist.MythicMobs").contains(MythicMobsListener.helper.getMythicMobInstance(victim).getType().getInternalName())) return;
+            MobHandler.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
-            debug("Data: " + MobListener.data);
+            debug("Data: " + MobHandler.data);
         }
 
         if (victim instanceof Player) {
-            if (victim.hasMetadata("NPC") || !helper.isMythicMob(damager)) return;
+            if (victim.hasMetadata("NPC") || !MythicMobsListener.helper.isMythicMob(damager)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
-                    != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(damager).getType().getInternalName())) return;
-            MobListener.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
+                    != config.getStringList("Blacklist.MythicMobs").contains(MythicMobsListener.helper.getMythicMobInstance(damager).getType().getInternalName())) return;
+            MobHandler.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
-            debug("Data: " + MobListener.data);
+            debug("Data: " + MobHandler.data);
         }
     }
-    
+
     @EventHandler(ignoreCancelled = true)
     public void onDeath(final MythicMobDeathEvent event) {
         final MythicMob mobs = event.getMobType();
-        MobListener.onMobDeath(event.getEntity(), event.getMob().getDisplayName(), mobs.getInternalName(), mobs.getHealth().get());
+        MobHandler.onMobDeath(event.getEntity(), event.getMob().getDisplayName(), mobs.getInternalName(), mobs.getHealth().get());
     }
 }

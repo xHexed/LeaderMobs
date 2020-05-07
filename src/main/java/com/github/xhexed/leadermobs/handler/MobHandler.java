@@ -1,4 +1,4 @@
-package com.github.xhexed.leadermobs.listeners;
+package com.github.xhexed.leadermobs.handler;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.Reward;
@@ -19,10 +19,10 @@ import java.util.*;
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 import static com.github.xhexed.leadermobs.Utils.*;
 
-public class MobListener {
+public class MobHandler {
     public static final Map<Entity, MobDamageInfo> data = new HashMap<>();
 
-    static void onMobSpawn(final Entity entity, final String mobName) {
+    public static void onMobSpawn(final Entity entity, final String mobName) {
         data.put(entity, new MobDamageInfo(new HashMap<>(), new HashMap<>()));
 
         final Location location = entity.getLocation();
@@ -48,7 +48,7 @@ public class MobListener {
         }
     }
 
-    static void onPlayerDamage(final UUID uuid, final Entity entity, final Double damage) {
+    public static void onPlayerDamage(final UUID uuid, final Entity entity, final Double damage) {
         final MobDamageInfo mobInfo = data.get(entity);
         final Map<UUID, Double> damageDealtList = mobInfo.getDamageDealt();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
@@ -57,7 +57,7 @@ public class MobListener {
         data.put(entity, new MobDamageInfo(damageDealtList, mobInfo.getDamageTaken()));
     }
 
-    static void onMobDamage(final Entity entity, final UUID uuid, final Double damage) {
+    public static void onMobDamage(final Entity entity, final UUID uuid, final Double damage) {
         final Map<UUID, Double> damageTakenList = data.containsKey(entity) ? data.get(entity).getDamageTaken() : new HashMap<>();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
         damageTakenList.put(uuid, damageTakenList.containsKey(uuid) ?
@@ -65,7 +65,7 @@ public class MobListener {
         data.put(entity, new MobDamageInfo(data.get(entity).getDamageDealt(), damageTakenList));
     }
 
-    static void onMobDeath(final Entity entity, final String mobName, final String internalName, final double health) {
+    public static void onMobDeath(final Entity entity, final String mobName, final String internalName, final double health) {
         final FileConfiguration config = getInstance().getConfig();
         if (!data.containsKey(entity)) return;
         final MobDamageInfo damageInfo = data.get(entity);

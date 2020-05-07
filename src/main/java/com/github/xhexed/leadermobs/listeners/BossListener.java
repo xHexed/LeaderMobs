@@ -1,5 +1,6 @@
 package com.github.xhexed.leadermobs.listeners;
 
+import com.github.xhexed.leadermobs.handler.MobHandler;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
@@ -23,7 +24,7 @@ public class BossListener implements Listener {
     public void onSpawn(final BossSpawnEvent event) {
         final String bossName = event.getBoss().getName();
         if (config.getBoolean("Blacklist.Whitelist", false) != config.getStringList("Blacklist.Boss").contains(bossName)) return;
-        MobListener.onMobSpawn(event.getEntity(), bossName);
+        MobHandler.onMobSpawn(event.getEntity(), bossName);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -36,24 +37,24 @@ public class BossListener implements Listener {
             if (damager.hasMetadata("NPC") || !BossAPI.isBoss(victim)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
                     != config.getStringList("Blacklist.Boss").contains(BossAPI.getBoss(entity).getName())) return;
-            MobListener.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
+            MobHandler.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
-            debug("Data: " + MobListener.data);
+            debug("Data: " + MobHandler.data);
         }
 
         if (victim instanceof Player) {
             if (victim.hasMetadata("NPC") || !BossAPI.isBoss(damager)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
                     != config.getStringList("Blacklist.Boss").contains(BossAPI.getBoss(entity).getName())) return;
-            MobListener.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
+            MobHandler.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
-            debug("Data: " + MobListener.data);
+            debug("Data: " + MobHandler.data);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onDeath(final BossDeathEvent e) {
         final Boss boss = e.getBoss();
-        MobListener.onMobDeath(e.getEntity(), boss.getSettings().getCustomName(), boss.getName(), boss.getSettings().getHealth());
+        MobHandler.onMobDeath(e.getEntity(), boss.getSettings().getCustomName(), boss.getName(), boss.getSettings().getHealth());
     }
 }

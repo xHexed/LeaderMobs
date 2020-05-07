@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.*;
-import static com.github.xhexed.leadermobs.listeners.MobListener.data;
+import static com.github.xhexed.leadermobs.handler.MobHandler.data;
 
 public class Utils {
     public static final Pattern PLAYER_NAME = Pattern.compile("%player_name%");
@@ -92,23 +92,21 @@ public class Utils {
     private static String onPlaceholderRequest(String params, final Entity entity) {
         if (params.startsWith("top_dealt_")) {
             params = params.substring(10);
-			debugConsole("Pos:" + params);
 			
             final int pos;
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
             try { return Bukkit.getOfflinePlayer(data.get(entity).getTopDamageDealt().get(pos - 1).getValue()).getName(); }
-            catch (final IndexOutOfBoundsException ignored) { return ""; }
+            catch (final IndexOutOfBoundsException e) { return ""; }
         }
         if (params.startsWith("top_taken_")) {
             params = params.substring(10);
-			debugConsole("Pos:" + params);
 
             final int pos;
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
             try { return Bukkit.getOfflinePlayer(data.get(entity).getTopDamageTaken().get(pos - 1).getValue()).getName(); }
-            catch (final IndexOutOfBoundsException ignored) { return ""; }
+            catch (final IndexOutOfBoundsException e) { return ""; }
         }
         return "";
     }

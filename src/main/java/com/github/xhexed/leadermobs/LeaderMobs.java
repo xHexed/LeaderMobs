@@ -3,6 +3,7 @@ package com.github.xhexed.leadermobs;
 import com.github.xhexed.leadermobs.commands.Commands;
 import com.github.xhexed.leadermobs.listeners.BossListener;
 import com.github.xhexed.leadermobs.listeners.MythicMobsListener;
+import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -69,7 +70,13 @@ public class LeaderMobs extends JavaPlugin {
         }
         if (manager.isPluginEnabled("MythicMobs")) {
             logger.info("Found MythicMobs, hooking...");
-            manager.registerEvents(new MythicMobsListener(), this);
+            final String version = MythicMobs.inst().getDescription().getVersion();
+            if (version.charAt(0) <= '4' && version.charAt(2) <= 9) {
+                manager.registerEvents(new MythicMobsListener(), this);
+            }
+            else {
+                manager.registerEvents(new MythicMobsListener(), this);
+            }
         }
         else {
             logger.severe("Didn't found any hookable mobs plugin, disabling..");

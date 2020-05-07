@@ -52,7 +52,7 @@ Messages:
       title:
         enabled: true
         title: "%mob_name% died."
-        subTitle: "1st damage dealt: %mob_top_taken_1%"
+        subTitle: "1st damage dealt: %mob_top_dealt_1%"
         fadeIn: 10
         stay: 10
         fadeOut: 10
