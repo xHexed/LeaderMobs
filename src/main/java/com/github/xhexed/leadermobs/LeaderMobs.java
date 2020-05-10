@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public class LeaderMobs extends JavaPlugin {
+    public static File dataFile;
     public static FileConfiguration playerData;
     public static boolean broadcast;
     static boolean debug;
