@@ -131,7 +131,7 @@ public class MobHandler {
         data.remove(entity);
     }
 
-    private static void sendPlaceMessage(final double health, final ConfigurationSection config, final List<Pair<Double, UUID>> damageDealtList, final Collection<UUID> topDealtList, final String dealtMessage) {
+    private static void sendPlaceMessage(final double health, final ConfigurationSection config, final List<? extends Pair<Double, UUID>> damageDealtList, final Collection<? super UUID> topDealtList, final String dealtMessage) {
         for (int place = 1; place <= damageDealtList.size(); place++) {
             if (place >= config.getInt("PlacesToBroadcast")) break;
 
