@@ -38,7 +38,7 @@ public class Reward {
         giveRewards(takenRewards, topTakenList);
     }
 
-    private void giveRewards(final Map<Integer, List<String>> rewards, final List<UUID> topList) {
+    private void giveRewards(final Map<Integer, ? extends List<String>> rewards, final List<UUID> topList) {
         IntStream.range(0, topList.size()).forEach(i -> {
             final UUID uuid = topList.get(i);
             final String player = Bukkit.getOfflinePlayer(uuid).getName();

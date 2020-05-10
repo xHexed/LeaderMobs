@@ -39,18 +39,18 @@ public class MythicMobsListener implements Listener {
         final Entity damager = event.getDamager();
 
         if (damager instanceof Player) {
-            if (damager.hasMetadata("NPC") || !MythicMobsListener.helper.isMythicMob(victim)) return;
+            if (damager.hasMetadata("NPC") || !helper.isMythicMob(victim)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
-                    != config.getStringList("Blacklist.MythicMobs").contains(MythicMobsListener.helper.getMythicMobInstance(victim).getType().getInternalName())) return;
+                    != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(victim).getType().getInternalName())) return;
             MobHandler.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
             debug("Data: " + MobHandler.data);
         }
 
         if (victim instanceof Player) {
-            if (victim.hasMetadata("NPC") || !MythicMobsListener.helper.isMythicMob(damager)) return;
+            if (victim.hasMetadata("NPC") || !helper.isMythicMob(damager)) return;
             if (config.getBoolean("Blacklist.Whitelist", false)
-                    != config.getStringList("Blacklist.MythicMobs").contains(MythicMobsListener.helper.getMythicMobInstance(damager).getType().getInternalName())) return;
+                    != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(damager).getType().getInternalName())) return;
             MobHandler.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
             debug("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
             debug("Data: " + MobHandler.data);
