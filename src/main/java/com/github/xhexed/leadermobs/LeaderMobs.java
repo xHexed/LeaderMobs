@@ -4,6 +4,7 @@ import com.github.xhexed.leadermobs.commands.Commands;
 import com.github.xhexed.leadermobs.listeners.BossListener;
 import com.github.xhexed.leadermobs.listeners.LegacyMythicMobsListener;
 import com.github.xhexed.leadermobs.listeners.MythicMobsListener;
+import com.tchristofferson.configupdater.ConfigUpdater;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -32,37 +34,16 @@ public class LeaderMobs extends JavaPlugin {
     static File debugfile;
 
     public static LeaderMobs getInstance() { return instance; }
-
-    private void updateConfig() {
-        final FileConfiguration config = getConfig();
-        switch (config.getInt("version", 0)) {
-            case 1:
-                config.addDefault("Messages.MobSpawn.title.title", "%mob_name% spawned");
-                config.addDefault("Messages.MobSpawn.title.subTitle", "x: %x%, y: %y%, z: %z%");
-                config.addDefault("Messages.MobSpawn.title.fadeIn", 1);
-                config.addDefault("Messages.MobSpawn.title.stay", 1);
-                config.addDefault("Messages.MobSpawn.title.fadeOut", 1);
-                config.addDefault("Messages.MobSpawn.actionbar.message", "%mob_name% spawned");
-                config.addDefault("Messages.MobDead.title.title", "%mob_name% spawned");
-                config.addDefault("Messages.MobDead.title.subTitle", "x: %x%, y: %y%, z: %z%");
-                config.addDefault("Messages.MobDead.title.fadeIn", 1);
-                config.addDefault("Messages.MobDead.title.stay", 1);
-                config.addDefault("Messages.MobDead.title.fadeOut", 1);
-                config.addDefault("Messages.MobDead.actionbar.message", "%mob_name% spawned");
-            case 2:
-                //TODO: Update config :(
-                config.set("version", 3);
-                saveConfig();
-        }
-    }
     
     @Override
     public void onEnable() {
         instance = this;
         saveDefaultConfig();
         reload();
-        updateConfig();
-        
+
+        try { ConfigUpdater.update(this, "config.yml", new File(getDataFolder(), "config.yml"), new ArrayList<>()); }
+        catch (final IOException e) { e.printStackTrace(); }
+
         final PluginManager manager = getServer().getPluginManager();
         final Logger logger = getLogger();
         if (manager.isPluginEnabled("Boss")) {

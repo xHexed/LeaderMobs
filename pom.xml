@@ -64,6 +64,10 @@
             <id>nexus</id>
             <url>http://mvn.lumine.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>maven-central</id>
+            <url>https://oss.sonatype.org/content/groups/public</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -96,11 +100,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.tchristofferson</groupId>
+            <artifactId>ConfigUpdater</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
-            <version>4.9.0</version>
+            <version>4.9.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
