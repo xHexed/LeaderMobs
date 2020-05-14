@@ -20,7 +20,7 @@ public class Commands implements CommandExecutor, TabCompleter {
     private static final List<String> playerCommands = Collections.singletonList("toggle");
 
     @Override
-    public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command, @NotNull final String label, @NotNull final String[] args) {
+    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final String[] args) {
         if (sender instanceof ConsoleCommandSender) {
             if (args.length == 0) {
                 sender.sendMessage(c("&7Usage: /lm reload"));
@@ -72,7 +72,7 @@ public class Commands implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull final CommandSender commandSender, @NotNull final Command command, @NotNull final String s, @NotNull final String[] strings) {
+    public List<String> onTabComplete(final @NotNull CommandSender commandSender, final @NotNull Command command, final @NotNull String s, final String[] strings) {
         if (strings.length > 1) {
             return null;
         }

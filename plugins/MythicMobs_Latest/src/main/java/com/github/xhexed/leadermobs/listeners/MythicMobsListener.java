@@ -7,7 +7,6 @@ import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent;
 import io.lumine.xikage.mythicmobs.mobs.MythicMob;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -31,10 +30,6 @@ public class MythicMobsListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(final EntityDamageByEntityEvent event) {
-        handleDamageEvent(event, config);
-    }
-
-    static void handleDamageEvent(final EntityDamageByEntityEvent event, final ConfigurationSection config) {
         final Entity victim = event.getEntity();
         final Entity damager = event.getDamager();
 
