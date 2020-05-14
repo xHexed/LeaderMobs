@@ -6,7 +6,13 @@
 
     <groupId>com.github.xhexed</groupId>
     <artifactId>LeaderMobs</artifactId>
+    <packaging>pom</packaging>
     <version>1.1.2</version>
+    <modules>
+        <module>plugins/MythicMobs_Latest</module>
+        <module>plugins/MythicMobs_Legacy</module>
+        <module>plugins/Boss</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -104,19 +110,6 @@
             <groupId>com.tchristofferson</groupId>
             <artifactId>ConfigUpdater</artifactId>
             <version>1.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.lumine.xikage</groupId>
-            <artifactId>MythicMobs</artifactId>
-            <version>4.9.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.minecademy</groupId>
-            <artifactId>Boss</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
