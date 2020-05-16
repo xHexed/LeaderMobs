@@ -15,7 +15,7 @@ import org.mineacademy.boss.api.event.BossDeathEvent;
 import org.mineacademy.boss.api.event.BossSpawnEvent;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
-import static com.github.xhexed.leadermobs.Utils.debug;
+import static com.github.xhexed.leadermobs.Utils.debugln;
 
 public class BossListener implements Listener {
     private final FileConfiguration config = getInstance().getConfig();
@@ -34,21 +34,21 @@ public class BossListener implements Listener {
         final Entity damager = event.getDamager();
 
         if (damager instanceof Player) {
-            if (damager.hasMetadata("NPC") || !BossAPI.isBoss(victim)) return;
-            if (config.getBoolean("Blacklist.Whitelist", false)
-                    != config.getStringList("Blacklist.Boss").contains(BossAPI.getBoss(entity).getName())) return;
+            if (damager.hasMetadata("NPC") || !BossAPI.isBoss(victim) ||
+                    (config.getBoolean("Blacklist.Whitelist", false)
+                            != config.getStringList("Blacklist.Boss").contains(BossAPI.getBoss(entity).getName()))
+            ) return;
             MobHandler.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
-            debug("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
-            debug("Data: " + MobHandler.data);
+            debugln("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
         }
 
         if (victim instanceof Player) {
-            if (victim.hasMetadata("NPC") || !BossAPI.isBoss(damager)) return;
-            if (config.getBoolean("Blacklist.Whitelist", false)
-                    != config.getStringList("Blacklist.Boss").contains(BossAPI.getBoss(entity).getName())) return;
+            if (victim.hasMetadata("NPC") || !BossAPI.isBoss(damager) ||
+                    (config.getBoolean("Blacklist.Whitelist", false)
+                            != config.getStringList("Blacklist.Boss").contains(BossAPI.getBoss(entity).getName()))
+            ) return;
             MobHandler.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
-            debug("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
-            debug("Data: " + MobHandler.data);
+            debugln("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
         }
     }
 

@@ -16,7 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
-import static com.github.xhexed.leadermobs.Utils.debug;
+import static com.github.xhexed.leadermobs.Utils.debugln;
 
 public class MythicMobsListener implements Listener {
     private static final BukkitAPIHelper helper = MythicMobs.inst().getAPIHelper();
@@ -34,21 +34,21 @@ public class MythicMobsListener implements Listener {
         final Entity damager = event.getDamager();
 
         if (damager instanceof Player) {
-            if (damager.hasMetadata("NPC") || !helper.isMythicMob(victim)) return;
-            if (config.getBoolean("Blacklist.Whitelist", false)
-                    != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(victim).getType().getInternalName())) return;
+            if (damager.hasMetadata("NPC") || !helper.isMythicMob(victim) ||
+                    (config.getBoolean("Blacklist.Whitelist", false)
+                            != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(victim).getType().getInternalName()))
+            ) return;
             MobHandler.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
-            debug("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
-            debug("Data: " + MobHandler.data);
+            debugln("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
         }
 
         if (victim instanceof Player) {
-            if (victim.hasMetadata("NPC") || !helper.isMythicMob(damager)) return;
-            if (config.getBoolean("Blacklist.Whitelist", false)
-                    != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(damager).getType().getInternalName())) return;
+            if (victim.hasMetadata("NPC") || !helper.isMythicMob(damager) ||
+                    (config.getBoolean("Blacklist.Whitelist", false)
+                    != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(damager).getType().getInternalName()))
+            ) return;
             MobHandler.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
-            debug("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
-            debug("Data: " + MobHandler.data);
+            debugln("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
         }
     }
 

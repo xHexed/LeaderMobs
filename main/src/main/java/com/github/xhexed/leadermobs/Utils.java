@@ -121,7 +121,18 @@ public class Utils {
     public static void debug(final String text) {
         if (!debug) return;
         try (final BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(debugfile, true))) {
-            writer.write(('\n' + text).getBytes());
+            writer.write(text.getBytes());
+            writer.flush();
+        }
+        catch (final IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void debugln(final String text) {
+        if (!debug) return;
+        try (final BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(debugfile, true))) {
+            writer.write((text + '\n').getBytes());
             writer.flush();
         }
         catch (final IOException e) {

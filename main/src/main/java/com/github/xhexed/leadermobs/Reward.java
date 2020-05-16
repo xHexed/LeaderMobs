@@ -23,9 +23,10 @@ public class Reward {
         this.mobname      = mobname;
         debug("Place list: ");
         topDealtList.forEach((uuid) -> debug(Bukkit.getOfflinePlayer(uuid).getName() + ", "));
+        debugln("");
 
         if (!config.contains(mobname)) {
-            debug("Rewards for mob: " + mobname + " not found...");
+            debugln("Rewards for mob: " + mobname + " not found...");
             return;
         }
 
@@ -42,12 +43,12 @@ public class Reward {
         IntStream.range(0, topList.size()).forEach(i -> {
             final UUID uuid = topList.get(i);
             final String player = Bukkit.getOfflinePlayer(uuid).getName();
-            debug("Giving reward for " + player);
+            debugln("Giving reward for " + player);
             rewards.get(i + 1).stream()
                     .map(command -> PLAYER_NAME.matcher(command).replaceAll(player))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
                     .forEach(command -> {
-                        debug("Place: " + i + "command:" + command);
+                        debugln("Place: " + i + "command:" + command);
                         server.dispatchCommand(sender, command);
                     });
         });

@@ -10,9 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,9 +35,6 @@ public class LeaderMobs extends JavaPlugin {
         instance = this;
         saveDefaultConfig();
         reload();
-
-        try { ConfigUpdater.update(this, "config.yml", new File(getDataFolder(), "config.yml"), new ArrayList<>()); }
-        catch (final IOException e) { e.printStackTrace(); }
 
         final PluginManager manager = getServer().getPluginManager();
         final Logger logger = getLogger();
@@ -92,10 +87,17 @@ public class LeaderMobs extends JavaPlugin {
     }
 
     public void reload() {
-        reloadConfig();
         if (!new File(getDataFolder(), "rewards.yml").exists()) {
             saveResource("rewards.yml", true);
         }
+
+        try {
+            ConfigUpdater.update(this, "config.yml", new File(getDataFolder(), "config.yml"), new ArrayList<>());
+            ConfigUpdater.update(this, "rewards.yml", new File(getDataFolder(), "rewards.yml"), new ArrayList<>());
+        }
+        catch (final IOException e) { e.printStackTrace(); }
+
+        reloadConfig();
 
         final File datafile = new File(getDataFolder(), "data.yml");
         if (!datafile.exists()) {
@@ -108,7 +110,6 @@ public class LeaderMobs extends JavaPlugin {
         playerData = YamlConfiguration.loadConfiguration(datafile);
 
         final FileConfiguration config = getConfig();
-
         debug          = config.getBoolean("debug");
         broadcast = config.getBoolean("Messages.broadcast");
 
@@ -117,19 +118,11 @@ public class LeaderMobs extends JavaPlugin {
             if (!Debugfolder.exists())
                 Debugfolder.mkdirs();
 
-            try {
-                final SimpleDateFormat df = new SimpleDateFormat("MM-dd-hh");
-                final String file = "debug_" + df.format(new Date()) + ".txt";
-                getLogger().info("Debug mode is on, out file: " + file);
-                debugfile = new File(getDataFolder() + "/debugs", file);
-                final BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(debugfile, true));
-                writer.write(("Server version: " + getServer().getVersion() + '\n').getBytes());
-                writer.flush();
-                writer.close();
-            }
-            catch (final IOException e) {
-                e.printStackTrace();
-            }
+            final SimpleDateFormat df = new SimpleDateFormat("MM-dd-hh");
+            final String file = "debug_" + df.format(new Date()) + ".txt";
+            getLogger().info("Debug mode is on, out file: " + file);
+            debugfile = new File(getDataFolder() + "/debugs", file);
+            Utils.debugln("Server version: " + getServer().getVersion());
         }
     }
 
@@ -138,5 +131,4 @@ public class LeaderMobs extends JavaPlugin {
         instance = null;
         HandlerList.unregisterAll(this);
     }
-
 }
