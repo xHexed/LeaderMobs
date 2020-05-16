@@ -90,8 +90,8 @@ Messages:
         delay: 10
         message: "%mob_name% died"
   toggle:
-    on: "&8<&a!&8>&7 You have successfully &aenabled&7 the broadcaster messages!"
-    off: "&8<&c!&8>&7 You have successfully &cdisabled&7 the broadcaster messages!"
+    true: "&8<&a!&8>&7 You have successfully &aenabled&7 the broadcaster messages!"
+    false: "&8<&c!&8>&7 You have successfully &cdisabled&7 the broadcaster messages!"
 
 Blacklist:
   #Should the blacklist acted as whitelist?

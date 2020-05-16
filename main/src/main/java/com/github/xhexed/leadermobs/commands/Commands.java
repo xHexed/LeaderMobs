@@ -23,11 +23,11 @@ public class Commands implements CommandExecutor, TabCompleter {
     public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final String[] args) {
         if (sender instanceof ConsoleCommandSender) {
             if (args.length == 0) {
-                sender.sendMessage(c("&7Usage: /lm reload"));
+                sender.sendMessage("§7Usage: /lm reload");
             }
             else if (args.length == 1) {
                 if ("reload".equalsIgnoreCase(args[0])) {
-                    sender.sendMessage(c("&aReloading plugin..."));
+                    sender.sendMessage("§aReloading plugin...");
                     LeaderMobs.getInstance().reload();
                     return true;
                 }
@@ -35,31 +35,31 @@ public class Commands implements CommandExecutor, TabCompleter {
         }
         if (sender instanceof Player) {
             if (args.length == 0) {
-                sender.sendMessage(c("&7Usage: /lm <reload/toggle>"));
+                sender.sendMessage("§7Usage: /lm <reload/toggle>");
             }
             else if (args.length == 1) {
                 switch (args[0].toLowerCase()) {
                     case "reload": {
                         if (!sender.hasPermission("lm.reload")) {
-                            sender.sendMessage(c("&cYou don't have permission!"));
+                            sender.sendMessage("§cYou don't have permission!");
                             return true;
                         }
-                        sender.sendMessage(c("&aReloading plugin..."));
+                        sender.sendMessage("§aReloading plugin...");
                         LeaderMobs.getInstance().reload();
                         return true;
                     }
                     case "toggle": {
                         if (!sender.hasPermission("lm.toggle")) {
-                            sender.sendMessage(c("&cYou don't have permission!"));
+                            sender.sendMessage("§cYou don't have permission!");
                             return true;
                         }
                         final FileConfiguration cnf = LeaderMobs.playerData;
                         if (!cnf.contains(sender.getName()) || cnf.getBoolean(sender.getName())) {
-                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.Toggle.Off")));
+                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.toggle.false")));
                             cnf.set(sender.getName(), false);
                         }
                         else {
-                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.Toggle.On")));
+                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.toggle.true")));
                             cnf.set(sender.getName(), true);
                         }
 
