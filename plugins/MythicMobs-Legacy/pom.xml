@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>LeaderMobs</artifactId>
+        <artifactId>leadermobs</artifactId>
         <groupId>com.github.xhexed</groupId>
         <version>1.1.2</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>MythicMobs_Legacy</artifactId>
+    <artifactId>leadermobs-mythicmobs-legacy</artifactId>
 
     <repositories>
         <repository>
@@ -28,7 +28,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.xhexed</groupId>
-            <artifactId>main</artifactId>
+            <artifactId>leadermobs-main</artifactId>
             <version>1.1.2</version>
         </dependency>
     </dependencies>

@@ -3,18 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>LeaderMobs</artifactId>
+        <artifactId>leadermobs</artifactId>
         <groupId>com.github.xhexed</groupId>
         <version>1.1.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dist</artifactId>
+    <artifactId>LeaderMobs-dist</artifactId>
     <packaging>jar</packaging>
 
     <build>
         <directory>../target</directory>
-        <finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
+        <finalName>${project.parent.name}-${project.parent.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -58,22 +58,22 @@
     <dependencies>
         <dependency>
             <groupId>com.github.xhexed</groupId>
-            <artifactId>main</artifactId>
+            <artifactId>leadermobs-main</artifactId>
             <version>1.1.2</version>
         </dependency>
         <dependency>
             <groupId>com.github.xhexed</groupId>
-            <artifactId>Boss</artifactId>
+            <artifactId>leadermobs-boss</artifactId>
             <version>1.1.2</version>
         </dependency>
         <dependency>
             <groupId>com.github.xhexed</groupId>
-            <artifactId>MythicMobs_Latest</artifactId>
+            <artifactId>leadermobs-mythicmobs-latest</artifactId>
             <version>1.1.2</version>
         </dependency>
         <dependency>
             <groupId>com.github.xhexed</groupId>
-            <artifactId>MythicMobs_Legacy</artifactId>
+            <artifactId>leadermobs-mythicmobs-legacy</artifactId>
             <version>1.1.2</version>
         </dependency>
     </dependencies>
