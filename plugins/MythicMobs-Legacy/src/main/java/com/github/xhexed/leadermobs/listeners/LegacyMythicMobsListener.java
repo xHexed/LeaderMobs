@@ -41,6 +41,15 @@ public class LegacyMythicMobsListener implements Listener {
             debug("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
             debug("Data: " + MobHandler.data);
         }
+
+        if (victim instanceof Player) {
+            if (victim.hasMetadata("NPC") || !helper.isMythicMob(damager)) return;
+            if (config.getBoolean("Blacklist.Whitelist", false)
+                    != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(damager).getType().getInternalName())) return;
+            MobHandler.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
+            debug("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
+            debug("Data: " + MobHandler.data);
+        }
     }
 
     @EventHandler(ignoreCancelled = true)
