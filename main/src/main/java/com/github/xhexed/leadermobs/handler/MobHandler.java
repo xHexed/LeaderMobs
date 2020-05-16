@@ -16,6 +16,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 import static com.github.xhexed.leadermobs.Utils.*;
@@ -83,8 +84,6 @@ public class MobHandler {
         if (damageInfo.getDamageDealt().keySet().size() < config.getInt("PlayersRequired")) return;
 
         final BukkitScheduler scheduler = Bukkit.getScheduler();
-        final List<UUID> topDealtList = new ArrayList<>();
-        final List<UUID> topTakenList = new ArrayList<>();
 
         scheduler.runTaskLater(getInstance(), () -> {
             scheduler.runTaskLater(getInstance(), () -> {
@@ -93,7 +92,7 @@ public class MobHandler {
                 damageDealtHeader = replaceMobPlaceholder(damageDealtHeader, entity);
                 sendMessage(damageDealtHeader);
 
-                sendPlaceMessage(health, config, damageInfo.getTopDamageDealt(), topDealtList, config.getString("Messages.MobDead.damageDealt.message", ""));
+                sendPlaceMessage(health, config, damageInfo.getTopDamageDealt(), config.getString("Messages.MobDead.damageDealt.message", ""));
 
                 scheduler.runTaskLater(getInstance(), () -> {
                     if (config.getBoolean("Messages.MobDead.damageDealt.title.enabled", false)) {
@@ -123,7 +122,7 @@ public class MobHandler {
                 damageTakenheader = replaceMobPlaceholder(damageTakenheader, entity);
                 sendMessage(damageTakenheader);
 
-                sendPlaceMessage(health, config, damageInfo.getTopDamageTaken(), topTakenList, config.getString("Messages.MobDead.damageTaken.message", ""));
+                sendPlaceMessage(health, config, damageInfo.getTopDamageTaken(), config.getString("Messages.MobDead.damageTaken.message", ""));
 
                 scheduler.runTaskLater(getInstance(), () -> {
                     if (config.getBoolean("Messages.MobDead.damageTaken.title.enabled", false)) {
@@ -145,26 +144,26 @@ public class MobHandler {
                 damageTakenFooter = NAME.matcher(damageTakenFooter != null ? damageTakenFooter : "").replaceAll(ChatColor.stripColor(mobName));
                 damageTakenFooter = replaceMobPlaceholder(damageTakenFooter, entity);
                 sendMessage(damageTakenFooter);
-            }, config.getLong("Messages.MobDead.damageTaken.delay"));
+            }, config.getLong("Messages.MobDead.damageTaken.delay", 0));
         }, config.getLong("Messages.MobDead.delay", 0));
 
-        new Reward(internalName, topDealtList, topTakenList);
+        new Reward(internalName,
+                damageInfo.getTopDamageDealt().stream().map(Pair::getValue).collect(Collectors.toList()),
+                damageInfo.getTopDamageTaken().stream().map(Pair::getValue).collect(Collectors.toList()));
         data.remove(entity);
     }
 
-    private static void sendPlaceMessage(final double health, final ConfigurationSection config, final List<? extends Pair<Double, UUID>> damageDealtList, final Collection<? super UUID> topDealtList, final String dealtMessage) {
-        for (int place = 1; place <= damageDealtList.size(); place++) {
+    private static void sendPlaceMessage(final double health, final ConfigurationSection config, final List<? extends Pair<Double, UUID>> damageList, final String damageMessage) {
+        for (int place = 1; place <= damageList.size(); place++) {
             if (place >= config.getInt("PlacesToBroadcast")) break;
 
-            final Pair<Double, UUID> info = damageDealtList.get(place - 1);
+            final Pair<Double, UUID> info = damageList.get(place - 1);
 
             final Double damage = info.getKey();
             final UUID uuid = info.getValue();
             final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
 
-            topDealtList.add(uuid);
-
-            String message = dealtMessage;
+            String message = damageMessage;
             message = PLACE_PREFIX.matcher(message != null ? message : "").replaceAll(config.getString(config.contains("PlacePrefix." + place) ? "PlacePrefix." + place : "PlacePrefix.default", ""));
             message = DAMAGE_POS.matcher(message).replaceAll(Integer.toString(place));
             message = PLAYER_NAME.matcher(message).replaceAll(player.getName());
