@@ -55,7 +55,7 @@ public class LeaderMobs extends JavaPlugin {
             logger.info("Found MythicMobs, hooking...");
             final String[] version = Objects.requireNonNull(manager.getPlugin("MythicMobs")).getDescription().getVersion().split("\\.");
             final int mainVersion = Integer.parseInt(version[0]);
-            if (mainVersion < 4 || (mainVersion == 4 && Integer.parseInt(version[2]) < 9)) {
+            if (mainVersion < 4 || (mainVersion == 4 && Integer.parseInt(version[1]) < 9)) {
                 logger.info("Found legacy version of MythicMobs (4.9.0-), hooking...");
                 try {
                     manager.registerEvents((Listener) Class.forName("com.github.xhexed.leadermobs.listeners.LegacyMythicMobsListener").newInstance(), this);
