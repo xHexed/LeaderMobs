@@ -1,5 +1,4 @@
 #Placeholders avalable: %player_name%, %place%
-version: 1
 
 SkeletalMinion: #Boss name
   dealt:
