@@ -1,14 +1,12 @@
 package com.github.xhexed.leadermobs;
 
 import com.github.xhexed.leadermobs.commands.Commands;
-import com.github.xhexed.leadermobs.listeners.BossListener;
-import com.github.xhexed.leadermobs.listeners.LegacyMythicMobsListener;
-import com.github.xhexed.leadermobs.listeners.MythicMobsListener;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -47,7 +45,11 @@ public class LeaderMobs extends JavaPlugin {
         final Logger logger = getLogger();
         if (manager.isPluginEnabled("Boss")) {
             logger.info("Found Boss, hooking...");
-            manager.registerEvents(new BossListener(), this);
+            try {
+                manager.registerEvents((Listener) Class.forName("com.github.xhexed.leadermobs.listeners.BossListener").newInstance(), this);
+            } catch (final InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
         }
         if (manager.isPluginEnabled("MythicMobs")) {
             logger.info("Found MythicMobs, hooking...");
@@ -55,10 +57,18 @@ public class LeaderMobs extends JavaPlugin {
             final int mainVersion = Integer.parseInt(version[0]);
             if (mainVersion < 4 || (mainVersion == 4 && Integer.parseInt(version[2]) < 9)) {
                 logger.info("Found legacy version of MythicMobs (4.9.0-), hooking...");
-                manager.registerEvents(new LegacyMythicMobsListener(), this);
+                try {
+                    manager.registerEvents((Listener) Class.forName("com.github.xhexed.leadermobs.listeners.LegacyMythicMobsListener").newInstance(), this);
+                } catch (final InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
             else {
-                manager.registerEvents(new MythicMobsListener(), this);
+                try {
+                    manager.registerEvents((Listener) Class.forName("com.github.xhexed.leadermobs.listeners.MythicMobsListener").newInstance(), this);
+                } catch (final InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
         else {
