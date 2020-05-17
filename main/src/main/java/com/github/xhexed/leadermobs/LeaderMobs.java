@@ -99,15 +99,15 @@ public class LeaderMobs extends JavaPlugin {
 
         reloadConfig();
 
-        final File datafile = new File(getDataFolder(), "data.yml");
-        if (!datafile.exists()) {
+        dataFile = new File(getDataFolder(), "data.yml");
+        if (!dataFile.exists()) {
             try {
-                datafile.createNewFile();
+                dataFile.createNewFile();
             } catch (final IOException e) {
                 e.printStackTrace();
             }
         }
-        playerData = YamlConfiguration.loadConfiguration(datafile);
+        playerData = YamlConfiguration.loadConfiguration(dataFile);
 
         final FileConfiguration config = getConfig();
         debug          = config.getBoolean("debug");
