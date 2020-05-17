@@ -39,13 +39,13 @@ public class MobHandler {
 
         scheduler.runTaskLater(getInstance(), () -> {
             config.getStringList("Messages.MobSpawn.messages").stream()
-                    .map(message -> getMobSpawnMessage(entity, mobName, x, y, z, message))
+                    .map(message -> getMobSpawnMessage(mobName, x, y, z, message))
                     .forEach(Utils::sendMessage);
 
             scheduler.runTaskLater(getInstance(), () -> {
                 if (config.getBoolean("Messages.MobSpawn.title.enabled", false)) {
-                    Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(entity, mobName, x, y, z, config.getString("Messages.MobSpawn.title.title", ""))),
-                            ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(entity, mobName, x, y, z, config.getString("Messages.MobSpawn.title.subTitle", ""))),
+                    Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(mobName, x, y, z, config.getString("Messages.MobSpawn.title.title", ""))),
+                            ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(mobName, x, y, z, config.getString("Messages.MobSpawn.title.subTitle", ""))),
                             config.getInt("Messages.MobSpawn.title.fadeIn", 0),
                             config.getInt("Messages.MobSpawn.title.stay", 0),
                             config.getInt("Messages.MobSpawn.title.fadeOut", 0)));
@@ -54,7 +54,7 @@ public class MobHandler {
 
             scheduler.runTaskLater(getInstance(), () -> {
                 if (config.getBoolean("Messages.MobSpawn.actionbar.enabled", false)) {
-                    Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(entity, mobName, x, y, z, config.getString("Messages.MobSpawn.actionbar.message", "")))));
+                    Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobSpawnMessage(mobName, x, y, z, config.getString("Messages.MobSpawn.actionbar.message", "")))));
                 }
             }, config.getLong("Messages.MobSpawn.actionbar.delay", 0));
         }, config.getLong("Messages.MobSpawn.delay", 0));
@@ -89,15 +89,15 @@ public class MobHandler {
             scheduler.runTaskLater(getInstance(), () -> {
                 String damageDealtHeader = config.getString("Messages.MobDead.damageDealt.header", "");
                 damageDealtHeader = NAME.matcher(damageDealtHeader != null ? damageDealtHeader : "").replaceAll(ChatColor.stripColor(mobName));
-                damageDealtHeader = replaceMobPlaceholder(damageDealtHeader, entity);
+                damageDealtHeader = replaceMobPlaceholder(damageDealtHeader, damageInfo);
                 sendMessage(damageDealtHeader);
 
                 sendPlaceMessage(health, config, damageInfo.getTopDamageDealt(), config.getString("Messages.MobDead.damageDealt.message", ""));
 
                 scheduler.runTaskLater(getInstance(), () -> {
                     if (config.getBoolean("Messages.MobDead.damageDealt.title.enabled", false)) {
-                        Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageDealt.title.title", ""))),
-                                ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageDealt.title.subTitle", ""))),
+                        Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageDealt.title.title", ""))),
+                                ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageDealt.title.subTitle", ""))),
                                 config.getInt("Messages.MobDead.damageDealt.title.fadeIn", 0),
                                 config.getInt("Messages.MobDead.damageDealt.title.stay", 0),
                                 config.getInt("Messages.MobDead.damageDealt.title.fadeOut", 0)));
@@ -106,28 +106,28 @@ public class MobHandler {
 
                 scheduler.runTaskLater(getInstance(), () -> {
                     if (config.getBoolean("Messages.MobDead.damageDealt.actionbar.enabled", false)) {
-                        Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageDealt.actionbar.message", "")))));
+                        Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageDealt.actionbar.message", "")))));
                     }
                 }, config.getLong("Messages.MobDead.damageDealt.actionbar.delay", 0));
 
                 String damageDealtFooter = config.getString("Messages.MobDead.damageDealt.footer", "");
                 damageDealtFooter = NAME.matcher(damageDealtFooter != null ? damageDealtFooter : "").replaceAll(ChatColor.stripColor(mobName));
-                damageDealtFooter = replaceMobPlaceholder(damageDealtFooter, entity);
+                damageDealtFooter = replaceMobPlaceholder(damageDealtFooter, damageInfo);
                 sendMessage(damageDealtFooter);
             }, config.getLong("Messages.MobDead.damageDealt.delay", 0));
 
             scheduler.runTaskLater(getInstance(), () -> {
                 String damageTakenheader = config.getString("Messages.MobDead.damageTaken.header", "");
                 damageTakenheader = NAME.matcher(damageTakenheader != null ? damageTakenheader : "").replaceAll(ChatColor.stripColor(mobName));
-                damageTakenheader = replaceMobPlaceholder(damageTakenheader, entity);
+                damageTakenheader = replaceMobPlaceholder(damageTakenheader, damageInfo);
                 sendMessage(damageTakenheader);
 
                 sendPlaceMessage(health, config, damageInfo.getTopDamageTaken(), config.getString("Messages.MobDead.damageTaken.message", ""));
 
                 scheduler.runTaskLater(getInstance(), () -> {
                     if (config.getBoolean("Messages.MobDead.damageTaken.title.enabled", false)) {
-                        Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageTaken.title.title", ""))),
-                                ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageTaken.title.subTitle", ""))),
+                        Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageTaken.title.title", ""))),
+                                ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageTaken.title.subTitle", ""))),
                                 config.getInt("Messages.MobDead.damageTaken.title.fadeIn", 0),
                                 config.getInt("Messages.MobDead.damageTaken.title.stay", 0),
                                 config.getInt("Messages.MobDead.damageTaken.title.fadeOut", 0)));
@@ -136,13 +136,13 @@ public class MobHandler {
 
                 scheduler.runTaskLater(getInstance(), () -> {
                     if (config.getBoolean("Messages.MobDead.damageTaken.actionbar.enabled", false)) {
-                        Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(entity, mobName, config.getString("Messages.MobDead.damageTaken.actionbar.message", "")))));
+                        Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageTaken.actionbar.message", "")))));
                     }
                 }, config.getLong("Messages.MobDead.damageTaken.actionbar.delay", 0));
 
                 String damageTakenFooter = config.getString("Messages.MobDead.damageTaken.footer", "");
                 damageTakenFooter = NAME.matcher(damageTakenFooter != null ? damageTakenFooter : "").replaceAll(ChatColor.stripColor(mobName));
-                damageTakenFooter = replaceMobPlaceholder(damageTakenFooter, entity);
+                damageTakenFooter = replaceMobPlaceholder(damageTakenFooter, damageInfo);
                 sendMessage(damageTakenFooter);
             }, config.getLong("Messages.MobDead.damageTaken.delay", 0));
         }, config.getLong("Messages.MobDead.delay", 0));

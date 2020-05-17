@@ -1,12 +1,12 @@
 package com.github.xhexed.leadermobs;
 
+import com.github.xhexed.leadermobs.data.MobDamageInfo;
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import java.io.BufferedOutputStream;
@@ -17,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.*;
-import static com.github.xhexed.leadermobs.handler.MobHandler.data;
 
 public class Utils {
     public static final Pattern PLAYER_NAME = Pattern.compile("%player_name%");
@@ -69,34 +68,33 @@ public class Utils {
         }
     }
 
-    public static String getMobSpawnMessage(final Entity entity, final String mobname, final int x, final int y, final int z, String message) {
+    public static String getMobSpawnMessage(final String mobname, final int x, final int y, final int z, String message) {
         message = NAME.matcher(message).replaceAll(ChatColor.stripColor(mobname));
         message = POS_X.matcher(message).replaceAll(Integer.toString(x));
         message = POS_Y.matcher(message).replaceAll(Integer.toString(y));
         message = POS_Z.matcher(message).replaceAll(Integer.toString(z));
-        message = replaceMobPlaceholder(message, entity);
         message = replacePlaceholder(null, message);
         return message;
     }
 
-    public static String replaceMobPlaceholder(String message, final Entity entity) {
+    public static String replaceMobPlaceholder(String message, final MobDamageInfo info) {
         final Matcher m = PLACEHOLDER_PATTERN.matcher(message);
         while (m.find()) {
             final String params = m.group(2);
             debugConsole("Placeholder requested: " + params);
-            message = message.replaceAll(Pattern.quote(m.group()), Matcher.quoteReplacement(onPlaceholderRequest(params, entity)));
+            message = message.replaceAll(Pattern.quote(m.group()), Matcher.quoteReplacement(onPlaceholderRequest(params, info)));
         }
         return message;
     }
 
-    private static String onPlaceholderRequest(String params, final Entity entity) {
+    private static String onPlaceholderRequest(String params, final MobDamageInfo info) {
         if (params.startsWith("top_dealt_")) {
             params = params.substring(10);
 			
             final int pos;
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
-            try { return Bukkit.getOfflinePlayer(data.get(entity).getTopDamageDealt().get(pos - 1).getValue()).getName(); }
+            try { return Bukkit.getOfflinePlayer(info.getTopDamageDealt().get(pos - 1).getValue()).getName(); }
             catch (final IndexOutOfBoundsException e) { return ""; }
         }
         if (params.startsWith("top_taken_")) {
@@ -105,15 +103,15 @@ public class Utils {
             final int pos;
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
-            try { return Bukkit.getOfflinePlayer(data.get(entity).getTopDamageTaken().get(pos - 1).getValue()).getName(); }
+            try { return Bukkit.getOfflinePlayer(info.getTopDamageTaken().get(pos - 1).getValue()).getName(); }
             catch (final IndexOutOfBoundsException e) { return ""; }
         }
         return "";
     }
 
-    public static String getMobDeathMessage(final Entity entity, final String mobname, String message) {
+    public static String getMobDeathMessage(final MobDamageInfo info, final String mobname, String message) {
         message = NAME.matcher(message).replaceAll(ChatColor.stripColor(mobname));
-        message = replaceMobPlaceholder(message, entity);
+        message = replaceMobPlaceholder(message, info);
         message = replacePlaceholder(null, message);
         return message;
     }
