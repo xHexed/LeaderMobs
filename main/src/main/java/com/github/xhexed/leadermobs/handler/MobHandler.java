@@ -1,6 +1,5 @@
 package com.github.xhexed.leadermobs.handler;
 
-import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.Reward;
 import com.github.xhexed.leadermobs.Utils;
 import com.github.xhexed.leadermobs.data.MobDamageInfo;
@@ -15,7 +14,10 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
@@ -33,7 +35,7 @@ public class MobHandler {
         final int z = location.getBlockZ();
 
         final FileConfiguration config = getInstance().getConfig();
-        if (!LeaderMobs.broadcast) return;
+        if (!config.getBoolean("Messages.broadcast")) return;
 
         final BukkitScheduler scheduler = Bukkit.getScheduler();
 

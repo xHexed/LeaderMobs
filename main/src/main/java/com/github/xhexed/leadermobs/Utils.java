@@ -43,13 +43,13 @@ public class Utils {
 
     public static void sendMessage(final String message) {
         Bukkit.getOnlinePlayers().forEach(p -> {
-            if (!playerData.getBoolean(p.getName(), true)) return;
+            if (playerData.getBoolean(p.getName(), false)) return;
             p.sendMessage(replacePlaceholder(p, ChatColor.translateAlternateColorCodes('&', message)));
         });
     }
 
     public static void sendTitle(final Player player, final String title, final String subTitle, final int fadeIn, final int stay, final int fadeOut) {
-        if (playerData.getBoolean(player.getName())) return;
+        if (playerData.getBoolean(player.getName(), false)) return;
         try {
             player.sendTitle(title, subTitle, fadeIn, stay, fadeOut);
         }
@@ -59,7 +59,7 @@ public class Utils {
     }
 
     public static void sendActionBar(final Player player, final String message) {
-        if (playerData.getBoolean(player.getName())) return;
+        if (playerData.getBoolean(player.getName(), false)) return;
         try {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
         }
@@ -97,6 +97,15 @@ public class Utils {
             try { return Bukkit.getOfflinePlayer(info.getTopDamageDealt().get(pos - 1).getValue()).getName(); }
             catch (final IndexOutOfBoundsException e) { return ""; }
         }
+        if (params.startsWith("top_dealt_damage_")) {
+            params = params.substring(15);
+
+            final int pos;
+            try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
+
+            try { return DOUBLE_FORMAT.format(info.getTopDamageDealt().get(pos - 1).getKey()); }
+            catch (final IndexOutOfBoundsException e) { return ""; }
+        }
         if (params.startsWith("top_taken_")) {
             params = params.substring(10);
 
@@ -104,6 +113,15 @@ public class Utils {
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
             try { return Bukkit.getOfflinePlayer(info.getTopDamageTaken().get(pos - 1).getValue()).getName(); }
+            catch (final IndexOutOfBoundsException e) { return ""; }
+        }
+        if (params.startsWith("top_taken_damage_")) {
+            params = params.substring(15);
+
+            final int pos;
+            try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
+
+            try { return DOUBLE_FORMAT.format(info.getTopDamageTaken().get(pos - 1).getKey()); }
             catch (final IndexOutOfBoundsException e) { return ""; }
         }
         return "";

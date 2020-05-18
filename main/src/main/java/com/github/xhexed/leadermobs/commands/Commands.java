@@ -1,7 +1,6 @@
 package com.github.xhexed.leadermobs.commands;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
-import org.bukkit.ChatColor;
 import org.bukkit.command.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -9,13 +8,11 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
+import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
 public class Commands implements CommandExecutor, TabCompleter {
-    private String c(final String text) { return ChatColor.translateAlternateColorCodes('&', text); }
     private static final List<String> commands = Collections.singletonList("reload");
     private static final List<String> playerCommands = Collections.singletonList("toggle");
 
@@ -53,17 +50,17 @@ public class Commands implements CommandExecutor, TabCompleter {
                             sender.sendMessage("§cYou don't have permission!");
                             return true;
                         }
-                        final FileConfiguration cnf = LeaderMobs.playerData;
-                        if (!cnf.contains(sender.getName()) || cnf.getBoolean(sender.getName())) {
-                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.toggle.false")));
-                            cnf.set(sender.getName(), false);
+                        final FileConfiguration config = LeaderMobs.playerData;
+                        if (!config.contains(sender.getName()) || config.getBoolean(sender.getName())) {
+                            sender.sendMessage(translateAlternateColorCodes('&', Objects.requireNonNull(LeaderMobs.getInstance().getConfig().getString("Messages.toggle.false", ""))));
+                            config.set(sender.getName(), false);
                         }
                         else {
-                            sender.sendMessage(c(LeaderMobs.getInstance().getConfig().getString("Messages.toggle.true")));
-                            cnf.set(sender.getName(), true);
+                            sender.sendMessage(translateAlternateColorCodes('&', Objects.requireNonNull(LeaderMobs.getInstance().getConfig().getString("Messages.toggle.true", ""))));
+                            config.set(sender.getName(), true);
                         }
 
-                        try { cnf.save(LeaderMobs.dataFile); } catch (final IOException e) { e.printStackTrace(); }
+                        try { config.save(LeaderMobs.dataFile); } catch (final IOException e) { e.printStackTrace(); }
                     }
                 }
             }

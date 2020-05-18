@@ -1,4 +1,6 @@
 debug: false
+#Will the plugin attempt to auto-update the plugin to get new files?
+auto-update: true
 
 PlayersRequired: 1 #This is to prevent spam if there's only 1 or 2 people killing the mob privately, there's no limit!
 PlacesToBroadcast: 10 #How much places to broadcast.
@@ -96,7 +98,9 @@ Messages:
 Blacklist:
   #Should the blacklist acted as whitelist?
   Whitelist: false
+  #Mobs from Boss plugin
   Boss:
   - "test"
+  #Mobs from MythicMobs plugin
   MythicMobs:
   - "test"

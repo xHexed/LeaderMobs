@@ -5,7 +5,6 @@ import com.tchristofferson.configupdater.ConfigUpdater;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -21,7 +20,6 @@ import java.util.logging.Logger;
 public class LeaderMobs extends JavaPlugin {
     public static File dataFile;
     public static FileConfiguration playerData;
-    public static boolean broadcast;
     static boolean debug;
     static boolean papi;
     static boolean mvdw;
@@ -91,11 +89,15 @@ public class LeaderMobs extends JavaPlugin {
             saveResource("rewards.yml", true);
         }
 
-        try {
-            ConfigUpdater.update(this, "config.yml", new File(getDataFolder(), "config.yml"), new ArrayList<>());
-            ConfigUpdater.update(this, "rewards.yml", new File(getDataFolder(), "rewards.yml"), new ArrayList<>());
+        final FileConfiguration config = getConfig();
+        if (config.getBoolean("auto-update", true)) {
+            try {
+                ConfigUpdater.update(this, "config.yml", new File(getDataFolder(), "config.yml"), new ArrayList<>());
+                ConfigUpdater.update(this, "rewards.yml", new File(getDataFolder(), "rewards.yml"), new ArrayList<>());
+            } catch (final IOException e) {
+                e.printStackTrace();
+            }
         }
-        catch (final IOException e) { e.printStackTrace(); }
 
         reloadConfig();
 
@@ -109,17 +111,13 @@ public class LeaderMobs extends JavaPlugin {
         }
         playerData = YamlConfiguration.loadConfiguration(dataFile);
 
-        final FileConfiguration config = getConfig();
-        debug          = config.getBoolean("debug");
-        broadcast = config.getBoolean("Messages.broadcast");
-
+        debug          = config.getBoolean("debug", false);
         if (debug) {
             final File Debugfolder = new File(getDataFolder() + "/debugs");
             if (!Debugfolder.exists())
                 Debugfolder.mkdirs();
 
-            final SimpleDateFormat df = new SimpleDateFormat("MM-dd-hh");
-            final String file = "debug_" + df.format(new Date()) + ".txt";
+            final String file = "debug_" + new SimpleDateFormat("MM-dd-hh").format(new Date()) + ".txt";
             getLogger().info("Debug mode is on, out file: " + file);
             debugfile = new File(getDataFolder() + "/debugs", file);
             Utils.debugln("Server version: " + getServer().getVersion());
@@ -129,6 +127,5 @@ public class LeaderMobs extends JavaPlugin {
     @Override
     public void onDisable() {
         instance = null;
-        HandlerList.unregisterAll(this);
     }
 }
