@@ -5,22 +5,45 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.xhexed</groupId>
-    <artifactId>LeaderMobs</artifactId>
-    <version>1.1.2</version>
+    <artifactId>leadermobs</artifactId>
+    <version>1.2.1</version>
+    <packaging>pom</packaging>
+
+    <name>LeaderMobs</name>
+
+    <modules>
+        <module>plugins/MythicMobs-Latest</module>
+        <module>plugins/MythicMobs-Legacy</module>
+        <module>plugins/Boss</module>
+        <module>main</module>
+        <module>dist</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
         <defaultGoal>clean package</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <!-- manifest>
+                            <addClasspath>false</addClasspath>
+                        </manifest -->
+                    </archive>
+                </configuration>
+            </plugin>
+            <!-- plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-install-plugin</artifactId>
-                <version>3.0.0-M1</version>
                 <configuration>
                     <groupId>org.minecademy</groupId>
                     <artifactId>Boss</artifactId>
@@ -38,33 +61,17 @@
                         <phase>validate</phase>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin -->
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
+
     <repositories>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
-        <repository>
-            <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-        <repository>
-            <id>mvdw-software</id>
-            <url>http://repo.mvdw-software.be/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>nexus</id>
-            <url>http://mvn.lumine.io/repository/maven-public/</url>
-        </repository>
     </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -79,35 +86,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>2.10.4</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>be.maximvdw</groupId>
-            <artifactId>MVdWPlaceholderAPI</artifactId>
-            <version>3.0.2-SNAPSHOT</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>io.lumine.xikage</groupId>
-            <artifactId>MythicMobs</artifactId>
-            <version>4.9.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.minecademy</groupId>
-            <artifactId>Boss</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>19.0.0</version>
         </dependency>
     </dependencies>
 </project>

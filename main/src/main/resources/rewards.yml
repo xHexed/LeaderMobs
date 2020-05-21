@@ -1,0 +1,33 @@
+#Placeholders avalable: %player_name%, %place%
+
+SkeletalMinion: #Boss name
+  dealt:
+    1: #Place (top damage)
+      rewards: #Can have unlimited commands!
+      - "msg %player_name% 1st!"
+    2: #Place #2
+      rewards:
+      - "msg %player_name% 2nd!"
+  taken:
+    1:
+      rewards:
+      - "msg %player_name% 1st!"
+    2:
+      rewards:
+      - "msg %player_name% 2nd!"
+
+SkeletalKnight: #Another boss name
+  dealt:
+    1:
+      rewards:
+      - "msg %player_name% 1st!"
+    2:
+      rewards:
+      - "msg %player_name% 2nd!"
+  taken:
+    1:
+      rewards:
+      - "msg %player_name% 1st!"
+    2:
+      rewards:
+      - "msg %player_name% 2nd!"
