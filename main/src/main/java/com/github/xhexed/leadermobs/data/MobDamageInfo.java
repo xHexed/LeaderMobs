@@ -1,14 +1,14 @@
 package com.github.xhexed.leadermobs.data;
 
-import javafx.util.Pair;
+import com.github.xhexed.leadermobs.utils.Pair;
 
 import java.util.*;
 
 public class MobDamageInfo {
     private final Map<UUID, Double> damageDealt;
     private final Map<UUID, Double> damageTaken;
-    private Pair<List<Pair<Double, UUID>>, Boolean> topDamageDealt = new Pair<>(new ArrayList<>(), false);
-    private Pair<List<Pair<Double, UUID>>, Boolean> topDamageTaken = new Pair<>(new ArrayList<>(), false);
+    private final List<Pair<Double, UUID>> topDamageDealt = new ArrayList<>();
+    private final List<Pair<Double, UUID>> topDamageTaken = new ArrayList<>();
 
     public MobDamageInfo(final Map<UUID, Double> damageDealt, final Map<UUID, Double> damageTaken) {
         this.damageDealt = new HashMap<>(damageDealt);
@@ -24,21 +24,16 @@ public class MobDamageInfo {
     }
 
     public List<Pair<Double, UUID>> getTopDamageDealt() {
-        final List<Pair<Double, UUID>> topDamageDealt = calculateTop(this.topDamageDealt.getKey(), damageDealt, this.topDamageDealt.getValue());
-        this.topDamageDealt = new Pair<>(topDamageDealt, true);
-        return topDamageDealt;
+        return calculateTop(topDamageDealt, damageDealt);
     }
 
     public List<Pair<Double, UUID>> getTopDamageTaken() {
-        final List<Pair<Double, UUID>> topDamageTaken = calculateTop(this.topDamageTaken.getKey(), damageTaken, this.topDamageTaken.getValue());
-        this.topDamageTaken = new Pair<>(topDamageTaken, true);
-        return topDamageTaken;
+        return calculateTop(topDamageTaken, damageTaken);
     }
 
-    private List<Pair<Double, UUID>> calculateTop(final List<Pair<Double, UUID>> topList, final Map<UUID, Double> list, final boolean isCalculated) {
-        if (isCalculated) return topList;
+    private List<Pair<Double, UUID>> calculateTop(final List<Pair<Double, UUID>> topList, final Map<UUID, Double> list) {
+        if (!topList.isEmpty()) return topList;
 
-        topList.clear();
         list.forEach((p, d) -> topList.add(new Pair<>(d, p)));
         topList.sort((f, s) -> s.getKey().compareTo(f.getKey()));
         return topList;
