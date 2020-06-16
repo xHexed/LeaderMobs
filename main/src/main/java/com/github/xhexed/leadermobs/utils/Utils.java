@@ -1,4 +1,4 @@
-package com.github.xhexed.leadermobs;
+package com.github.xhexed.leadermobs.utils;
 
 import com.github.xhexed.leadermobs.data.MobDamageInfo;
 import me.clip.placeholderapi.PlaceholderAPI;

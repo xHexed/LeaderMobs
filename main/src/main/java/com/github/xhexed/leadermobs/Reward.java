@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
-import static com.github.xhexed.leadermobs.Utils.*;
+import static com.github.xhexed.leadermobs.utils.Utils.*;
 
 public class Reward {
     private final String mobname;

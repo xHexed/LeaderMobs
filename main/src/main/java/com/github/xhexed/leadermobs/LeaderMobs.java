@@ -1,6 +1,7 @@
 package com.github.xhexed.leadermobs;
 
 import com.github.xhexed.leadermobs.commands.Commands;
+import com.github.xhexed.leadermobs.utils.Utils;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,11 +21,11 @@ import java.util.logging.Logger;
 public class LeaderMobs extends JavaPlugin {
     public static File dataFile;
     public static FileConfiguration playerData;
-    static boolean debug;
-    static boolean papi;
-    static boolean mvdw;
+    public static boolean debug;
+    public static boolean papi;
+    public static boolean mvdw;
     private static LeaderMobs instance;
-    static File debugfile;
+    public static File debugfile;
 
     public static LeaderMobs getInstance() { return instance; }
     

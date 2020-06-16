@@ -1,9 +1,9 @@
 package com.github.xhexed.leadermobs.handler;
 
 import com.github.xhexed.leadermobs.Reward;
-import com.github.xhexed.leadermobs.Utils;
+import com.github.xhexed.leadermobs.utils.Utils;
 import com.github.xhexed.leadermobs.data.MobDamageInfo;
-import javafx.util.Pair;
+import com.github.xhexed.leadermobs.utils.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -21,10 +21,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
-import static com.github.xhexed.leadermobs.Utils.*;
+import static com.github.xhexed.leadermobs.utils.Utils.*;
 
 public class MobHandler {
-    public static final Map<Entity, MobDamageInfo> data = new HashMap<>();
+    private static final Map<Entity, MobDamageInfo> data = new HashMap<>();
 
     public static void onMobSpawn(final Entity entity, final String mobName) {
         data.put(entity, new MobDamageInfo(new HashMap<>(), new HashMap<>()));
