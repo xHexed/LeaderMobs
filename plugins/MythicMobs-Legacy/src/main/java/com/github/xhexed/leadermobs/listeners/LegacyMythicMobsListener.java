@@ -18,7 +18,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 import static com.github.xhexed.leadermobs.utils.Utils.debugln;
 
-public class LegacyMythicMobsListener implements Listener {
+class LegacyMythicMobsListener implements Listener {
     private static final BukkitAPIHelper helper = MythicMobs.inst().getAPIHelper();
     private final FileConfiguration config = getInstance().getConfig();
 

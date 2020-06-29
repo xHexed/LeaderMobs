@@ -17,7 +17,7 @@ import org.mineacademy.boss.api.event.BossSpawnEvent;
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 import static com.github.xhexed.leadermobs.utils.Utils.debugln;
 
-public class BossListener implements Listener {
+class BossListener implements Listener {
     private final FileConfiguration config = getInstance().getConfig();
 
     @EventHandler(ignoreCancelled = true)
