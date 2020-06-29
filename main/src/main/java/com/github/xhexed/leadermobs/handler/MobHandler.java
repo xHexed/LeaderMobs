@@ -12,6 +12,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Projectile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -60,20 +61,28 @@ public class MobHandler {
         }, config.getLong("Messages.MobSpawn.delay", 0));
     }
 
-    public static void onPlayerDamage(final UUID uuid, final Entity entity, final Double damage) {
+    public static void onPlayerDamage(final UUID player, Entity entity, final Double damage) {
+        if (entity instanceof Projectile) {
+            final Entity shooter = (Entity) ((Projectile) entity).getShooter();
+            if (shooter != null) entity = shooter;
+        }
         final MobDamageInfo mobInfo = data.get(entity);
         final Map<UUID, Double> damageDealtList = mobInfo.getDamageDealt();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
-        damageDealtList.put(uuid, damageDealtList.containsKey(uuid) ?
-                damageDealtList.get(uuid) + damageFinal : damageFinal);
+        damageDealtList.put(player, damageDealtList.containsKey(player) ?
+                damageDealtList.get(player) + damageFinal : damageFinal);
         data.put(entity, new MobDamageInfo(damageDealtList, mobInfo.getDamageTaken()));
     }
 
-    public static void onMobDamage(final Entity entity, final UUID uuid, final Double damage) {
+    public static void onMobDamage(Entity entity, final UUID player, final Double damage) {
+        if (entity instanceof Projectile) {
+            final Entity shooter = (Entity) ((Projectile) entity).getShooter();
+            if (shooter != null) entity = shooter;
+        }
         final Map<UUID, Double> damageTakenList = data.containsKey(entity) ? data.get(entity).getDamageTaken() : new HashMap<>();
         final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
-        damageTakenList.put(uuid, damageTakenList.containsKey(uuid) ?
-                damageTakenList.get(uuid) + damageFinal : damageFinal);
+        damageTakenList.put(player, damageTakenList.containsKey(player) ?
+                damageTakenList.get(player) + damageFinal : damageFinal);
         data.put(entity, new MobDamageInfo(data.get(entity).getDamageDealt(), damageTakenList));
     }
 
