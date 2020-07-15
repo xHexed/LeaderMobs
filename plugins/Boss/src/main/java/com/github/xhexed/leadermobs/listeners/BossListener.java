@@ -19,10 +19,10 @@ import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 import static com.github.xhexed.leadermobs.utils.Utils.debugln;
 
 public class BossListener implements Listener {
-    private final FileConfiguration config = getInstance().getConfig();
 
     @EventHandler(ignoreCancelled = true)
     public void onSpawn(final BossSpawnEvent event) {
+        final FileConfiguration config = getInstance().getConfig();
         final String bossName = event.getBoss().getName();
         if (config.getBoolean("Blacklist.Whitelist", false) != config.getStringList("Blacklist.Boss").contains(bossName)) return;
         MobHandler.onMobSpawn(event.getEntity(), bossName);
@@ -30,6 +30,7 @@ public class BossListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(final EntityDamageByEntityEvent event) {
+        final FileConfiguration config = getInstance().getConfig();
         Entity victim = event.getEntity();
         Entity damager = event.getDamager();
 

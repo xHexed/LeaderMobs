@@ -21,16 +21,18 @@ import static com.github.xhexed.leadermobs.utils.Utils.debugln;
 
 public class MythicMobsListener implements Listener {
     private static final BukkitAPIHelper helper = MythicMobs.inst().getAPIHelper();
-    private final FileConfiguration config = getInstance().getConfig();
 
     @EventHandler(ignoreCancelled = true)
     public void onSpawn(final MythicMobSpawnEvent event) {
+
+        final FileConfiguration config = getInstance().getConfig();
         if (config.getBoolean("Blacklist.Whitelist", false) != config.getStringList("Blacklist.MythicMobs").contains(event.getMobType().getInternalName())) return;
         MobHandler.onMobSpawn(event.getEntity(), event.getMobType().getDisplayName().get());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(final EntityDamageByEntityEvent event) {
+        final FileConfiguration config = getInstance().getConfig();
         Entity victim = event.getEntity();
         Entity damager = event.getDamager();
 
