@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,8 +30,18 @@ public class BossListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(final EntityDamageByEntityEvent event) {
-        final Entity victim = event.getEntity();
-        final Entity damager = event.getDamager();
+        Entity victim = event.getEntity();
+        Entity damager = event.getDamager();
+
+        if (damager instanceof Projectile) {
+            final Entity shooter = (Entity) ((Projectile) damager).getShooter();
+            if (shooter != null) damager = shooter;
+        }
+
+        if (victim instanceof Projectile) {
+            final Entity shooter = (Entity) ((Projectile) victim).getShooter();
+            if (shooter != null) victim = shooter;
+        }
 
         if (damager instanceof Player) {
             if (damager.hasMetadata("NPC") || !BossAPI.isBoss(victim) ||
