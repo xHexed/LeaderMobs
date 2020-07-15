@@ -65,6 +65,6 @@ public class BossListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onDeath(final BossDeathEvent e) {
         final Boss boss = e.getBoss();
-        MobHandler.onMobDeath(e.getEntity(), boss.getSettings().getCustomName(), boss.getName(), boss.getSettings().getHealth());
+        MobHandler.onMobDeath(e.getEntity(), boss.getSettings().getCustomName(), boss.getName());
     }
 }

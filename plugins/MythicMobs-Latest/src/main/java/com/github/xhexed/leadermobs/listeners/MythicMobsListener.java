@@ -66,6 +66,6 @@ public class MythicMobsListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onDeath(final MythicMobDeathEvent event) {
         final MythicMob mobs = event.getMobType();
-        MobHandler.onMobDeath(event.getEntity(), event.getMob().getDisplayName(), mobs.getInternalName(), mobs.getHealth().get());
+        MobHandler.onMobDeath(event.getEntity(), event.getMob().getDisplayName(), mobs.getInternalName());
     }
 }

@@ -77,9 +77,10 @@ public class MobHandler {
         data.put(entity, new MobDamageInfo(data.get(entity).getDamageDealt(), damageTakenList));
     }
 
-    public static void onMobDeath(final Entity entity, final String mobName, final String internalName, final double health) {
+    public static void onMobDeath(final Entity entity, final String mobName, final String internalName) {
         if (!data.containsKey(entity)) return;
         final MobDamageInfo damageInfo = data.get(entity);
+        damageInfo.calculateTop();
         final FileConfiguration config = getInstance().getConfig();
         if (damageInfo.getDamageDealt().keySet().size() < config.getInt("PlayersRequired")) return;
 
@@ -90,7 +91,7 @@ public class MobHandler {
                 damageDealtHeader = replaceMobPlaceholder(damageDealtHeader, damageInfo);
                 sendMessage(damageDealtHeader);
 
-                sendPlaceMessage(health, config, damageInfo.getTopDamageDealt(), config.getString("Messages.MobDead.damageDealt.message", ""));
+                sendPlaceMessage(damageInfo.getTotalDamageDealt(), config, damageInfo.getTopDamageDealt(), config.getString("Messages.MobDead.damageDealt.message", ""));
 
                 getScheduler().runTaskLater(getInstance(), () -> {
                     if (config.getBoolean("Messages.MobDead.damageDealt.title.enabled", false)) {
@@ -120,7 +121,7 @@ public class MobHandler {
                 damageTakenheader = replaceMobPlaceholder(damageTakenheader, damageInfo);
                 sendMessage(damageTakenheader);
 
-                sendPlaceMessage(health, config, damageInfo.getTopDamageTaken(), config.getString("Messages.MobDead.damageTaken.message", ""));
+                sendPlaceMessage(damageInfo.getTotalDamageTaken(), config, damageInfo.getTopDamageTaken(), config.getString("Messages.MobDead.damageTaken.message", ""));
 
                 getScheduler().runTaskLater(getInstance(), () -> {
                     if (config.getBoolean("Messages.MobDead.damageTaken.title.enabled", false)) {
@@ -151,7 +152,7 @@ public class MobHandler {
         data.remove(entity);
     }
 
-    private static void sendPlaceMessage(final double health, final ConfigurationSection config, final List<? extends Pair<Double, UUID>> damageList, final String damageMessage) {
+    private static void sendPlaceMessage(final double total, final ConfigurationSection config, final List<? extends Pair<Double, UUID>> damageList, final String damageMessage) {
         for (int place = 1; place <= damageList.size(); place++) {
             if (place >= config.getInt("PlacesToBroadcast")) break;
 
@@ -166,7 +167,7 @@ public class MobHandler {
             message = DAMAGE_POS.matcher(message).replaceAll(Integer.toString(place));
             message = PLAYER_NAME.matcher(message).replaceAll(player.getName());
             message = DAMAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(damage));
-            message = PERCENTAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(getPercentage(damage, health)));
+            message = PERCENTAGE.matcher(message).replaceAll(DOUBLE_FORMAT.format(getPercentage(damage, total)));
             message = replacePlaceholder(player, message);
             sendMessage(ChatColor.translateAlternateColorCodes('&', message));
         }
