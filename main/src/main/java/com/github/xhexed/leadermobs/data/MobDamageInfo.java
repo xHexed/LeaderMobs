@@ -4,6 +4,8 @@ import com.github.xhexed.leadermobs.utils.Pair;
 
 import java.util.*;
 
+import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
+
 public class MobDamageInfo {
     private final Map<UUID, Double> damageDealt;
     private final Map<UUID, Double> damageTaken;
@@ -20,11 +22,11 @@ public class MobDamageInfo {
     public void calculateTop() {
         Pair<List<Pair<Double, UUID>>, Double> result;
 
-        result = calculateTop(topDamageDealt, damageDealt);
+        result = calculateTop(topDamageDealt, damageDealt, getInstance().getConfig().getDouble("damage.dealt", 0));
         topDamageDealt = result.getKey();
         totalDamageDealt = result.getValue();
 
-        result = calculateTop(topDamageTaken, damageTaken);
+        result = calculateTop(topDamageTaken, damageTaken, getInstance().getConfig().getDouble("damage.taken", 0));
         topDamageTaken = result.getKey();
         totalDamageTaken = result.getValue();
     }
@@ -53,12 +55,12 @@ public class MobDamageInfo {
         return topDamageTaken;
     }
 
-    private Pair<List<Pair<Double, UUID>>, Double> calculateTop(final List<Pair<Double, UUID>> topList, final Map<UUID, Double> list) {
+    private Pair<List<Pair<Double, UUID>>, Double> calculateTop(final List<Pair<Double, UUID>> topList, final Map<UUID, Double> list, final double requiredDamage) {
         if (!topList.isEmpty()) return new Pair<>(topList, 0.0);
         double totalDamage = 0.0;
-
         for (final Map.Entry<UUID, Double> entry : list.entrySet()) {
             final Double damage = entry.getValue();
+            if (damage < requiredDamage) continue;
             topList.add(new Pair<>(damage, entry.getKey()));
             totalDamage += damage;
         }

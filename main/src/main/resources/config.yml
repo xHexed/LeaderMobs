@@ -11,10 +11,13 @@ PlacePrefix:
   123: "This pos will have long prefix!"
   default: "&6"
 
-Damage:
+damage:
   #How much damage the player has to dealt to get included to the leaderboard, set to 0 to disable
-  required: 0
+  dealt: 0
+  #Same with above but if taken
+  taken: 0
 
+#Comming soon... (tm)
 Warmup:
   #How much damage the mob have to take to start the leaderboard, set to 0 to disable
   damage: 1
@@ -22,6 +25,7 @@ Warmup:
     #Time for the leaderboard to reset, set to 0 to disable
     interval: 600
 
+#Comming soon... (tm)
 Reset:
   #How much damage the mob have to take for the leaderboard to not get cleared
   damage: 1
