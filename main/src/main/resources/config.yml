@@ -57,6 +57,10 @@ Messages:
     delay: 10
     #Placeholders avalable: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
     damageDealt:
+      #Will it hide the header-footer message when no one is in the list?
+      hide-empty-header: true
+      #Same with above but with footer
+      hide-empty-footer: true
       delay: 10
       header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
       footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
@@ -76,6 +80,8 @@ Messages:
         message: "%mob_name% died"
     damageTaken:
       delay: 10
+      hide-empty-header: true
+      hide-empty-footer: true
       header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
       footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
       message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
