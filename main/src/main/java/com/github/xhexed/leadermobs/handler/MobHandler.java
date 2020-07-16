@@ -1,5 +1,6 @@
 package com.github.xhexed.leadermobs.handler;
 
+import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.Reward;
 import com.github.xhexed.leadermobs.utils.Utils;
 import com.github.xhexed.leadermobs.data.MobDamageInfo;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
@@ -24,7 +26,17 @@ import static com.github.xhexed.leadermobs.utils.Utils.*;
 import static org.bukkit.Bukkit.getScheduler;
 
 public class MobHandler {
-    private static final Map<Entity, MobDamageInfo> data = new HashMap<>();
+    private static final Map<Entity, MobDamageInfo> data = new ConcurrentHashMap<>();
+    
+    static {
+        getScheduler().runTaskTimerAsynchronously(LeaderMobs.getInstance(), () -> {
+            for (final Entity entity : data.keySet()) {
+                if (!entity.isValid()) {
+                    data.remove(entity);
+                }
+            }
+        }, 0, 200);
+    }
 
     public static void onMobSpawn(final Entity entity, final String mobName) {
         data.put(entity, new MobDamageInfo(new HashMap<>(), new HashMap<>()));
