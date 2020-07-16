@@ -94,7 +94,6 @@ public class LeaderMobs extends JavaPlugin {
         if (config.getBoolean("auto-update", true)) {
             try {
                 ConfigUpdater.update(this, "config.yml", new File(getDataFolder(), "config.yml"), new ArrayList<>());
-                ConfigUpdater.update(this, "rewards.yml", new File(getDataFolder(), "rewards.yml"), new ArrayList<>());
             } catch (final IOException e) {
                 e.printStackTrace();
             }
