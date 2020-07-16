@@ -86,7 +86,7 @@ public class MobHandler {
 
         getScheduler().runTaskLater(getInstance(), () -> {
             getScheduler().runTaskLater(getInstance(), () -> {
-                if (damageInfo.getTopDamageDealt().isEmpty() && config.getBoolean("Messages.MobDead.damageDealt.hide-empty-header", false)) {
+                if (!(damageInfo.getTopDamageDealt().isEmpty() && config.getBoolean("Messages.MobDead.damageDealt.hide-empty-header", false))) {
                     String damageDealtHeader = config.getString("Messages.MobDead.damageDealt.header", "");
                     damageDealtHeader = NAME.matcher(damageDealtHeader != null ? damageDealtHeader : "").replaceAll(ChatColor.stripColor(mobName));
                     damageDealtHeader = replaceMobPlaceholder(damageDealtHeader, damageInfo);
@@ -111,7 +111,7 @@ public class MobHandler {
                     }
                 }, config.getLong("Messages.MobDead.damageDealt.actionbar.delay", 0));
 
-                if (damageInfo.getTopDamageDealt().isEmpty() && config.getBoolean("Messages.MobDead.damageDealt.hide-empty-footer", false)) {
+                if (!(damageInfo.getTopDamageDealt().isEmpty() && config.getBoolean("Messages.MobDead.damageDealt.hide-empty-footer", false))) {
                     String damageDealtFooter = config.getString("Messages.MobDead.damageDealt.footer", "");
                     damageDealtFooter = NAME.matcher(damageDealtFooter != null ? damageDealtFooter : "").replaceAll(ChatColor.stripColor(mobName));
                     damageDealtFooter = replaceMobPlaceholder(damageDealtFooter, damageInfo);
@@ -120,7 +120,7 @@ public class MobHandler {
             }, config.getLong("Messages.MobDead.damageDealt.delay", 0));
 
             getScheduler().runTaskLater(getInstance(), () -> {
-                if (damageInfo.getTopDamageTaken().isEmpty() && config.getBoolean("Messages.MobDead.damageTaken.hide-empty-header", false)) {
+                if (!(damageInfo.getTopDamageTaken().isEmpty() && config.getBoolean("Messages.MobDead.damageTaken.hide-empty-header", false))) {
                     String damageTakenheader = config.getString("Messages.MobDead.damageTaken.header", "");
                     damageTakenheader = NAME.matcher(damageTakenheader != null ? damageTakenheader : "").replaceAll(ChatColor.stripColor(mobName));
                     damageTakenheader = replaceMobPlaceholder(damageTakenheader, damageInfo);
@@ -145,7 +145,7 @@ public class MobHandler {
                     }
                 }, config.getLong("Messages.MobDead.damageTaken.actionbar.delay", 0));
 
-                if (damageInfo.getTopDamageTaken().isEmpty() && config.getBoolean("Messages.MobDead.damageTaken.hide-empty-footer", false)) {
+                if (!(damageInfo.getTopDamageTaken().isEmpty() && config.getBoolean("Messages.MobDead.damageTaken.hide-empty-footer", false))) {
                     String damageTakenFooter = config.getString("Messages.MobDead.damageTaken.footer", "");
                     damageTakenFooter = NAME.matcher(damageTakenFooter != null ? damageTakenFooter : "").replaceAll(ChatColor.stripColor(mobName));
                     damageTakenFooter = replaceMobPlaceholder(damageTakenFooter, damageInfo);
