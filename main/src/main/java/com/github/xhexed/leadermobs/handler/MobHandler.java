@@ -2,16 +2,15 @@ package com.github.xhexed.leadermobs.handler;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.Reward;
-import com.github.xhexed.leadermobs.utils.Utils;
 import com.github.xhexed.leadermobs.data.MobDamageInfo;
 import com.github.xhexed.leadermobs.utils.Pair;
+import com.github.xhexed.leadermobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 
 import java.util.HashMap;
@@ -73,20 +72,21 @@ public class MobHandler {
     }
 
     public static void onPlayerDamage(final UUID player, final Entity entity, final Double damage) {
-        final MobDamageInfo mobInfo = data.get(entity);
-        final Map<UUID, Double> damageDealtList = mobInfo.getDamageDealt();
-        final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
+        final MobDamageInfo info = data.containsKey(entity) ? data.get(entity) :
+                new MobDamageInfo(new HashMap<>(), new HashMap<>());
+        final Map<UUID, Double> damageDealtList = info.getDamageDealt();
         damageDealtList.put(player, damageDealtList.containsKey(player) ?
-                damageDealtList.get(player) + damageFinal : damageFinal);
-        data.put(entity, new MobDamageInfo(damageDealtList, mobInfo.getDamageTaken()));
+                damageDealtList.get(player) + damage : damage);
+        data.put(entity, new MobDamageInfo(damageDealtList, info.getDamageTaken()));
     }
 
     public static void onMobDamage(final Entity entity, final UUID player, final Double damage) {
-        final Map<UUID, Double> damageTakenList = data.containsKey(entity) ? data.get(entity).getDamageTaken() : new HashMap<>();
-        final double damageFinal = Math.min(((Damageable) entity).getHealth(), damage);
+        final MobDamageInfo info = data.containsKey(entity) ? data.get(entity) :
+                new MobDamageInfo(new HashMap<>(), new HashMap<>());
+        final Map<UUID, Double> damageTakenList = info.getDamageTaken();
         damageTakenList.put(player, damageTakenList.containsKey(player) ?
-                damageTakenList.get(player) + damageFinal : damageFinal);
-        data.put(entity, new MobDamageInfo(data.get(entity).getDamageDealt(), damageTakenList));
+                damageTakenList.get(player) + damage : damage);
+        data.put(entity, new MobDamageInfo(info.getDamageDealt(), damageTakenList));
     }
 
     public static void onMobDeath(final Entity entity, final String mobName, final String internalName) {
