@@ -35,10 +35,9 @@ Reset:
   resetHealth: true
 
 Messages:
-  #Should the plugin broadcast the messages when mob spawns or dies
-  broadcast: true
   #Placeholders avalable: %place_color%, %place%, %mob_name%, %percentage%
   MobSpawn:
+    broadcast: true
     #Delay in ticks
     delay: 10
     messages:
@@ -61,6 +60,7 @@ Messages:
     delay: 10
     #Placeholders avalable: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
     damageDealt:
+      broadcast: true
       #Will it hide the header-footer message when no one is in the list?
       hide-empty-header: true
       #Same with above but with footer
@@ -83,6 +83,7 @@ Messages:
         delay: 10
         message: "%mob_name% died"
     damageTaken:
+      broadcast: true
       delay: 10
       hide-empty-header: true
       hide-empty-footer: true

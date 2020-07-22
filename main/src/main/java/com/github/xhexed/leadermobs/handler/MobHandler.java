@@ -1,6 +1,5 @@
 package com.github.xhexed.leadermobs.handler;
 
-import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.Reward;
 import com.github.xhexed.leadermobs.data.MobDamageInfo;
 import com.github.xhexed.leadermobs.utils.Pair;
@@ -28,7 +27,7 @@ public class MobHandler {
     private static final Map<Entity, MobDamageInfo> data = new ConcurrentHashMap<>();
     
     static {
-        getScheduler().runTaskTimerAsynchronously(LeaderMobs.getInstance(), () -> {
+        getScheduler().runTaskTimerAsynchronously(getInstance(), () -> {
             for (final Entity entity : data.keySet()) {
                 if (!entity.isValid()) {
                     data.remove(entity);
@@ -46,7 +45,7 @@ public class MobHandler {
         final int z = location.getBlockZ();
 
         final FileConfiguration config = getInstance().getConfig();
-        if (!config.getBoolean("Messages.broadcast")) return;
+        if (!config.getBoolean("Messages.MobSpawn.broadcast", true)) return;
 
         getScheduler().runTaskLater(getInstance(), () -> {
             config.getStringList("Messages.MobSpawn.messages").stream()
@@ -97,73 +96,76 @@ public class MobHandler {
         if (damageInfo.getDamageDealt().keySet().size() < config.getInt("PlayersRequired")) return;
 
         getScheduler().runTaskLater(getInstance(), () -> {
-            getScheduler().runTaskLater(getInstance(), () -> {
-                if (!(damageInfo.getTopDamageDealt().isEmpty() && config.getBoolean("Messages.MobDead.damageDealt.hide-empty-header", false))) {
-                    String damageDealtHeader = config.getString("Messages.MobDead.damageDealt.header", "");
-                    damageDealtHeader = NAME.matcher(damageDealtHeader != null ? damageDealtHeader : "").replaceAll(ChatColor.stripColor(mobName));
-                    damageDealtHeader = replaceMobPlaceholder(damageDealtHeader, damageInfo);
-                    sendMessage(damageDealtHeader);
-                }
-
-                sendPlaceMessage(damageInfo.getTotalDamageDealt(), config, damageInfo.getTopDamageDealt(), config.getString("Messages.MobDead.damageDealt.message", ""));
-
+            if (config.getBoolean("Messages.MobDead.damageDealt.broadcast", true)) {
                 getScheduler().runTaskLater(getInstance(), () -> {
-                    if (config.getBoolean("Messages.MobDead.damageDealt.title.enabled", false)) {
-                        Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageDealt.title.title", ""))),
-                                ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageDealt.title.subTitle", ""))),
-                                config.getInt("Messages.MobDead.damageDealt.title.fadeIn", 0),
-                                config.getInt("Messages.MobDead.damageDealt.title.stay", 0),
-                                config.getInt("Messages.MobDead.damageDealt.title.fadeOut", 0)));
+                    if (!(damageInfo.getTopDamageDealt().isEmpty() && config.getBoolean("Messages.MobDead.damageDealt.hide-empty-header", false))) {
+                        String damageDealtHeader = config.getString("Messages.MobDead.damageDealt.header", "");
+                        damageDealtHeader = NAME.matcher(damageDealtHeader != null ? damageDealtHeader : "").replaceAll(ChatColor.stripColor(mobName));
+                        damageDealtHeader = replaceMobPlaceholder(damageDealtHeader, damageInfo);
+                        sendMessage(damageDealtHeader);
                     }
-                }, config.getLong("Messages.MobDead.damageDealt.title.delay", 0));
 
+                    sendPlaceMessage(damageInfo.getTotalDamageDealt(), config, damageInfo.getTopDamageDealt(), config.getString("Messages.MobDead.damageDealt.message", ""));
+
+                    getScheduler().runTaskLater(getInstance(), () -> {
+                        if (config.getBoolean("Messages.MobDead.damageDealt.title.enabled", false)) {
+                            Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageDealt.title.title", ""))),
+                                                                               ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageDealt.title.subTitle", ""))),
+                                                                               config.getInt("Messages.MobDead.damageDealt.title.fadeIn", 0),
+                                                                               config.getInt("Messages.MobDead.damageDealt.title.stay", 0),
+                                                                               config.getInt("Messages.MobDead.damageDealt.title.fadeOut", 0)));
+                        }
+                    }, config.getLong("Messages.MobDead.damageDealt.title.delay", 0));
+
+                    getScheduler().runTaskLater(getInstance(), () -> {
+                        if (config.getBoolean("Messages.MobDead.damageDealt.actionbar.enabled", false)) {
+                            Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageDealt.actionbar.message", "")))));
+                        }
+                    }, config.getLong("Messages.MobDead.damageDealt.actionbar.delay", 0));
+
+                    if (!(damageInfo.getTopDamageDealt().isEmpty() && config.getBoolean("Messages.MobDead.damageDealt.hide-empty-footer", false))) {
+                        String damageDealtFooter = config.getString("Messages.MobDead.damageDealt.footer", "");
+                        damageDealtFooter = NAME.matcher(damageDealtFooter != null ? damageDealtFooter : "").replaceAll(ChatColor.stripColor(mobName));
+                        damageDealtFooter = replaceMobPlaceholder(damageDealtFooter, damageInfo);
+                        sendMessage(damageDealtFooter);
+                    }
+                }, config.getLong("Messages.MobDead.damageDealt.delay", 0));
+            }
+            if (config.getBoolean("Messages.MobDead.damageTaken.broadcast", true)) {
                 getScheduler().runTaskLater(getInstance(), () -> {
-                    if (config.getBoolean("Messages.MobDead.damageDealt.actionbar.enabled", false)) {
-                        Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageDealt.actionbar.message", "")))));
+                    if (!(damageInfo.getTopDamageTaken().isEmpty() && config.getBoolean("Messages.MobDead.damageTaken.hide-empty-header", false))) {
+                        String damageTakenheader = config.getString("Messages.MobDead.damageTaken.header", "");
+                        damageTakenheader = NAME.matcher(damageTakenheader != null ? damageTakenheader : "").replaceAll(ChatColor.stripColor(mobName));
+                        damageTakenheader = replaceMobPlaceholder(damageTakenheader, damageInfo);
+                        sendMessage(damageTakenheader);
                     }
-                }, config.getLong("Messages.MobDead.damageDealt.actionbar.delay", 0));
 
-                if (!(damageInfo.getTopDamageDealt().isEmpty() && config.getBoolean("Messages.MobDead.damageDealt.hide-empty-footer", false))) {
-                    String damageDealtFooter = config.getString("Messages.MobDead.damageDealt.footer", "");
-                    damageDealtFooter = NAME.matcher(damageDealtFooter != null ? damageDealtFooter : "").replaceAll(ChatColor.stripColor(mobName));
-                    damageDealtFooter = replaceMobPlaceholder(damageDealtFooter, damageInfo);
-                    sendMessage(damageDealtFooter);
-                }
-            }, config.getLong("Messages.MobDead.damageDealt.delay", 0));
+                    sendPlaceMessage(damageInfo.getTotalDamageTaken(), config, damageInfo.getTopDamageTaken(), config.getString("Messages.MobDead.damageTaken.message", ""));
 
-            getScheduler().runTaskLater(getInstance(), () -> {
-                if (!(damageInfo.getTopDamageTaken().isEmpty() && config.getBoolean("Messages.MobDead.damageTaken.hide-empty-header", false))) {
-                    String damageTakenheader = config.getString("Messages.MobDead.damageTaken.header", "");
-                    damageTakenheader = NAME.matcher(damageTakenheader != null ? damageTakenheader : "").replaceAll(ChatColor.stripColor(mobName));
-                    damageTakenheader = replaceMobPlaceholder(damageTakenheader, damageInfo);
-                    sendMessage(damageTakenheader);
-                }
+                    getScheduler().runTaskLater(getInstance(), () -> {
+                        if (config.getBoolean("Messages.MobDead.damageTaken.title.enabled", false)) {
+                            Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageTaken.title.title", ""))),
+                                                                               ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageTaken.title.subTitle", ""))),
+                                                                               config.getInt("Messages.MobDead.damageTaken.title.fadeIn", 0),
+                                                                               config.getInt("Messages.MobDead.damageTaken.title.stay", 0),
+                                                                               config.getInt("Messages.MobDead.damageTaken.title.fadeOut", 0)));
+                        }
+                    }, config.getLong("Messages.MobDead.damageTaken.title.delay", 0));
 
-                sendPlaceMessage(damageInfo.getTotalDamageTaken(), config, damageInfo.getTopDamageTaken(), config.getString("Messages.MobDead.damageTaken.message", ""));
+                    getScheduler().runTaskLater(getInstance(), () -> {
+                        if (config.getBoolean("Messages.MobDead.damageTaken.actionbar.enabled", false)) {
+                            Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageTaken.actionbar.message", "")))));
+                        }
+                    }, config.getLong("Messages.MobDead.damageTaken.actionbar.delay", 0));
 
-                getScheduler().runTaskLater(getInstance(), () -> {
-                    if (config.getBoolean("Messages.MobDead.damageTaken.title.enabled", false)) {
-                        Bukkit.getOnlinePlayers().forEach((p) -> sendTitle(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageTaken.title.title", ""))),
-                                ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageTaken.title.subTitle", ""))),
-                                config.getInt("Messages.MobDead.damageTaken.title.fadeIn", 0),
-                                config.getInt("Messages.MobDead.damageTaken.title.stay", 0),
-                                config.getInt("Messages.MobDead.damageTaken.title.fadeOut", 0)));
+                    if (!(damageInfo.getTopDamageTaken().isEmpty() && config.getBoolean("Messages.MobDead.damageTaken.hide-empty-footer", false))) {
+                        String damageTakenFooter = config.getString("Messages.MobDead.damageTaken.footer", "");
+                        damageTakenFooter = NAME.matcher(damageTakenFooter != null ? damageTakenFooter : "").replaceAll(ChatColor.stripColor(mobName));
+                        damageTakenFooter = replaceMobPlaceholder(damageTakenFooter, damageInfo);
+                        sendMessage(damageTakenFooter);
                     }
-                }, config.getLong("Messages.MobDead.damageTaken.title.delay", 0));
-
-                getScheduler().runTaskLater(getInstance(), () -> {
-                    if (config.getBoolean("Messages.MobDead.damageTaken.actionbar.enabled", false)) {
-                        Bukkit.getOnlinePlayers().forEach((p) -> sendActionBar(p, ChatColor.translateAlternateColorCodes('&', getMobDeathMessage(damageInfo, mobName, config.getString("Messages.MobDead.damageTaken.actionbar.message", "")))));
-                    }
-                }, config.getLong("Messages.MobDead.damageTaken.actionbar.delay", 0));
-
-                if (!(damageInfo.getTopDamageTaken().isEmpty() && config.getBoolean("Messages.MobDead.damageTaken.hide-empty-footer", false))) {
-                    String damageTakenFooter = config.getString("Messages.MobDead.damageTaken.footer", "");
-                    damageTakenFooter = NAME.matcher(damageTakenFooter != null ? damageTakenFooter : "").replaceAll(ChatColor.stripColor(mobName));
-                    damageTakenFooter = replaceMobPlaceholder(damageTakenFooter, damageInfo);
-                    sendMessage(damageTakenFooter);
-                }
-            }, config.getLong("Messages.MobDead.damageTaken.delay", 0));
+                }, config.getLong("Messages.MobDead.damageTaken.delay", 0));
+            }
         }, config.getLong("Messages.MobDead.delay", 0));
 
         new Reward(internalName,
