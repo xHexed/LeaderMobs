@@ -1,8 +1,7 @@
 package com.github.xhexed.leadermobs;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
-import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -15,8 +14,6 @@ import static com.github.xhexed.leadermobs.utils.Utils.*;
 
 public class Reward {
     private final String mobname;
-    private final Server server = Bukkit.getServer();
-    private final CommandSender sender = Bukkit.getConsoleSender();
     private final FileConfiguration config = YamlConfiguration.loadConfiguration(new File(getInstance().getDataFolder(), "rewards.yml"));
 
     public Reward(final String mobname, final List<UUID> topDealtList, final List<UUID> topTakenList) {
@@ -30,34 +27,33 @@ public class Reward {
             return;
         }
 
-        final Map<Integer, List<String>> dealtRewards = new HashMap<>();
-        final Map<Integer, List<String>> takenRewards = new HashMap<>();
-        setRewards(dealtRewards, ".dealt");
-        setRewards(takenRewards, ".taken");
-
-        giveRewards(dealtRewards, topDealtList);
-        giveRewards(takenRewards, topTakenList);
+        giveRewards(getRewards(".dealt"), topDealtList);
+        giveRewards(getRewards(".taken"), topTakenList);
     }
 
-    private void giveRewards(final Map<Integer, ? extends List<String>> rewards, final List<UUID> topList) {
-        IntStream.range(0, topList.size()).forEach(i -> {
+    private void giveRewards(final List<List<String>> rewards, final List<UUID> topList) {
+        if (topList.size() < rewards.size()) return;
+        IntStream.range(0, rewards.size()).forEach(i -> {
             final UUID uuid = topList.get(i);
             final String player = Bukkit.getOfflinePlayer(uuid).getName();
             debugln("Giving reward for " + player);
-            rewards.get(i + 1).stream()
+            rewards.get(i).stream()
                     .map(command -> PLAYER_NAME.matcher(command).replaceAll(player))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
                     .forEach(command -> {
                         debugln("Place: " + i + "command:" + command);
-                        server.dispatchCommand(sender, command);
+                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
                     });
         });
     }
 
-    private void setRewards(final Map<? super Integer, ? super List<String>> rewards, final String path) {
-        Objects.requireNonNull(config.getConfigurationSection(mobname + path)).getKeys(false)
-                .forEach(place -> rewards.put(
-                        Integer.parseInt(place),
-                        new ArrayList<>(config.getStringList(mobname + path + "." + place + ".rewards"))));
+    private List<List<String>> getRewards(final String path) {
+        final List<List<String>> rewards = new ArrayList<>();
+        final ConfigurationSection section = config.getConfigurationSection(mobname + path);
+        if (section == null) return rewards;
+        section.getKeys(false)
+                .forEach(place -> rewards.addAll(
+                        Collections.singleton(config.getStringList(mobname + path + "." + place + ".rewards"))));
+        return rewards;
     }
 }
