@@ -1,6 +1,8 @@
 package com.github.xhexed.leadermobs;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -35,11 +37,13 @@ public class Reward {
         if (topList.size() < rewards.size()) return;
         IntStream.range(0, rewards.size()).forEach(i -> {
             final UUID uuid = topList.get(i);
-            final String player = Bukkit.getOfflinePlayer(uuid).getName();
+            final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
             debugln("Giving reward for " + player);
             rewards.get(i).stream()
-                    .map(command -> PLAYER_NAME.matcher(command).replaceAll(player))
+                    .map(command -> PLAYER_NAME.matcher(command).replaceAll(player.getName()))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
+                    .map(command -> PlaceholderAPI.setPlaceholders(player, command))
+                    .map(command -> be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, command))
                     .forEach(command -> {
                         debugln("Place: " + i + "command:" + command);
                         Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
