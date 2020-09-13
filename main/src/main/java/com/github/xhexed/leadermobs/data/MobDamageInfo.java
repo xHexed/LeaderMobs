@@ -60,9 +60,9 @@ public class MobDamageInfo {
         double totalDamage = 0.0;
         for (final Map.Entry<UUID, Double> entry : list.entrySet()) {
             final Double damage = entry.getValue();
+            totalDamage += damage;
             if (damage < requiredDamage) continue;
             topList.add(new Pair<>(damage, entry.getKey()));
-            totalDamage += damage;
         }
         topList.sort((f, s) -> s.getKey().compareTo(f.getKey()));
         return new Pair<>(topList, totalDamage);
