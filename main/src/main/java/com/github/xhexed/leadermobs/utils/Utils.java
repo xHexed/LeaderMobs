@@ -7,7 +7,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.TNTPrimed;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -132,6 +135,18 @@ public class Utils {
         message = replaceMobPlaceholder(message, info);
         message = replacePlaceholder(null, message);
         return message;
+    }
+
+    public static Entity getDamageSource(Entity entity) {
+        if (entity instanceof Projectile) {
+            final Entity shooter = (Entity) ((Projectile) entity).getShooter();
+            if (shooter != null) entity = shooter;
+        }
+        if (entity instanceof TNTPrimed) {
+            final Entity igniter = ((TNTPrimed) entity).getSource();
+            if (igniter != null) entity = igniter;
+        }
+        return entity;
     }
 
     public static void debug(final String text) {
