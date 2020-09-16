@@ -5,18 +5,19 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
-import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
-import static com.github.xhexed.leadermobs.utils.Utils.*;
+import static com.github.xhexed.leadermobs.utils.Utils.DAMAGE_POS;
+import static com.github.xhexed.leadermobs.utils.Utils.PLAYER_NAME;
 
 public class Reward {
     private final String mobname;
-    private final FileConfiguration config = YamlConfiguration.loadConfiguration(new File(getInstance().getDataFolder(), "rewards.yml"));
+    private final FileConfiguration config = LeaderMobs.rewards;
 
     public Reward(final String mobname, final List<UUID> topDealtList, final List<UUID> topTakenList) {
         this.mobname      = mobname;

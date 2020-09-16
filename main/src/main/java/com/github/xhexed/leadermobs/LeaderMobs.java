@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 public class LeaderMobs extends JavaPlugin {
     public static File dataFile;
     public static FileConfiguration playerData;
+    public static FileConfiguration rewards;
     public static boolean papi;
     public static boolean mvdw;
     private static LeaderMobs instance;
@@ -84,6 +85,8 @@ public class LeaderMobs extends JavaPlugin {
         if (!new File(getDataFolder(), "rewards.yml").exists()) {
             saveResource("rewards.yml", true);
         }
+        final File rewardFile = new File(getDataFolder(), "rewards.yml");
+        rewards = YamlConfiguration.loadConfiguration(rewardFile);
 
         final FileConfiguration config = getConfig();
         if (config.getBoolean("auto-update", true)) {
