@@ -87,15 +87,6 @@ public class Utils {
     }
 
     private static String onPlaceholderRequest(String params, final MobDamageInfo info) {
-        if (params.startsWith("top_dealt_")) {
-            params = params.substring(10);
-			
-            final int pos;
-            try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
-
-            try { return Bukkit.getOfflinePlayer(info.getTopDamageDealt().get(pos - 1).getValue()).getName(); }
-            catch (final IndexOutOfBoundsException e) { return ""; }
-        }
         if (params.startsWith("top_dealt_damage_")) {
             params = params.substring(15);
 
@@ -105,13 +96,13 @@ public class Utils {
             try { return DOUBLE_FORMAT.format(info.getTopDamageDealt().get(pos - 1).getKey()); }
             catch (final IndexOutOfBoundsException e) { return ""; }
         }
-        if (params.startsWith("top_taken_")) {
+        if (params.startsWith("top_dealt_")) {
             params = params.substring(10);
-
+			
             final int pos;
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
-            try { return Bukkit.getOfflinePlayer(info.getTopDamageTaken().get(pos - 1).getValue()).getName(); }
+            try { return Bukkit.getOfflinePlayer(info.getTopDamageDealt().get(pos - 1).getValue()).getName(); }
             catch (final IndexOutOfBoundsException e) { return ""; }
         }
         if (params.startsWith("top_taken_damage_")) {
@@ -121,6 +112,15 @@ public class Utils {
             try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
 
             try { return DOUBLE_FORMAT.format(info.getTopDamageTaken().get(pos - 1).getKey()); }
+            catch (final IndexOutOfBoundsException e) { return ""; }
+        }
+        if (params.startsWith("top_taken_")) {
+            params = params.substring(10);
+
+            final int pos;
+            try { pos = Integer.parseInt(params); } catch (final NumberFormatException ignored) { return ""; }
+
+            try { return Bukkit.getOfflinePlayer(info.getTopDamageTaken().get(pos - 1).getValue()).getName(); }
             catch (final IndexOutOfBoundsException e) { return ""; }
         }
         return "";
