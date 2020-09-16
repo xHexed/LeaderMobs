@@ -7,7 +7,6 @@ import io.lumine.xikage.mythicmobs.api.bukkit.BukkitAPIHelper;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
 import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent;
 import io.lumine.xikage.mythicmobs.mobs.MythicMob;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,7 +16,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
-import static com.github.xhexed.leadermobs.utils.Utils.debugln;
 
 public class LegacyMythicMobsListener implements Listener {
     private static final BukkitAPIHelper helper = MythicMobs.inst().getAPIHelper();
@@ -41,7 +39,6 @@ public class LegacyMythicMobsListener implements Listener {
                     != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(victim).getType().getInternalName()))
             ) return;
             MobHandler.onPlayerDamage(damager.getUniqueId(), victim, event.getFinalDamage());
-            debugln("Damage for boss: " + ChatColor.stripColor(victim.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + damager.getName());
         }
 
         if (victim instanceof Player) {
@@ -50,7 +47,6 @@ public class LegacyMythicMobsListener implements Listener {
                     != config.getStringList("Blacklist.MythicMobs").contains(helper.getMythicMobInstance(damager).getType().getInternalName()))
             ) return;
             MobHandler.onMobDamage(damager, victim.getUniqueId(), event.getFinalDamage());
-            debugln("Damage for boss: " + ChatColor.stripColor(damager.getName()) + ", damage: " + event.getFinalDamage() + ", player: " + victim.getName());
         }
     }
 

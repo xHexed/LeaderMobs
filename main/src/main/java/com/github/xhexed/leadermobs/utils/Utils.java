@@ -12,9 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
 
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,7 +81,6 @@ public class Utils {
         final Matcher m = PLACEHOLDER_PATTERN.matcher(message);
         while (m.find()) {
             final String params = m.group(2);
-            debugConsole("Placeholder requested: " + params);
             message = message.replaceAll(Pattern.quote(m.group()), Matcher.quoteReplacement(onPlaceholderRequest(params, info)));
         }
         return message;
@@ -147,32 +143,5 @@ public class Utils {
             if (igniter != null) entity = igniter;
         }
         return entity;
-    }
-
-    public static void debug(final String text) {
-        if (!debug) return;
-        try (final BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(debugfile, true))) {
-            writer.write(text.getBytes());
-            writer.flush();
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void debugln(final String text) {
-        if (!debug) return;
-        try (final BufferedOutputStream writer = new BufferedOutputStream(new FileOutputStream(debugfile, true))) {
-            writer.write((text + '\n').getBytes());
-            writer.flush();
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void debugConsole(final String text) {
-        if (debug)
-            System.out.println(text);
     }
 }

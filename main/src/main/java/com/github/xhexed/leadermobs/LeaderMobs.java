@@ -1,7 +1,6 @@
 package com.github.xhexed.leadermobs;
 
 import com.github.xhexed.leadermobs.commands.Commands;
-import com.github.xhexed.leadermobs.utils.Utils;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,20 +11,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 public class LeaderMobs extends JavaPlugin {
     public static File dataFile;
     public static FileConfiguration playerData;
-    public static boolean debug;
     public static boolean papi;
     public static boolean mvdw;
     private static LeaderMobs instance;
-    public static File debugfile;
 
     public static LeaderMobs getInstance() { return instance; }
     
@@ -110,18 +105,6 @@ public class LeaderMobs extends JavaPlugin {
             }
         }
         playerData = YamlConfiguration.loadConfiguration(dataFile);
-
-        debug          = config.getBoolean("debug", false);
-        if (debug) {
-            final File Debugfolder = new File(getDataFolder() + "/debugs");
-            if (!Debugfolder.exists())
-                Debugfolder.mkdirs();
-
-            final String file = "debug_" + new SimpleDateFormat("MM-dd-hh").format(new Date()) + ".txt";
-            getLogger().info("Debug mode is on, out file: " + file);
-            debugfile = new File(getDataFolder() + "/debugs", file);
-            Utils.debugln("Server version: " + getServer().getVersion());
-        }
     }
 
     @Override

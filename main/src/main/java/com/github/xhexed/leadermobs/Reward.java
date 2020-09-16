@@ -20,12 +20,8 @@ public class Reward {
 
     public Reward(final String mobname, final List<UUID> topDealtList, final List<UUID> topTakenList) {
         this.mobname      = mobname;
-        debug("Place list: ");
-        topDealtList.forEach((uuid) -> debug(Bukkit.getOfflinePlayer(uuid).getName() + ", "));
-        debugln("");
 
         if (!config.contains(mobname)) {
-            debugln("Rewards for mob: " + mobname + " not found...");
             return;
         }
 
@@ -38,16 +34,12 @@ public class Reward {
         IntStream.range(0, rewards.size()).forEach(i -> {
             final UUID uuid = topList.get(i);
             final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-            debugln("Giving reward for " + player);
             rewards.get(i).stream()
                     .map(command -> PLAYER_NAME.matcher(command).replaceAll(player.getName()))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
                     .map(command -> PlaceholderAPI.setPlaceholders(player, command))
                     .map(command -> be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, command))
-                    .forEach(command -> {
-                        debugln("Place: " + i + "command:" + command);
-                        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
-                    });
+                    .forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command));
         });
     }
 
