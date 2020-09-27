@@ -29,6 +29,8 @@ public class Utils {
     public static final Pattern DAMAGE = Pattern.compile("%damage%");
     public static final Pattern DAMAGE_DEALT = Pattern.compile("%damage_dealt%");
     public static final Pattern DAMAGE_TAKEN = Pattern.compile("%damage_taken%");
+    public static final Pattern DAMAGE_DEALT_PERCENTAGE = Pattern.compile("%damage_dealt_percentage%");
+    public static final Pattern DAMAGE_TAKEN_PERCENTAGE = Pattern.compile("%damage_taken_percentage%");
     public static final Pattern PERCENTAGE = Pattern.compile("%percentage%");
     private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("[%](mob_)([^%]+)[%]");
     public static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#.##");

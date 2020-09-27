@@ -26,14 +26,15 @@ public class Reward {
         if (!config.contains(mobname)) {
             return;
         }
-        giveRewards(getRewards(".dealt"), info.getTopDamageDealt(), info.getTotalDamageDealt(), DAMAGE_DEALT);
-        giveRewards(getRewards(".taken"), info.getTopDamageTaken(), info.getTotalDamageTaken(), DAMAGE_TAKEN);
+        giveRewards(getRewards(".dealt"), info.getTopDamageDealt(), info.getTotalDamageDealt(), DAMAGE_DEALT, DAMAGE_DEALT_PERCENTAGE);
+        giveRewards(getRewards(".taken"), info.getTopDamageTaken(), info.getTotalDamageTaken(), DAMAGE_TAKEN, DAMAGE_TAKEN_PERCENTAGE);
     }
 
     private void giveRewards(final List<List<String>> rewards,
                              final List<Pair<Double, UUID>> topList,
                              final double totalDamage,
-                             final Pattern damageFormat) {
+                             final Pattern damageFormat,
+                             final Pattern percentageFormat) {
         if (topList.size() < rewards.size()) return;
         IntStream.range(0, rewards.size()).forEach(i -> {
             final Pair<Double, UUID> info = topList.get(i);
@@ -43,7 +44,7 @@ public class Reward {
                     .map(command -> PLAYER_NAME.matcher(command).replaceAll(player.getName()))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
                     .map(command -> damageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getKey())))
-                    .map(command -> PERCENTAGE.matcher(command).replaceAll(DOUBLE_FORMAT.format(getPercentage(info.getKey(), totalDamage))))
+                    .map(command -> percentageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(getPercentage(info.getKey(), totalDamage))))
                     .map(command -> PlaceholderAPI.setPlaceholders(player, command))
                     .map(command -> be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, command))
                     .forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command));
