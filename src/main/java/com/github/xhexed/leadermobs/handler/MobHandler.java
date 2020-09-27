@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import static com.github.xhexed.leadermobs.LeaderMobs.getInstance;
 import static com.github.xhexed.leadermobs.utils.Utils.*;
@@ -168,9 +167,7 @@ public class MobHandler {
             }
         }, config.getLong("Messages.MobDead.delay", 0));
 
-        new Reward(internalName,
-                damageInfo.getTopDamageDealt().stream().map(Pair::getValue).collect(Collectors.toList()),
-                damageInfo.getTopDamageTaken().stream().map(Pair::getValue).collect(Collectors.toList()));
+        new Reward(internalName, damageInfo);
         data.remove(entity);
     }
 

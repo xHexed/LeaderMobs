@@ -1,5 +1,7 @@
 package com.github.xhexed.leadermobs;
 
+import com.github.xhexed.leadermobs.data.MobDamageInfo;
+import com.github.xhexed.leadermobs.utils.Pair;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -12,32 +14,32 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-import static com.github.xhexed.leadermobs.utils.Utils.DAMAGE_POS;
-import static com.github.xhexed.leadermobs.utils.Utils.PLAYER_NAME;
+import static com.github.xhexed.leadermobs.utils.Utils.*;
 
 public class Reward {
     private final String mobname;
     private final FileConfiguration config = LeaderMobs.rewards;
 
-    public Reward(final String mobname, final List<UUID> topDealtList, final List<UUID> topTakenList) {
+    public Reward(final String mobname, final MobDamageInfo info) {
         this.mobname      = mobname;
-
         if (!config.contains(mobname)) {
             return;
         }
-
-        giveRewards(getRewards(".dealt"), topDealtList);
-        giveRewards(getRewards(".taken"), topTakenList);
+        giveRewards(getRewards(".dealt"), info.getTopDamageDealt(), info.getTotalDamageDealt());
+        giveRewards(getRewards(".taken"), info.getTopDamageTaken(), info.getTotalDamageTaken());
     }
 
-    private void giveRewards(final List<List<String>> rewards, final List<UUID> topList) {
+    private void giveRewards(final List<List<String>> rewards, final List<Pair<Double, UUID>> topList, final double totalDamage) {
         if (topList.size() < rewards.size()) return;
         IntStream.range(0, rewards.size()).forEach(i -> {
-            final UUID uuid = topList.get(i);
+            final Pair<Double, UUID> info = topList.get(i);
+            final UUID uuid = info.getValue();
             final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
             rewards.get(i).stream()
                     .map(command -> PLAYER_NAME.matcher(command).replaceAll(player.getName()))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
+                    .map(command -> DAMAGE.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getKey())))
+                    .map(command -> PERCENTAGE.matcher(command).replaceAll(DOUBLE_FORMAT.format(getPercentage(info.getKey(), totalDamage))))
                     .map(command -> PlaceholderAPI.setPlaceholders(player, command))
                     .map(command -> be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, command))
                     .forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command));

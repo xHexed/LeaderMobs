@@ -1,4 +1,4 @@
-#Placeholders avalable: %player_name%, %place%
+#Placeholders avalable: %player_name%, %place%, %damage%, %percentage%
 
 SkeletalMinion: #Boss name
   dealt:
