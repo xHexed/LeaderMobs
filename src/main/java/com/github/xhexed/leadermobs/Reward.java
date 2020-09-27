@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
 import static com.github.xhexed.leadermobs.utils.Utils.*;
@@ -25,11 +26,14 @@ public class Reward {
         if (!config.contains(mobname)) {
             return;
         }
-        giveRewards(getRewards(".dealt"), info.getTopDamageDealt(), info.getTotalDamageDealt());
-        giveRewards(getRewards(".taken"), info.getTopDamageTaken(), info.getTotalDamageTaken());
+        giveRewards(getRewards(".dealt"), info.getTopDamageDealt(), info.getTotalDamageDealt(), DAMAGE_DEALT);
+        giveRewards(getRewards(".taken"), info.getTopDamageTaken(), info.getTotalDamageTaken(), DAMAGE_TAKEN);
     }
 
-    private void giveRewards(final List<List<String>> rewards, final List<Pair<Double, UUID>> topList, final double totalDamage) {
+    private void giveRewards(final List<List<String>> rewards,
+                             final List<Pair<Double, UUID>> topList,
+                             final double totalDamage,
+                             final Pattern damageFormat) {
         if (topList.size() < rewards.size()) return;
         IntStream.range(0, rewards.size()).forEach(i -> {
             final Pair<Double, UUID> info = topList.get(i);
@@ -38,7 +42,7 @@ public class Reward {
             rewards.get(i).stream()
                     .map(command -> PLAYER_NAME.matcher(command).replaceAll(player.getName()))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
-                    .map(command -> DAMAGE.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getKey())))
+                    .map(command -> damageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getKey())))
                     .map(command -> PERCENTAGE.matcher(command).replaceAll(DOUBLE_FORMAT.format(getPercentage(info.getKey(), totalDamage))))
                     .map(command -> PlaceholderAPI.setPlaceholders(player, command))
                     .map(command -> be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, command))
