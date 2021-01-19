@@ -84,6 +84,10 @@
             <id>nexus</id>
             <url>http://mvn.lumine.io/repository/maven-public/</url>
         </repository>
+        <repository>
+            <id>mineacademy-repo</id>
+            <url>https://bitbucket.org/kangarko/libraries/raw/master</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -128,9 +132,9 @@
             <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.minecademy</groupId>
-            <artifactId>Boss</artifactId>
-            <version>3.1.0</version>
+            <groupId>org.mineacademy.plugin</groupId>
+            <artifactId>Boss-API</artifactId>
+            <version>3.8.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
