@@ -18,12 +18,12 @@ import java.util.stream.IntStream;
 import static com.github.xhexed.leadermobs.utils.Utils.*;
 
 public class Reward {
-    private final String mobname;
+    private final String mobName;
     private final FileConfiguration config = LeaderMobs.rewards;
 
-    public Reward(final String mobname, final MobDamageInfo info) {
-        this.mobname      = mobname;
-        if (!config.contains(mobname)) {
+    public Reward(final String mobName, final MobDamageInfo info) {
+        this.mobName = mobName;
+        if (!config.contains(mobName)) {
             return;
         }
         giveRewards(getRewards(".dealt"), info.getTopDamageDealt(), info.getTotalDamageDealt(), DAMAGE_DEALT, DAMAGE_DEALT_PERCENTAGE);
@@ -35,8 +35,7 @@ public class Reward {
                              final double totalDamage,
                              final Pattern damageFormat,
                              final Pattern percentageFormat) {
-        if (topList.size() < rewards.size()) return;
-        IntStream.range(0, rewards.size()).forEach(i -> {
+        IntStream.range(0, Math.min(topList.size(), rewards.size())).forEach(i -> {
             final Pair<Double, UUID> info = topList.get(i);
             final UUID uuid = info.getValue();
             final OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
@@ -53,11 +52,11 @@ public class Reward {
 
     private List<List<String>> getRewards(final String path) {
         final List<List<String>> rewards = new ArrayList<>();
-        final ConfigurationSection section = config.getConfigurationSection(mobname + path);
+        final ConfigurationSection section = config.getConfigurationSection(mobName + path);
         if (section == null) return rewards;
         section.getKeys(false)
                 .forEach(place -> rewards.addAll(
-                        Collections.singleton(config.getStringList(mobname + path + "." + place + ".rewards"))));
+                        Collections.singleton(config.getStringList(mobName + path + "." + place + ".rewards"))));
         return rewards;
     }
 }
