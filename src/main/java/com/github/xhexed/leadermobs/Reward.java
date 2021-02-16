@@ -2,7 +2,7 @@ package com.github.xhexed.leadermobs;
 
 import com.github.xhexed.leadermobs.data.MobDamageInfo;
 import com.github.xhexed.leadermobs.utils.Pair;
-import me.clip.placeholderapi.PlaceholderAPI;
+import com.github.xhexed.leadermobs.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
@@ -44,8 +44,7 @@ public class Reward {
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
                     .map(command -> damageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getKey())))
                     .map(command -> percentageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(getPercentage(info.getKey(), totalDamage))))
-                    .map(command -> PlaceholderAPI.setPlaceholders(player, command))
-                    .map(command -> be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, command))
+                    .map(command -> Utils.replacePlaceholder(player, command))
                     .forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command));
         });
     }
