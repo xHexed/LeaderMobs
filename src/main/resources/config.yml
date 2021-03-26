@@ -1,117 +1,168 @@
-debug: false
-#Will the plugin attempt to auto-update the plugin to get new files?
 auto-update: true
+config-version: 1
 
-PlayersRequired: 1 #This is to prevent spam if there's only 1 or 2 people killing the mob privately, there's no limit!
-PlacesToBroadcast: 10 #How much places to broadcast.
-PlacePrefix:
-  1: "&a"
-  2: "&b"
-  3: "&e"
-  123: "This pos will have long prefix!"
-  default: "&6"
-
-damage:
-  #How much damage the player has to dealt to get included to the leaderboard, set to 0 to disable
-  dealt: 0
-  #Same with above but if taken
-  taken: 0
-
-#Comming soon... (tm)
-Warmup:
-  #How much damage the mob have to take to start the leaderboard, set to 0 to disable
-  damage: 1
-  reset:
-    #Time for the leaderboard to reset, set to 0 to disable
-    interval: 600
-
-#Comming soon... (tm)
-Reset:
-  #How much damage the mob have to take for the leaderboard to not get cleared
-  damage: 1
-  #Time for the leaderboard to reset
-  interval: 600
-  #Will the boss reset its health?
-  resetHealth: true
-
-Messages:
-  #Placeholders avalable: %place_color%, %place%, %mob_name%, %percentage%
-  MobSpawn:
-    broadcast: true
-    #Delay in ticks
-    delay: 10
-    messages:
-    - "&8&l&m------<--------------->------"
-    - "   &8<&a!&8> &7Mob named: %mob_name% spawned at (x: %x%, y: %y%, z: %z%)"
-    - "&8&l&m------<--------------->------"
-    title:
-      enabled: true
+templates:
+  temp:
+    # Plugin mob names
+    mobs:
+    - "test"
+    players-required: 1 # This is to prevent spam if there's only 1 or 2 people killing the mob
+    places-to-broadcast: 10 # How much places to broadcast
+    default-place-prefix: "&6"
+    place-prefix:
+      1: "&a"
+      2: "&b"
+      3: "&e"
+      123: "This pos will have long prefix!"
+    total-damage-requirement:
+      # How much damage the player has to dealt to get included to the leaderboard, set to 0 to disable
+      dealt-damage-required: 0
+      # Same with above but with taken
+      taken-damage-required: 0
+    # Coming soon... (tm)
+    warmup-damage-requirement:
+      # How much damage the mob have to take to start the leaderboard, set to 0 to disable
+      damage: 0
+      # Time for the leaderboard to reset if not enough damage were made, set to 0 to disable
+      reset-interval: 600
+    # Coming soon... (tm)
+    reset-damage-requirement:
+      # How much damage the mob have to take in set time for the leaderboard to not get cleared
+      damage: 1
+      # Time for the leaderboard to reset
+      reset-interval: 600
+    # Placeholders available: %place_color%, %place%, %mob_name%, %percentage%
+    # You can remove this section
+    mob-spawn-message:
+      # Delay in ticks
       delay: 10
-      title: "%mob_name% spawned"
-      subTitle: "x: %x%, y: %y%, z: %z%"
-      fadeIn: 10
-      stay: 10
-      fadeOut: 10
-    actionbar:
-      enabled: true
-      delay: 10
-      message: "%mob_name% spawned"
-  MobDead:
-    delay: 10
-    #Placeholders avalable: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
-    damageDealt:
-      broadcast: true
-      #Will it hide the header-footer message when no one is in the list?
-      hide-empty-header: true
-      #Same with above but with footer
-      hide-empty-footer: true
-      delay: 10
-      header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
-      footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
-      #Placeholders avalable: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
-      message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+      messages:
+      - "&8&l&m------<--------------->------"
+      - "   &8<&a!&8> &7Mob %mob_name% spawned at (x: %x%, y: %y%, z: %z%)"
+      - "&8&l&m------<--------------->------"
+      # You can remove this section
       title:
-        enabled: true
         delay: 10
-        title: "%mob_name% died."
-        subTitle: "1st damage dealt: %mob_top_dealt_1%"
-        fadeIn: 10
+        title: "%mob_name% spawned"
+        sub-title: "x: %x%, y: %y%, z: %z%"
+        fade-in: 10
         stay: 10
-        fadeOut: 10
+        fade-out: 10
+      # You can remove this section
       actionbar:
-        enabled: true
         delay: 10
-        message: "%mob_name% died"
-    damageTaken:
-      broadcast: true
-      delay: 10
-      hide-empty-header: true
-      hide-empty-footer: true
-      header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
-      footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
-      message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
-      title:
-        enabled: true
+        message: "%mob_name% spawned"
+    # You can remove this section
+    mob-dead-message:
+      # Placeholders available: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
+      # You can remove this section
+      damage-dealt:
+        # Will it hide the header-footer message when no one is in the list?
+        hide-empty-header: true
+        hide-empty-footer: true
         delay: 10
-        title: "%mob_name% died."
-        subTitle: "1st damage taken: %mob_top_taken_1%"
-        fadeIn: 10
-        stay: 10
-        fadeOut: 10
-      actionbar:
-        enabled: true
+        header-messages:
+          - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
+        footer-messages:
+          - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
+        # Placeholders available: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
+        message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+        title:
+          delay: 10
+          title: "%mob_name% died."
+          sub-title: "1st damage dealt: %mob_top_dealt_1%"
+          fade-in: 10
+          stay: 10
+          fade-out: 10
+        actionbar:
+          delay: 10
+          message: "%mob_name% died"
+      # You can remove this section
+      damage-taken:
         delay: 10
-        message: "%mob_name% died"
-  toggle:
-    true: "&8<&a!&8>&7 You have successfully &aenabled&7 the broadcaster messages!"
-    false: "&8<&c!&8>&7 You have successfully &cdisabled&7 the broadcaster messages!"
+        hide-empty-header: true
+        hide-empty-footer: true
+        header-messages:
+        - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
+        footer-messages:
+        - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
+        message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+        title:
+          delay: 10
+          title: "%mob_name% died."
+          sub-title: "1st damage taken: %mob_top_taken_1%"
+          fade-in: 10
+          stay: 10
+          fade-out: 10
+        actionbar:
+          delay: 10
+          message: "%mob_name% died"
 
-Blacklist:
-  #Should the blacklist acted as whitelist?
-  Whitelist: false
-  #Mobs from Boss plugin
-  Boss:
-  - "test"
-  #Mobs from MythicMobs plugin
-  MythicMobs:
-  - "test"
+mob-messages:
+  plugin-hooks:
+    MythicMobs:
+      example:
+        # The template to use, override it by including settings below
+        template: "abc"
+        blacklist:
+        - "test"
+        mob-spawn-message:
+          delay: 10
+          messages:
+          - "&8&l&m------<--------------->------"
+          - "   &8<&a!&8> &7Mob %mob_name% spawned at (x: %x%, y: %y%, z: %z%)"
+          - "&8&l&m------<--------------->------"
+          title:
+            delay: 10
+            title: "%mob_name% spawned"
+            sub-title: "x: %x%, y: %y%, z: %z%"
+            fade-in: 10
+            stay: 10
+            fade-out: 10
+          actionbar:
+            delay: 10
+            message: "%mob_name% spawned"
+        mob-dead-message:
+          damage-dealt:
+            hide-empty-header: true
+            hide-empty-footer: true
+            delay: 10
+            header-messages:
+              - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
+            footer-messages:
+              - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
+            message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+            title:
+              delay: 10
+              title: "%mob_name% died."
+              sub-title: "1st damage dealt: %mob_top_dealt_1%"
+              fade-in: 10
+              stay: 10
+              fade-out: 10
+            actionbar:
+              delay: 10
+              message: "%mob_name% died"
+          damage-taken:
+            delay: 10
+            hide-empty-header: true
+            hide-empty-footer: true
+            header-messages:
+              - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
+            footer-messages:
+              - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
+            message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+            title:
+              delay: 10
+              title: "%mob_name% died."
+              sub-title: "1st damage taken: %mob_top_taken_1%"
+              fade-in: 10
+              stay: 10
+              fade-out: 10
+            actionbar:
+              delay: 10
+              message: "%mob_name% died"
+
+plugin-messages:
+  toggle-broadcast:
+    on: "&8<&a!&8>&7 Successfully enabled broadcaster messages."
+    off: "&8<&c!&8>&7 Successfully disabled broadcaster messages."

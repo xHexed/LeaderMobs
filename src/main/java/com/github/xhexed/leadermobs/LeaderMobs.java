@@ -1,46 +1,46 @@
 package com.github.xhexed.leadermobs;
 
-import com.github.xhexed.leadermobs.commands.Commands;
-import com.github.xhexed.leadermobs.listeners.BossListener;
-import com.github.xhexed.leadermobs.listeners.MythicMobsListener;
-import com.tchristofferson.configupdater.ConfigUpdater;
+import com.github.xhexed.leadermobs.command.CommandManager;
+import com.github.xhexed.leadermobs.config.ConfigManager;
+import com.github.xhexed.leadermobs.data.PlayerDataManager;
+import com.github.xhexed.leadermobs.listener.BossListener;
+import com.github.xhexed.leadermobs.listener.MythicMobsListener;
+import com.github.xhexed.leadermobs.manager.MobEventManager;
+import com.github.xhexed.leadermobs.manager.RewardManager;
+import com.github.xhexed.leadermobs.util.PluginUtil;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 import java.util.logging.Logger;
 
 public class LeaderMobs extends JavaPlugin {
-    public static File dataFile;
-    public static FileConfiguration playerData;
-    public static FileConfiguration rewards;
-    public static boolean papi;
-    public static boolean mvdw;
-    private static LeaderMobs instance;
+    private ConfigManager configManager;
+    private PlayerDataManager playerDataManager;
+    private PluginUtil pluginUtil;
+    private MobEventManager mobEventManager;
+    private RewardManager rewardManager;
+    public boolean papi;
+    public boolean mvdw;
 
-    public static LeaderMobs getInstance() { return instance; }
-    
     @Override
     public void onEnable() {
-        instance = this;
-        saveDefaultConfig();
-        reload();
+        configManager = new ConfigManager(this);
+        playerDataManager = new PlayerDataManager(this);
+        pluginUtil = new PluginUtil(this);
+        mobEventManager = new MobEventManager(this);
+        rewardManager = new RewardManager(this);
 
-        final PluginManager manager = getServer().getPluginManager();
-        final Logger logger = getLogger();
-        if (manager.isPluginEnabled("Boss")) {
+        PluginManager manager = getServer().getPluginManager();
+        Logger logger = getLogger();
+        if (manager.isPluginEnabled("Boss") && configManager.getPluginMobMessages().containsKey("Boss")) {
             logger.info("Found Boss, hooking...");
-            manager.registerEvents(new BossListener(), this);
+            manager.registerEvents(new BossListener(this), this);
         }
-        if (manager.isPluginEnabled("MythicMobs")) {
+        if (manager.isPluginEnabled("MythicMobs") && configManager.getPluginMobMessages().containsKey("MythicMobs")) {
             logger.info("Found MythicMobs, hooking...");
-            manager.registerEvents(new MythicMobsListener(), this);
+            manager.registerEvents(new MythicMobsListener(this), this);
         }
         else {
             logger.severe("Didn't found any hookable mobs plugin, disabling..");
@@ -57,42 +57,37 @@ public class LeaderMobs extends JavaPlugin {
             mvdw = true;
         }
 
-        final PluginCommand command = Objects.requireNonNull(getCommand("lm"));
-        command.setExecutor(new Commands());
-        command.setTabCompleter(new Commands());
+        PluginCommand command = Objects.requireNonNull(getCommand("lm"));
+        CommandManager commandManager = new CommandManager(this);
+        command.setExecutor(commandManager);
+        command.setTabCompleter(commandManager);
+
+        reloadPlugin();
     }
 
-    public void reload() {
-        if (!new File(getDataFolder(), "rewards.yml").exists()) {
-            saveResource("rewards.yml", true);
-        }
-        final File rewardFile = new File(getDataFolder(), "rewards.yml");
-        rewards = YamlConfiguration.loadConfiguration(rewardFile);
-
-        final FileConfiguration config = getConfig();
-        if (config.getBoolean("auto-update", true)) {
-            try {
-                ConfigUpdater.update(this, "config.yml", new File(getDataFolder(), "config.yml"), new ArrayList<>());
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        reloadConfig();
-
-        dataFile = new File(getDataFolder(), "data.yml");
-        if (!dataFile.exists()) {
-            try {
-                dataFile.createNewFile();
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-        }
-        playerData = YamlConfiguration.loadConfiguration(dataFile);
+    public void reloadPlugin() {
+        configManager.reloadConfig();
+        playerDataManager.reloadData();
+        rewardManager.reloadData();
     }
 
-    @Override
-    public void onDisable() {
-        instance = null;
+    public ConfigManager getConfigManager() {
+        return configManager;
+    }
+
+    public PlayerDataManager getPlayerDataManager() {
+        return playerDataManager;
+    }
+
+    public MobEventManager getMobEventHandler() {
+        return mobEventManager;
+    }
+
+    public PluginUtil getPluginUtil() {
+        return pluginUtil;
+    }
+
+    public RewardManager getRewardManager() {
+        return rewardManager;
     }
 }

@@ -1,4 +1,4 @@
-package com.github.xhexed.leadermobs.commands;
+package com.github.xhexed.leadermobs.command;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
 import org.bukkit.command.*;
@@ -10,14 +10,18 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.*;
 
-import static org.bukkit.ChatColor.translateAlternateColorCodes;
+public class CommandManager implements CommandExecutor, TabCompleter {
+    private LeaderMobs plugin;
+    private List<String> commands = Collections.singletonList("reload");
+    private List<String> playerCommands = new ArrayList<>(commands);
 
-public class Commands implements CommandExecutor, TabCompleter {
-    private static final List<String> commands = Collections.singletonList("reload");
-    private static final List<String> playerCommands = Collections.singletonList("toggle");
+    public CommandManager(LeaderMobs plugin) {
+        this.plugin = plugin;
+        playerCommands.addAll(Collections.singletonList("toggle"));
+    }
 
     @Override
-    public boolean onCommand(final @NotNull CommandSender sender, final @NotNull Command command, final @NotNull String label, final String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (sender instanceof ConsoleCommandSender) {
             if (args.length == 0) {
                 sender.sendMessage("§7Usage: /lm reload");
@@ -25,7 +29,7 @@ public class Commands implements CommandExecutor, TabCompleter {
             else if (args.length == 1) {
                 if ("reload".equalsIgnoreCase(args[0])) {
                     sender.sendMessage("§aReloading plugin...");
-                    LeaderMobs.getInstance().reload();
+                    plugin.reloadPlugin();
                     return true;
                 }
             }
@@ -42,7 +46,7 @@ public class Commands implements CommandExecutor, TabCompleter {
                             return true;
                         }
                         sender.sendMessage("§aReloading plugin...");
-                        LeaderMobs.getInstance().reload();
+                        plugin.getConfigManager().reloadConfig();
                         return true;
                     }
                     case "toggle": {
@@ -50,17 +54,17 @@ public class Commands implements CommandExecutor, TabCompleter {
                             sender.sendMessage("§cYou don't have permission!");
                             return true;
                         }
-                        final FileConfiguration config = LeaderMobs.playerData;
+                        FileConfiguration config = plugin.getPlayerDataManager().getPlayerData();
                         if (!config.contains(sender.getName()) || config.getBoolean(sender.getName())) {
-                            sender.sendMessage(translateAlternateColorCodes('&', Objects.requireNonNull(LeaderMobs.getInstance().getConfig().getString("Messages.toggle.false", ""))));
+                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().toggleBroadcastOff);
                             config.set(sender.getName(), false);
                         }
                         else {
-                            sender.sendMessage(translateAlternateColorCodes('&', Objects.requireNonNull(LeaderMobs.getInstance().getConfig().getString("Messages.toggle.true", ""))));
+                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().toggleBroadcastOn);
                             config.set(sender.getName(), true);
                         }
 
-                        try { config.save(LeaderMobs.dataFile); } catch (final IOException e) { e.printStackTrace(); }
+                        try { config.save(plugin.getPlayerDataManager().getDataFile()); } catch (IOException e) { e.printStackTrace(); }
                     }
                 }
             }
@@ -69,17 +73,17 @@ public class Commands implements CommandExecutor, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(final @NotNull CommandSender commandSender, final @NotNull Command command, final @NotNull String s, final String[] strings) {
+    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
         if (strings.length > 1) {
             return null;
         }
 
-        final Collection<String> commandList = new ArrayList<>(commands);
+        Collection<String> commandList = commands;
         if (commandSender instanceof Player) {
-            commandList.addAll(playerCommands);
+            commandList = playerCommands;
         }
 
-        final List<String> completions = new ArrayList<>();
+        List<String> completions = new ArrayList<>();
         StringUtil.copyPartialMatches(strings[0], commandList, completions);
         Collections.sort(completions);
 

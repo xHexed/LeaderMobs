@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <artifactId>leadermobs</artifactId>
     <groupId>com.github.xhexed</groupId>
-    <version>1.4.3</version>
+    <version>2.0</version>
     <modelVersion>4.0.0</modelVersion>
     <name>LeaderMobs</name>
 
@@ -121,8 +121,8 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>spigot</artifactId>
+                    <groupId>be.maximvdw</groupId>
+                    <artifactId>MVdWUpdater</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -140,7 +140,7 @@
         <dependency>
             <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
-            <version>4.10.0</version>
+            <version>4.11.2</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
