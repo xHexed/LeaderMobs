@@ -39,7 +39,7 @@ public class TopDamageReward {
             DamageTracker info = topList.get(i);
             UUID uuid = info.getTracker();
             OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-            rewards.get(i).commands.stream()
+            entry.getValue().commands.stream()
                     .map(command -> PLAYER_NAME.matcher(command).replaceAll(player.getName()))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
                     .map(command -> damageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getTotalDamage())))
