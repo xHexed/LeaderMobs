@@ -21,6 +21,10 @@ public class MobDeathMessage {
 
         public DamageMessage(ConfigurationSection config) {
             super(config);
+            hideEmptyHeader = config.getBoolean("hide-empty-header");
+            hideEmptyFooter = config.getBoolean("hide-empty-footer");
+            headerMessages = config.getStringList("header-messages");
+            footerMessages = config.getStringList("footer-messages");
         }
     }
 }
