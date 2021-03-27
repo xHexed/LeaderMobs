@@ -39,6 +39,6 @@ public class BossListener extends CustomMobListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onDeath(BossDeathEvent e) {
         Boss boss = e.getBoss();
-        handleMobDeath(e.getEntity(), boss.getSettings().getCustomName(), boss.getName());
+        handleMobDeath(e.getEntity(), boss.getName(), boss.getSettings().getCustomName());
     }
 }

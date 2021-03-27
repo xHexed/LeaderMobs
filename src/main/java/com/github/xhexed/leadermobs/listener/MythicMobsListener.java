@@ -37,6 +37,6 @@ public class MythicMobsListener extends CustomMobListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onDeath(MythicMobDeathEvent event) {
-        handleMobDeath(event.getEntity(), event.getMob().getDisplayName(), event.getMobType().getInternalName());
+        handleMobDeath(event.getEntity(), event.getMobType().getInternalName(), event.getMob().getDisplayName());
     }
 }
