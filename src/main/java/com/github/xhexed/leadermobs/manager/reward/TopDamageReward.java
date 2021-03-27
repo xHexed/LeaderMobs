@@ -34,8 +34,8 @@ public class TopDamageReward {
                              Pattern damageFormat,
                              Pattern percentageFormat) {
         for (Map.Entry<Integer, DamageReward.DamagePlaceReward> entry : rewards.entrySet()) {
-            int i = entry.getKey();
-            if (i > topList.size()) break;
+            int i = entry.getKey() - 1;
+            if (i >= topList.size()) break;
             DamageTracker info = topList.get(i);
             UUID uuid = info.getTracker();
             OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
