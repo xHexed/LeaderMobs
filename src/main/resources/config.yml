@@ -6,8 +6,10 @@ templates:
     # Plugin mob names
     mobs:
     - "test"
-    players-required: 1 # This is to prevent spam if there's only 1 or 2 people killing the mob
-    places-to-broadcast: 10 # How much places to broadcast
+    # This is to prevent spam if there's only 1 or 2 people killing the mob
+    players-required: 1
+    # How much places to broadcast
+    places-to-broadcast: 10
     default-place-prefix: "&6"
     place-prefix:
       1: "&a"
@@ -103,7 +105,7 @@ mob-messages:
     MythicMobs:
       example:
         # The template to use, override it by including settings below
-        template: "abc"
+        template: "temp"
         blacklist:
         - "test"
         mob-spawn-message:
@@ -164,5 +166,5 @@ mob-messages:
 
 plugin-messages:
   toggle-broadcast:
-    on: "&8<&a!&8>&7 Successfully enabled broadcaster messages."
-    off: "&8<&c!&8>&7 Successfully disabled broadcaster messages."
+    true: "&8<&a!&8>&7 Successfully enabled broadcaster messages."
+    false: "&8<&c!&8>&7 Successfully disabled broadcaster messages."
