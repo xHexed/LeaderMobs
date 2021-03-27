@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.TreeMap;
 
 public class DamageReward {
-    public TreeMap<Integer, DamagePlaceReward> placeRewards;
+    public TreeMap<Integer, DamagePlaceReward> placeRewards = new TreeMap<>();
 
     public DamageReward(ConfigurationSection config) {
         for (String place : config.getKeys(false)) {

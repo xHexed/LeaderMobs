@@ -103,7 +103,6 @@ public class MobEventManager {
         AbstractMobMessage mobMessage = mobMessages.get(mobName);
         MobDeathMessage mobDeathMessage = mobMessage.mobDeathMessage;
         if (damageInfo.getDamageDealt().size() < mobMessage.playersRequired) return;
-
         MobDeathMessage.DamageMessage damageDealtMessage = mobDeathMessage.damageDealtMessage;
         if (damageDealtMessage != null) {
             getScheduler().runTaskLater(plugin, () -> {
@@ -146,12 +145,12 @@ public class MobEventManager {
         MobDeathMessage.DamageMessage damageTakenMessage = mobDeathMessage.damageTakenMessage;
         if (damageTakenMessage != null) {
             getScheduler().runTaskLater(plugin, () -> {
-                if (!(damageInfo.getTopDamageDealt().isEmpty() && damageTakenMessage.hideEmptyHeader)) {
-                    List<String> damageDealtHeaders = damageTakenMessage.headerMessages;
-                    for (String damageDealtHeader : damageDealtHeaders) {
-                        damageDealtHeader = NAME.matcher(damageDealtHeader != null ? damageDealtHeader : "").replaceAll(ChatColor.stripColor(mobDisplayName));
-                        damageDealtHeader = replaceMobPlaceholder(damageDealtHeader, damageInfo);
-                        plugin.getPluginUtil().sendMessage(damageDealtHeader);
+                if (!(damageInfo.getTopDamageTaken().isEmpty() && damageTakenMessage.hideEmptyHeader)) {
+                    List<String> damageTakenHeaders = damageTakenMessage.headerMessages;
+                    for (String damageTakenHeader : damageTakenHeaders) {
+                        damageTakenHeader = NAME.matcher(damageTakenHeader != null ? damageTakenHeader : "").replaceAll(ChatColor.stripColor(mobDisplayName));
+                        damageTakenHeader = replaceMobPlaceholder(damageTakenHeader, damageInfo);
+                        plugin.getPluginUtil().sendMessage(damageTakenHeader);
                     }
                 }
 

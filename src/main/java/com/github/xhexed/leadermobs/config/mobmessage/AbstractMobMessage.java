@@ -8,6 +8,7 @@ import com.github.xhexed.leadermobs.config.mobmessage.requirement.TotalDamageReq
 import com.github.xhexed.leadermobs.config.mobmessage.requirement.WarmupDamageRequirement;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -17,7 +18,7 @@ public abstract class AbstractMobMessage {
     public int playersRequired;
     public int placesToBroadcast;
     public String defaultPlacePrefix;
-    public Map<Integer, String> placePrefixes;
+    public Map<Integer, String> placePrefixes = new HashMap<>();
     public TotalDamageRequirement totalDamageRequirement;
     public WarmupDamageRequirement warmupDamageRequirement;
     public ResetDamageRequirement resetDamageRequirement;
@@ -39,6 +40,7 @@ public abstract class AbstractMobMessage {
             defaultPlacePrefix = config.getString("default-place-prefix");
         if (config.contains("place-prefix")) {
             ConfigurationSection placePrefix = config.getConfigurationSection("place-prefix");
+            placePrefixes.clear();
             Objects.requireNonNull(placePrefix).getKeys(false).forEach(place -> placePrefixes.put(Integer.valueOf(place), placePrefix.getString(place)));
         }
         if (config.contains("total-damage-requirement")) {

@@ -12,8 +12,8 @@ public class PluginMessage {
     public PluginMessage(ConfigurationSection config) {
         ConfigurationSection toggleBroadcast = config.getConfigurationSection("toggle-broadcast");
         if (toggleBroadcast != null) {
-            toggleBroadcastOn = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(toggleBroadcast.getString("on")));
-            toggleBroadcastOff = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(toggleBroadcast.getString("off")));
+            toggleBroadcastOn = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(toggleBroadcast.getString("true")));
+            toggleBroadcastOff = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(toggleBroadcast.getString("false")));
         }
     }
 }

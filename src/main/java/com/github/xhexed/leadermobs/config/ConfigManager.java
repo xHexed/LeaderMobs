@@ -19,7 +19,6 @@ public class ConfigManager {
     private Plugin plugin;
     private Map<String, TemplateMobMessage> templateMobMessages = new HashMap<>();
     private Map<String, Map<String, AbstractMobMessage>> pluginMobMessages = new HashMap<>();
-    private Map<String, AbstractMobMessage> blacklistMobMessages = new HashMap<>();
     private PluginMessage pluginMessage;
 
     public ConfigManager(Plugin plugin) {
@@ -42,7 +41,7 @@ public class ConfigManager {
         pluginMobMessages.clear();
         ConfigurationSection templates = config.getConfigurationSection("templates");
         if (templates != null) {
-            for (String template : config.getStringList("templates")) {
+            for (String template : templates.getKeys(false)) {
                 templateMobMessages.put(template, new TemplateMobMessage(templates.getConfigurationSection(template)));
             }
         }
@@ -53,9 +52,12 @@ public class ConfigManager {
                 ConfigurationSection pluginSection = pluginHooks.getConfigurationSection(pl);
                 for (String mobName : Objects.requireNonNull(pluginSection).getKeys(false)) {
                     AbstractMobMessage mobMessage = MobMessage.getMobMessage(Objects.requireNonNull(pluginSection.getConfigurationSection(mobName)), this);
-                    for (String mob : mobMessage.mobs) {
-                        mobMessages.put(pl, MobMessage.getMobMessage(Objects.requireNonNull(pluginSection.getConfigurationSection(mob)), this));
+                    if (mobMessage.mobs != null) {
+                        for (String mob : mobMessage.mobs) {
+                            mobMessages.put(mob, mobMessage);
+                        }
                     }
+                    mobMessages.put(mobName, mobMessage);
                 }
                 pluginMobMessages.put(pl, mobMessages);
             }));
@@ -73,9 +75,5 @@ public class ConfigManager {
 
     public PluginMessage getPluginMessage() {
         return pluginMessage;
-    }
-
-    public Map<String, AbstractMobMessage> getBlacklistMobMessages() {
-        return blacklistMobMessages;
     }
 }
