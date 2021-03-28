@@ -68,7 +68,8 @@ templates:
         footer-messages:
           - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
         # Placeholders available: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
-        message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+        messages:
+        - "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
         title:
           delay: 10
           title: "%mob_name% died."
@@ -88,7 +89,8 @@ templates:
         - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
         footer-messages:
         - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
-        message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+        messages:
+        - "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
         title:
           delay: 10
           title: "%mob_name% died."
@@ -133,7 +135,8 @@ mob-messages:
               - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
             footer-messages:
               - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
-            message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+            messages:
+            - "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
             title:
               delay: 10
               title: "%mob_name% died."
@@ -152,7 +155,8 @@ mob-messages:
               - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
             footer-messages:
               - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
-            message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+            messages:
+            - "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
             title:
               delay: 10
               title: "%mob_name% died."

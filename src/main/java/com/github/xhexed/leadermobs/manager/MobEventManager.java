@@ -170,12 +170,12 @@ public class MobEventManager {
                     getScheduler().runTaskLater(plugin, () -> Bukkit.getOnlinePlayers().forEach((p) -> plugin.getPluginUtil().sendActionBar(p, plugin.getPluginUtil().getMobDeathMessage(damageInfo, mobDisplayName, actionbarMessage.message))), actionbarMessage.delay);
                 }
 
-                if (!(damageInfo.getTopDamageDealt().isEmpty() && damageTakenMessage.hideEmptyFooter)) {
-                    List<String> damageDealtFooters = damageTakenMessage.footerMessages;
-                    for (String damageDealtFooter : damageDealtFooters) {
-                        damageDealtFooter = NAME.matcher(damageDealtFooter).replaceAll(ChatColor.stripColor(mobDisplayName));
-                        damageDealtFooter = replaceMobPlaceholder(damageDealtFooter, damageInfo);
-                        plugin.getPluginUtil().sendMessage(damageDealtFooter);
+                if (!(damageInfo.getTopDamageTaken().isEmpty() && damageTakenMessage.hideEmptyFooter)) {
+                    List<String> damageTakenFooters = damageTakenMessage.footerMessages;
+                    for (String damageTakenFooter : damageTakenFooters) {
+                        damageTakenFooter = NAME.matcher(damageTakenFooter).replaceAll(ChatColor.stripColor(mobDisplayName));
+                        damageTakenFooter = replaceMobPlaceholder(damageTakenFooter, damageInfo);
+                        plugin.getPluginUtil().sendMessage(damageTakenFooter);
                     }
                 }
             }, damageTakenMessage.delay);
