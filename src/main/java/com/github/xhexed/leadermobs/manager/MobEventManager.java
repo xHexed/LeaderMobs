@@ -154,7 +154,7 @@ public class MobEventManager {
                     }
                 }
 
-                plugin.getPluginUtil().sendPlaceMessage(damageInfo.getTotalDamageDealt(), mobMessage, damageInfo.getTopDamageDealt(), damageTakenMessage.messages);
+                plugin.getPluginUtil().sendPlaceMessage(damageInfo.getTotalDamageTaken(), mobMessage, damageInfo.getTopDamageTaken(), damageTakenMessage.messages);
 
                 TitleMessage titleMessage = damageTakenMessage.titleMessage;
                 if (titleMessage != null) {
