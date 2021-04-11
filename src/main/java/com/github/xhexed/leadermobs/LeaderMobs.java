@@ -4,11 +4,13 @@ import com.github.xhexed.leadermobs.command.CommandManager;
 import com.github.xhexed.leadermobs.config.ConfigManager;
 import com.github.xhexed.leadermobs.data.PlayerDataManager;
 import com.github.xhexed.leadermobs.listener.BossListener;
+import com.github.xhexed.leadermobs.listener.EliteMobsListener;
 import com.github.xhexed.leadermobs.listener.MythicMobsListener;
 import com.github.xhexed.leadermobs.manager.MobEventManager;
 import com.github.xhexed.leadermobs.manager.RewardManager;
 import com.github.xhexed.leadermobs.util.PluginUtil;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,19 +34,36 @@ public class LeaderMobs extends JavaPlugin {
         mobEventManager = new MobEventManager(this);
         rewardManager = new RewardManager(this);
 
+        PluginCommand command = Objects.requireNonNull(getCommand("lm"));
+        CommandManager commandManager = new CommandManager(this);
+        command.setExecutor(commandManager);
+        command.setTabCompleter(commandManager);
+
+        reloadPlugin();
+    }
+
+    public void reloadPlugin() {
         PluginManager manager = getServer().getPluginManager();
         Logger logger = getLogger();
-        if (manager.isPluginEnabled("Boss") && configManager.getPluginMobMessages().containsKey("Boss")) {
+        HandlerList.unregisterAll(this);
+        boolean found = false;
+        if (manager.isPluginEnabled("Boss")) {
             logger.info("Found Boss, hooking...");
             manager.registerEvents(new BossListener(this), this);
+            found = true;
         }
-        if (manager.isPluginEnabled("MythicMobs") && configManager.getPluginMobMessages().containsKey("MythicMobs")) {
+        if (manager.isPluginEnabled("MythicMobs")) {
             logger.info("Found MythicMobs, hooking...");
             manager.registerEvents(new MythicMobsListener(this), this);
+            found = true;
         }
-        else {
-            logger.severe("Didn't found any hookable mobs plugin, disabling..");
-            manager.disablePlugin(this);
+        if (manager.isPluginEnabled("EliteMobs")) {
+            logger.info("Found EliteMobs, hooking...");
+            manager.registerEvents(new EliteMobsListener(this), this);
+            found = true;
+        }
+        if (!found) {
+            logger.severe("Couldn't find any hookable mobs plugin...");
             return;
         }
 
@@ -57,15 +76,6 @@ public class LeaderMobs extends JavaPlugin {
             mvdw = true;
         }
 
-        PluginCommand command = Objects.requireNonNull(getCommand("lm"));
-        CommandManager commandManager = new CommandManager(this);
-        command.setExecutor(commandManager);
-        command.setTabCompleter(commandManager);
-
-        reloadPlugin();
-    }
-
-    public void reloadPlugin() {
         configManager.reloadConfig();
         playerDataManager.reloadData();
         rewardManager.reloadData();

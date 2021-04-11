@@ -143,5 +143,12 @@
             <version>4.11.2</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.magmaguy</groupId>
+            <artifactId>EliteMobs</artifactId>
+            <version>7.2.41</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/EliteMobs.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
