@@ -46,7 +46,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                             return true;
                         }
                         sender.sendMessage("§aReloading plugin...");
-                        plugin.getConfigManager().reloadConfig();
+                        plugin.reloadPlugin();
                         return true;
                     }
                     case "toggle": {
