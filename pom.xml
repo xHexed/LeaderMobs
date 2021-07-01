@@ -146,7 +146,7 @@
         <dependency>
             <groupId>com.magmaguy</groupId>
             <artifactId>EliteMobs</artifactId>
-            <version>7.2.41</version>
+            <version>7.3.3</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/EliteMobs.jar</systemPath>
         </dependency>
