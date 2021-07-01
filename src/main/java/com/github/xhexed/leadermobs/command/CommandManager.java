@@ -7,8 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 public class CommandManager implements CommandExecutor, TabCompleter {
     private LeaderMobs plugin;
@@ -64,7 +66,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                             config.set(sender.getName(), true);
                         }
 
-                        try { config.save(plugin.getPlayerDataManager().getDataFile()); } catch (IOException e) { e.printStackTrace(); }
+                        plugin.getPlayerDataManager().saveData();
                     }
                 }
             }

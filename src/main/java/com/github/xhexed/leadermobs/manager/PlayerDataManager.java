@@ -36,4 +36,13 @@ public class PlayerDataManager {
     public FileConfiguration getPlayerData() {
         return playerData;
     }
+
+    public void saveData() {
+        try {
+            playerData.save(dataFile);
+            reloadData();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
