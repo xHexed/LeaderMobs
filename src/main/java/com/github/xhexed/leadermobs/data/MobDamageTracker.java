@@ -72,7 +72,7 @@ public class MobDamageTracker {
             if (damage < requiredDamage) continue;
             topList.add(new DamageTracker(damage, entry.getKey()));
         }
-        topList.sort((f, s) -> Double.compare(s.getTotalDamage(), f.getTotalDamage()));
+        topList.sort(Comparator.comparing(DamageTracker::getTotalDamage));
         return new TopDamageResult(topList, totalDamage);
     }
 

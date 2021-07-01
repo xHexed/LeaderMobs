@@ -28,18 +28,18 @@ public class TopDamageReward {
         giveRewards(damageTakenRewards.placeRewards, info.getTopDamageTaken(), info.getTotalDamageTaken(), DAMAGE_TAKEN, DAMAGE_TAKEN_PERCENTAGE);
     }
 
-    private void giveRewards(TreeMap<Integer, DamageReward.DamagePlaceReward> rewards,
+    private void giveRewards(List<DamageReward.DamagePlaceReward> rewards,
                              List<DamageTracker> topList,
                              double totalDamage,
                              Pattern damageFormat,
                              Pattern percentageFormat) {
-        for (Map.Entry<Integer, DamageReward.DamagePlaceReward> entry : rewards.entrySet()) {
-            int i = entry.getKey() - 1;
+        for (DamageReward.DamagePlaceReward reward : rewards) {
+            int i = reward.place - 1;
             if (i >= topList.size()) break;
             DamageTracker info = topList.get(i);
             UUID uuid = info.getTracker();
             OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-            entry.getValue().commands.stream()
+            reward.commands.stream()
                     .map(command -> PLAYER_NAME.matcher(command).replaceAll(player.getName()))
                     .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
                     .map(command -> damageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getTotalDamage())))

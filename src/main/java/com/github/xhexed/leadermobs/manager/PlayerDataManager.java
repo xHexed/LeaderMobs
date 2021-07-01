@@ -1,4 +1,4 @@
-package com.github.xhexed.leadermobs.data;
+package com.github.xhexed.leadermobs.manager;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

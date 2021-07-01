@@ -2,16 +2,16 @@ package com.github.xhexed.leadermobs.manager.reward;
 
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.TreeMap;
 
 public class DamageReward {
-    public TreeMap<Integer, DamagePlaceReward> placeRewards = new TreeMap<>();
+    public List<DamagePlaceReward> placeRewards = new ArrayList<>();
 
     public DamageReward(ConfigurationSection config) {
         for (String place : config.getKeys(false)) {
-            placeRewards.put(Integer.parseInt(place), new DamagePlaceReward(Objects.requireNonNull(config.getConfigurationSection(place))));
+            placeRewards.add(new DamagePlaceReward(Objects.requireNonNull(config.getConfigurationSection(place))));
         }
     }
 

@@ -28,7 +28,7 @@ public class RewardManager {
     }
 
     public void reloadData() {
-        plugin.saveResource("rewards.yml", true);
+        plugin.saveResource("rewards.yml", false);
         FileConfiguration rewardConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "rewards.yml"));
         pluginTopDamageRewards.clear();
         ConfigurationSection pluginHooks = rewardConfig.getConfigurationSection("rewards.plugin-hooks");
