@@ -39,13 +39,14 @@ public class TopDamageReward {
             DamageTracker info = topList.get(i);
             UUID uuid = info.getTracker();
             OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
-            reward.commands.stream()
-                    .map(command -> PLAYER_NAME.matcher(command).replaceAll(player.getName()))
-                    .map(command -> DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1)))
-                    .map(command -> damageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getTotalDamage())))
-                    .map(command -> percentageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(getPercentage(info.getTotalDamage(), totalDamage))))
-                    .map(command -> plugin.getPluginUtil().replacePlaceholder(player, command))
-                    .forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command));
+            for (String command : reward.commands) {
+                command = PLAYER_NAME.matcher(command).replaceAll(player.getName());
+                command = DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1));
+                command = damageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getTotalDamage()));
+                command = percentageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(getPercentage(info.getTotalDamage(), totalDamage)));
+                command = plugin.getPluginUtil().replacePlaceholder(player, command);
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+            }
         }
     }
 }
