@@ -1,5 +1,6 @@
-package com.github.xhexed.leadermobs.config;
+package com.github.xhexed.leadermobs.manager;
 
+import com.github.xhexed.leadermobs.config.PluginMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.AbstractMobMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.MobMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.TemplateMobMessage;

@@ -1,7 +1,7 @@
 package com.github.xhexed.leadermobs;
 
 import com.github.xhexed.leadermobs.command.CommandManager;
-import com.github.xhexed.leadermobs.config.ConfigManager;
+import com.github.xhexed.leadermobs.manager.ConfigManager;
 import com.github.xhexed.leadermobs.manager.PlayerDataManager;
 import com.github.xhexed.leadermobs.listener.BossListener;
 import com.github.xhexed.leadermobs.listener.EliteMobsListener;

@@ -1,6 +1,6 @@
 package com.github.xhexed.leadermobs.config.mobmessage;
 
-import com.github.xhexed.leadermobs.config.ConfigManager;
+import com.github.xhexed.leadermobs.manager.ConfigManager;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class MobMessage extends AbstractMobMessage {
