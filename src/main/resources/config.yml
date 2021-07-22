@@ -106,9 +106,9 @@ mob-messages:
   plugin-hooks:
     MythicMobs:
       example:
-        # The template to use, override it by including settings below
+        # The template to use, override it by include settings below
         template: "temp"
-        blacklist:
+        mobs:
         - "test"
         mob-spawn-message:
           delay: 10
