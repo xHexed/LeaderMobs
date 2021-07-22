@@ -15,12 +15,7 @@ public class MobMessage extends AbstractMobMessage {
                 mobMessage.setMobMessage(config);
                 return mobMessage;
             }
-            else {
-                return new MobMessage(config);
-            }
         }
-        else {
-            return new MobMessage(config);
-        }
+        return new MobMessage(config);
     }
 }
