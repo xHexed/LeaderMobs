@@ -4,6 +4,7 @@ import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.config.mobmessage.AbstractMobMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.ActionbarMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.TitleMessage;
+import com.github.xhexed.leadermobs.config.mobmessage.message.DamageMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.message.MobDeathMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.message.MobEventMessage;
 import com.github.xhexed.leadermobs.data.MobDamageTracker;
@@ -103,7 +104,7 @@ public class MobEventManager {
         AbstractMobMessage mobMessage = mobMessages.get(mobName);
         MobDeathMessage mobDeathMessage = mobMessage.mobDeathMessage;
         if (damageInfo.getDamageDealt().size() < mobMessage.playersRequired) return;
-        MobDeathMessage.DamageMessage damageDealtMessage = mobDeathMessage.damageDealtMessage;
+        DamageMessage damageDealtMessage = mobDeathMessage.damageDealtMessage;
         if (damageDealtMessage != null) {
             getScheduler().runTaskLater(plugin, () -> {
                 if (!(damageInfo.getTopDamageDealt().isEmpty() && damageDealtMessage.hideEmptyHeader)) {
@@ -115,7 +116,7 @@ public class MobEventManager {
                     }
                 }
 
-                plugin.getPluginUtil().sendPlaceMessage(damageInfo.getTotalDamageDealt(), mobMessage, damageInfo.getTopDamageDealt(), damageDealtMessage.messages);
+                plugin.getPluginUtil().sendPlaceMessage(damageInfo.getTotalDamageDealt(), mobMessage, damageDealtMessage, damageInfo.getTopDamageDealt());
 
                 TitleMessage titleMessage = damageDealtMessage.titleMessage;
                 if (titleMessage != null) {
@@ -142,7 +143,7 @@ public class MobEventManager {
             }, damageDealtMessage.delay);
         }
 
-        MobDeathMessage.DamageMessage damageTakenMessage = mobDeathMessage.damageTakenMessage;
+        DamageMessage damageTakenMessage = mobDeathMessage.damageTakenMessage;
         if (damageTakenMessage != null) {
             getScheduler().runTaskLater(plugin, () -> {
                 if (!(damageInfo.getTopDamageTaken().isEmpty() && damageTakenMessage.hideEmptyHeader)) {
@@ -154,7 +155,7 @@ public class MobEventManager {
                     }
                 }
 
-                plugin.getPluginUtil().sendPlaceMessage(damageInfo.getTotalDamageTaken(), mobMessage, damageInfo.getTopDamageTaken(), damageTakenMessage.messages);
+                plugin.getPluginUtil().sendPlaceMessage(damageInfo.getTotalDamageTaken(), mobMessage, damageTakenMessage, damageInfo.getTopDamageTaken());
 
                 TitleMessage titleMessage = damageTakenMessage.titleMessage;
                 if (titleMessage != null) {

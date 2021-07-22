@@ -2,6 +2,7 @@ package com.github.xhexed.leadermobs.util;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.config.mobmessage.AbstractMobMessage;
+import com.github.xhexed.leadermobs.config.mobmessage.message.DamageMessage;
 import com.github.xhexed.leadermobs.data.DamageTracker;
 import com.github.xhexed.leadermobs.data.MobDamageTracker;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -45,7 +46,7 @@ public class PluginUtil {
         return string;
     }
 
-    public void sendPlaceMessage(double total, AbstractMobMessage mobMessage, List<DamageTracker> damageList, List<String> damageMessages) {
+    public void sendPlaceMessage(double total, AbstractMobMessage mobMessage, DamageMessage damageMessage, List<DamageTracker> damageList) {
         for (int place = 1; place <= damageList.size(); place++) {
             if (place >= mobMessage.placesToBroadcast) break;
 
@@ -54,9 +55,8 @@ public class PluginUtil {
             Double damage = info.getTotalDamage();
             OfflinePlayer player = Bukkit.getOfflinePlayer(info.getTracker());
 
-            for (String damageMessage : damageMessages) {
-                String message = damageMessage;
-                message = Util.PLACE_PREFIX.matcher(message).replaceAll(mobMessage.placePrefixes.getOrDefault(place, mobMessage.defaultPlacePrefix));
+            for (String message : damageMessage.messages) {
+                message = Util.PLACE_PREFIX.matcher(message).replaceAll(damageMessage.placePrefixes.getOrDefault(place, damageMessage.defaultPlacePrefix));
                 message = Util.DAMAGE_POS.matcher(message).replaceAll(Integer.toString(place));
                 message = Util.PLAYER_NAME.matcher(message).replaceAll(player.getName());
                 message = Util.DAMAGE.matcher(message).replaceAll(Util.DOUBLE_FORMAT.format(damage));

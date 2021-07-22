@@ -10,12 +10,6 @@ templates:
     players-required: 1
     # How much places to broadcast
     places-to-broadcast: 10
-    default-place-prefix: "&6"
-    place-prefix:
-      1: "&a"
-      2: "&b"
-      3: "&e"
-      123: "This pos will have long prefix!"
     total-damage-requirement:
       # How much damage the player has to dealt to get included to the leaderboard, set to 0 to disable
       dealt-damage-required: 0
@@ -60,6 +54,12 @@ templates:
       # You can remove this section
       damage-dealt:
         # Will it hide the header-footer message when no one is in the list?
+        default-place-prefix: "&6"
+        place-prefix:
+          1: "&a"
+          2: "&b"
+          3: "&e"
+          123: "This pos will have long prefix!"
         hide-empty-header: true
         hide-empty-footer: true
         delay: 10
@@ -82,6 +82,12 @@ templates:
           message: "%mob_name% died"
       # You can remove this section
       damage-taken:
+        default-place-prefix: "&6"
+        place-prefix:
+          1: "&a"
+          2: "&b"
+          3: "&e"
+          123: "This pos will have long prefix!"
         delay: 10
         hide-empty-header: true
         hide-empty-footer: true

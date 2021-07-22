@@ -8,17 +8,13 @@ import com.github.xhexed.leadermobs.config.mobmessage.requirement.TotalDamageReq
 import com.github.xhexed.leadermobs.config.mobmessage.requirement.WarmupDamageRequirement;
 import org.bukkit.configuration.ConfigurationSection;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public abstract class AbstractMobMessage {
     public List<String> mobs;
     public int playersRequired;
     public int placesToBroadcast;
-    public String defaultPlacePrefix;
-    public Map<Integer, String> placePrefixes = new HashMap<>();
     public TotalDamageRequirement totalDamageRequirement;
     public WarmupDamageRequirement warmupDamageRequirement;
     public ResetDamageRequirement resetDamageRequirement;
@@ -36,13 +32,6 @@ public abstract class AbstractMobMessage {
             playersRequired = config.getInt("players-required");
         if (config.contains("places-to-broadcast"))
             placesToBroadcast = config.getInt("places-to-broadcast");
-        if (config.contains("default-place-prefix"))
-            defaultPlacePrefix = config.getString("default-place-prefix");
-        if (config.contains("place-prefix")) {
-            ConfigurationSection placePrefix = config.getConfigurationSection("place-prefix");
-            placePrefixes.clear();
-            Objects.requireNonNull(placePrefix).getKeys(false).forEach(place -> placePrefixes.put(Integer.valueOf(place), placePrefix.getString(place)));
-        }
         if (config.contains("total-damage-requirement")) {
             totalDamageRequirement = new TotalDamageRequirement(Objects.requireNonNull(config.getConfigurationSection("total-damage-requirement")));
         }
