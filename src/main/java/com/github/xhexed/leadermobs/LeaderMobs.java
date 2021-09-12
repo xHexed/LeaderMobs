@@ -24,7 +24,6 @@ public class LeaderMobs extends JavaPlugin {
     private MobEventManager mobEventManager;
     private RewardManager rewardManager;
     public boolean papi;
-    public boolean mvdw;
 
     @Override
     public void onEnable() {
@@ -70,10 +69,6 @@ public class LeaderMobs extends JavaPlugin {
         if (manager.isPluginEnabled("PlaceholderAPI")) {
             logger.info("Found PlaceholderAPI, hooking...");
             papi = true;
-        }
-        if (manager.isPluginEnabled("MVdWPlaceholderAPI")) {
-            logger.info("Found MVdWPlaceholderAPI, hooking...");
-            mvdw = true;
         }
 
         configManager.reloadConfig();

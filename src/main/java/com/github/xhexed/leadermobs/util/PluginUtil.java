@@ -41,8 +41,6 @@ public class PluginUtil {
     public String replacePlaceholder(OfflinePlayer player, String string) {
         if (plugin.papi)
             string = PlaceholderAPI.setPlaceholders(player, string);
-        if (plugin.mvdw)
-            string = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(player, string);
         return string;
     }
 
