@@ -19,13 +19,21 @@ public class TopDamageReward {
 
     public TopDamageReward(LeaderMobs plugin, ConfigurationSection config) {
         this.plugin = plugin;
-        damageDealtRewards = new DamageReward(Objects.requireNonNull(config.getConfigurationSection("dealt")));
-        damageTakenRewards = new DamageReward(Objects.requireNonNull(config.getConfigurationSection("taken")));
+        if (config.contains("dealt")) {
+            damageDealtRewards = new DamageReward(Objects.requireNonNull(config.getConfigurationSection("dealt")));
+        }
+        if (config.contains("taken")) {
+            damageTakenRewards = new DamageReward(Objects.requireNonNull(config.getConfigurationSection("taken")));
+        }
     }
 
     public void giveRewards(MobDamageTracker info) {
-        giveRewards(damageDealtRewards.placeRewards, info.getTopDamageDealt(), info.getTotalDamageDealt(), DAMAGE_DEALT, DAMAGE_DEALT_PERCENTAGE);
-        giveRewards(damageTakenRewards.placeRewards, info.getTopDamageTaken(), info.getTotalDamageTaken(), DAMAGE_TAKEN, DAMAGE_TAKEN_PERCENTAGE);
+        if (damageDealtRewards != null) {
+            giveRewards(damageDealtRewards.placeRewards, info.getTopDamageDealt(), info.getTotalDamageDealt(), DAMAGE_DEALT, DAMAGE_DEALT_PERCENTAGE);
+        }
+        if (damageTakenRewards != null) {
+            giveRewards(damageTakenRewards.placeRewards, info.getTopDamageTaken(), info.getTotalDamageTaken(), DAMAGE_TAKEN, DAMAGE_TAKEN_PERCENTAGE);
+        }
     }
 
     private void giveRewards(List<DamageReward.DamagePlaceReward> rewards,

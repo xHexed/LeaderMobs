@@ -1,119 +1,114 @@
 auto-update: true
 config-version: 1
 
-templates:
-  temp:
-    # Plugin mob names
-    mobs:
-    - "test"
-    # This is to prevent spam if there's only 1 or 2 people killing the mob
-    players-required: 1
-    # How much places to broadcast
-    places-to-broadcast: 10
-    total-damage-requirement:
-      # How much damage the player has to dealt to get included to the leaderboard, set to 0 to disable
-      dealt-damage-required: 0
-      # Same with above but with taken
-      taken-damage-required: 0
-    # Coming soon... (tm)
-    warmup-damage-requirement:
-      # How much damage the mob have to take to start the leaderboard, set to 0 to disable
-      damage: 0
-      # Time for the leaderboard to reset if not enough damage were made, set to 0 to disable
-      reset-interval: 600
-    # Coming soon... (tm)
-    reset-damage-requirement:
-      # How much damage the mob have to take in set time for the leaderboard to not get cleared
-      damage: 1
-      # Time for the leaderboard to reset
-      reset-interval: 600
-    # Placeholders available: %place_color%, %place%, %mob_name%, %percentage%
-    # You can remove this section
-    mob-spawn-message:
-      # Delay in ticks
-      delay: 10
-      messages:
-      - "&8&l&m------<--------------->------"
-      - "   &8<&a!&8> &7Mob %mob_name% spawned at (x: %x%, y: %y%, z: %z%)"
-      - "&8&l&m------<--------------->------"
-      # You can remove this section
-      title:
-        delay: 10
-        title: "%mob_name% spawned"
-        sub-title: "x: %x%, y: %y%, z: %z%"
-        fade-in: 10
-        stay: 10
-        fade-out: 10
-      # You can remove this section
-      actionbar:
-        delay: 10
-        message: "%mob_name% spawned"
-    # You can remove this section
-    mob-dead-message:
-      # Placeholders available: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
-      # You can remove this section
-      damage-dealt:
-        # Will it hide the header-footer message when no one is in the list?
-        default-place-prefix: "&6"
-        place-prefix:
-          1: "&a"
-          2: "&b"
-          3: "&e"
-          123: "This pos will have long prefix!"
-        hide-empty-header: true
-        hide-empty-footer: true
-        delay: 10
-        header-messages:
-          - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
-        footer-messages:
-          - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
-        # Placeholders available: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
-        messages:
-        - "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
-        title:
-          delay: 10
-          title: "%mob_name% died."
-          sub-title: "1st damage dealt: %mob_top_dealt_1%"
-          fade-in: 10
-          stay: 10
-          fade-out: 10
-        actionbar:
-          delay: 10
-          message: "%mob_name% died"
-      # You can remove this section
-      damage-taken:
-        default-place-prefix: "&6"
-        place-prefix:
-          1: "&a"
-          2: "&b"
-          3: "&e"
-          123: "This pos will have long prefix!"
-        delay: 10
-        hide-empty-header: true
-        hide-empty-footer: true
-        header-messages:
-        - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
-        footer-messages:
-        - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
-        messages:
-        - "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
-        title:
-          delay: 10
-          title: "%mob_name% died."
-          sub-title: "1st damage taken: %mob_top_taken_1%"
-          fade-in: 10
-          stay: 10
-          fade-out: 10
-        actionbar:
-          delay: 10
-          message: "%mob_name% died"
-
 mob-messages:
   plugin-hooks:
     MythicMobs:
+      test:
+        mobs:
+        - "test"
+        # This is to prevent spam if there's only 1 or 2 people killing the mob
+        players-required: 1
+        # How many places to broadcast
+        places-to-broadcast: 10
+        total-damage-requirement:
+          # How much damage the player has to dealt to get included to the leaderboard, set to 0 to disable
+          dealt-damage-required: 0
+          # Same with above but with taken
+          taken-damage-required: 0
+        # Coming soon... (tm)
+        warmup-damage-requirement:
+          # How much damage the mob have to take to start the leaderboard, set to 0 to disable
+          damage: 0
+          # Time for the leaderboard to reset if not enough damage were made, set to 0 to disable
+          reset-interval: 600
+        # Coming soon... (tm)
+        reset-damage-requirement:
+          # How much damage the mob have to take in set time for the leaderboard to not get cleared
+          damage: 1
+          # Time for the leaderboard to reset
+          reset-interval: 600
+        # Placeholders available: %place_color%, %place%, %mob_name%, %percentage%
+        # You can remove this section
+        mob-spawn-message:
+          # Delay in ticks
+          delay: 10
+          messages:
+            - "&8&l&m------<--------------->------"
+            - "   &8<&a!&8> &7Mob %mob_name% spawned at (x: %x%, y: %y%, z: %z%)"
+            - "&8&l&m------<--------------->------"
+          # You can remove this section
+          title:
+            delay: 10
+            title: "%mob_name% spawned"
+            sub-title: "x: %x%, y: %y%, z: %z%"
+            fade-in: 10
+            stay: 10
+            fade-out: 10
+          # You can remove this section
+          actionbar:
+            delay: 10
+            message: "%mob_name% spawned"
+        # You can remove this section
+        mob-dead-message:
+          # Placeholders available: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
+          # You can remove this section
+          damage-dealt:
+            # Will it hide the header-footer message when no one is in the list?
+            default-place-prefix: "&6"
+            place-prefix:
+              1: "&a"
+              2: "&b"
+              3: "&e"
+              123: "This pos will have long prefix!"
+            hide-empty-header: true
+            hide-empty-footer: true
+            delay: 10
+            header-messages:
+              - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
+            footer-messages:
+              - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
+            # Placeholders available: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
+            messages:
+              - "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+            title:
+              delay: 10
+              title: "%mob_name% died."
+              sub-title: "1st damage dealt: %mob_top_dealt_1%"
+              fade-in: 10
+              stay: 10
+              fade-out: 10
+            actionbar:
+              delay: 10
+              message: "%mob_name% died"
+          # You can remove this section
+          damage-taken:
+            default-place-prefix: "&6"
+            place-prefix:
+              1: "&a"
+              2: "&b"
+              3: "&e"
+              123: "This pos will have long prefix!"
+            delay: 10
+            hide-empty-header: true
+            hide-empty-footer: true
+            header-messages:
+              - "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
+            footer-messages:
+              - "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
+            messages:
+              - "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+            title:
+              delay: 10
+              title: "%mob_name% died."
+              sub-title: "1st damage taken: %mob_top_taken_1%"
+              fade-in: 10
+              stay: 10
+              fade-out: 10
+            actionbar:
+              delay: 10
+              message: "%mob_name% died"
       example:
-        # The template to use, override it by include settings below
-        template: "temp"
         mobs:
         - "test"
         mob-spawn-message:

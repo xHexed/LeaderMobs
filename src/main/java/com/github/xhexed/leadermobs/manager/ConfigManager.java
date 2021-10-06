@@ -3,7 +3,6 @@ package com.github.xhexed.leadermobs.manager;
 import com.github.xhexed.leadermobs.config.PluginMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.AbstractMobMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.MobMessage;
-import com.github.xhexed.leadermobs.config.mobmessage.TemplateMobMessage;
 import com.tchristofferson.configupdater.ConfigUpdater;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,14 +10,10 @@ import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class ConfigManager {
     private Plugin plugin;
-    private Map<String, TemplateMobMessage> templateMobMessages = new HashMap<>();
     private Map<String, Map<String, AbstractMobMessage>> pluginMobMessages = new HashMap<>();
     private PluginMessage pluginMessage;
 
@@ -33,19 +28,12 @@ public class ConfigManager {
 
         if (config.getBoolean("auto-update", true)) {
             try {
-                ConfigUpdater.update(plugin, "config.yml", new File(plugin.getDataFolder(), "config.yml"), Arrays.asList("templates", "mob-messages"));
+                ConfigUpdater.update(plugin, "config.yml", new File(plugin.getDataFolder(), "config.yml"), Collections.singletonList("mob-messages"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        templateMobMessages.clear();
         pluginMobMessages.clear();
-        ConfigurationSection templates = config.getConfigurationSection("templates");
-        if (templates != null) {
-            for (String template : templates.getKeys(false)) {
-                templateMobMessages.put(template, new TemplateMobMessage(templates.getConfigurationSection(template)));
-            }
-        }
         ConfigurationSection pluginHooks = config.getConfigurationSection("mob-messages.plugin-hooks");
         if (pluginHooks != null) {
             pluginHooks.getKeys(false).forEach((pl -> {
@@ -68,10 +56,6 @@ public class ConfigManager {
 
     public Map<String, Map<String, AbstractMobMessage>> getPluginMobMessages() {
         return pluginMobMessages;
-    }
-
-    public Map<String, TemplateMobMessage> getTemplateMobMessages() {
-        return templateMobMessages;
     }
 
     public PluginMessage getPluginMessage() {

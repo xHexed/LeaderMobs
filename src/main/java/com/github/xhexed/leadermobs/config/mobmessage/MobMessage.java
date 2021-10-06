@@ -9,13 +9,6 @@ public class MobMessage extends AbstractMobMessage {
     }
 
     public static AbstractMobMessage getMobMessage(ConfigurationSection config, ConfigManager configManager) {
-        if (config.contains("template")) {
-            AbstractMobMessage mobMessage = configManager.getTemplateMobMessages().get(config.getString("template"));
-            if (mobMessage != null) {
-                mobMessage.setMobMessage(config);
-                return mobMessage;
-            }
-        }
         return new MobMessage(config);
     }
 }
