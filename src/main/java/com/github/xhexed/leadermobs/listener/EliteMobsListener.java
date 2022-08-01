@@ -21,7 +21,7 @@ public class EliteMobsListener extends CustomMobListener implements Listener {
 
     @Override
     public boolean isMob(Entity entity) {
-        return EntityTracker.getEliteMobEntity(entity.getUniqueId()) != null;
+        return EntityTracker.getEliteMobEntity(entity) != null;
     }
 
     @EventHandler(ignoreCancelled = true)

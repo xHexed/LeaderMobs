@@ -3,7 +3,6 @@ package com.github.xhexed.leadermobs;
 import com.github.xhexed.leadermobs.command.CommandManager;
 import com.github.xhexed.leadermobs.manager.ConfigManager;
 import com.github.xhexed.leadermobs.manager.PlayerDataManager;
-import com.github.xhexed.leadermobs.listener.BossListener;
 import com.github.xhexed.leadermobs.listener.EliteMobsListener;
 import com.github.xhexed.leadermobs.listener.MythicMobsListener;
 import com.github.xhexed.leadermobs.manager.MobEventManager;
@@ -46,11 +45,6 @@ public class LeaderMobs extends JavaPlugin {
         Logger logger = getLogger();
         HandlerList.unregisterAll(this);
         boolean found = false;
-        if (manager.isPluginEnabled("Boss")) {
-            logger.info("Found Boss, hooking...");
-            manager.registerEvents(new BossListener(this), this);
-            found = true;
-        }
         if (manager.isPluginEnabled("MythicMobs")) {
             logger.info("Found MythicMobs, hooking...");
             manager.registerEvents(new MythicMobsListener(this), this);

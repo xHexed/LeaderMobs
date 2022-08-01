@@ -1,9 +1,9 @@
 package com.github.xhexed.leadermobs.listener;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
-import io.lumine.xikage.mythicmobs.MythicMobs;
-import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobDeathEvent;
-import io.lumine.xikage.mythicmobs.api.bukkit.events.MythicMobSpawnEvent;
+import io.lumine.mythic.bukkit.MythicBukkit;
+import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
+import io.lumine.mythic.bukkit.events.MythicMobSpawnEvent;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,12 +17,12 @@ public class MythicMobsListener extends CustomMobListener implements Listener {
 
     @Override
     public String getMobName(Entity entity) {
-        return MythicMobs.inst().getAPIHelper().getMythicMobInstance(entity).getType().getInternalName();
+        return MythicBukkit.inst().getAPIHelper().getMythicMobInstance(entity).getType().getInternalName();
     }
 
     @Override
     public boolean isMob(Entity entity) {
-        return MythicMobs.inst().getAPIHelper().isMythicMob(entity);
+        return MythicBukkit.inst().getAPIHelper().isMythicMob(entity);
     }
 
     @EventHandler(ignoreCancelled = true)
