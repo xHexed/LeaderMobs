@@ -24,6 +24,7 @@ public class ConfigManager {
     }
 
     public void reloadConfig() {
+        plugin.reloadConfig();
         FileConfiguration config = plugin.getConfig();
 
         if (config.getBoolean("auto-update", true)) {
