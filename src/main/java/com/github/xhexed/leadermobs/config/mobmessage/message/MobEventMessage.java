@@ -14,9 +14,13 @@ public abstract class MobEventMessage {
     public ActionbarMessage actionbarMessage;
     
     public MobEventMessage(ConfigurationSection config) {
-        delay = config.getLong("delay");
-        messages = config.getStringList("messages");
-        titleMessage = new TitleMessage(Objects.requireNonNull(config.getConfigurationSection("title")));
-        actionbarMessage = new ActionbarMessage(Objects.requireNonNull(config.getConfigurationSection("actionbar")));
+        if (config.contains("delay"))
+            delay = config.getLong("delay");
+        if (config.contains("messages"))
+            messages = config.getStringList("messages");
+        if (config.contains("title"))
+            titleMessage = new TitleMessage(Objects.requireNonNull(config.getConfigurationSection("title")));
+        if (config.contains("actionbar"))
+            actionbarMessage = new ActionbarMessage(Objects.requireNonNull(config.getConfigurationSection("actionbar")));
     }
 }

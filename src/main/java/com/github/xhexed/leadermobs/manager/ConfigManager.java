@@ -1,11 +1,10 @@
 package com.github.xhexed.leadermobs.manager;
 
+import com.bgsoftware.common.config.CommentedConfiguration;
 import com.github.xhexed.leadermobs.config.PluginMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.AbstractMobMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.MobMessage;
-import com.tchristofferson.configupdater.ConfigUpdater;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -24,12 +23,14 @@ public class ConfigManager {
     }
 
     public void reloadConfig() {
-        plugin.reloadConfig();
-        FileConfiguration config = plugin.getConfig();
+        File file = new File(plugin.getDataFolder(), "config.yml");
+        if (!file.exists())
+            plugin.saveResource("config.yml", false);
+        CommentedConfiguration config = CommentedConfiguration.loadConfiguration(file);
 
         if (config.getBoolean("auto-update", true)) {
             try {
-                ConfigUpdater.update(plugin, "config.yml", new File(plugin.getDataFolder(), "config.yml"), Collections.singletonList("mob-messages"));
+                config.syncWithConfig(file, plugin.getResource("config.yml"), "mob-messages.plugin-hooks");
             } catch (IOException e) {
                 e.printStackTrace();
             }

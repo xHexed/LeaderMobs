@@ -1,11 +1,10 @@
 package com.github.xhexed.leadermobs.manager;
 
+import com.bgsoftware.common.config.CommentedConfiguration;
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.data.MobDamageTracker;
 import com.github.xhexed.leadermobs.manager.reward.TopDamageReward;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.HashMap;
@@ -28,8 +27,10 @@ public class RewardManager {
     }
 
     public void reloadData() {
-        plugin.saveResource("rewards.yml", false);
-        FileConfiguration rewardConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "rewards.yml"));
+        File file = new File(plugin.getDataFolder(), "rewards.yml");
+        if (!file.exists())
+            plugin.saveResource("rewards.yml", false);
+        CommentedConfiguration rewardConfig = CommentedConfiguration.loadConfiguration(file);
         pluginTopDamageRewards.clear();
         ConfigurationSection pluginHooks = rewardConfig.getConfigurationSection("rewards.plugin-hooks");
         if (pluginHooks != null) {
