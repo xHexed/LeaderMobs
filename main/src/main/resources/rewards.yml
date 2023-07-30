@@ -1,0 +1,25 @@
+# Placeholders available: %player_name%, %place%, %damage_dealt%, %damage_taken%, %damage_dealt_percentage%, %damage_taken_percentage%
+rewards:
+  plugin-hooks:
+    MythicMobs:
+      SkeletalMinion:
+        dealt:
+          1: # Place (top damage dealt)
+            commands:
+              - "msg %player_name% 1st!"
+          2:
+            commands:
+              - "msg %player_name% 2nd!"
+        taken:
+          1:  # Place (top damage taken)
+            commands:
+              - "msg %player_name% 1st!"
+      SkeletalKnight:
+        dealt:
+          1:
+            commands:
+              - "msg %player_name% 1st!"
+        taken:
+          1:
+            commands:
+              - "msg %player_name% 1st!"
