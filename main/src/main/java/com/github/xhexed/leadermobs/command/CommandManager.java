@@ -19,7 +19,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
     public CommandManager(LeaderMobs plugin) {
         this.plugin = plugin;
-        playerCommands.addAll(Collections.singletonList("toggle"));
+        playerCommands.add("toggle");
     }
 
     @Override
