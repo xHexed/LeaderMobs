@@ -42,7 +42,7 @@ public class ConfigManager {
                 Map<String, AbstractMobMessage> mobMessages = new HashMap<>();
                 ConfigurationSection pluginSection = pluginHooks.getConfigurationSection(pl);
                 for (String mobName : Objects.requireNonNull(pluginSection).getKeys(false)) {
-                    AbstractMobMessage mobMessage = MobMessage.getMobMessage(Objects.requireNonNull(pluginSection.getConfigurationSection(mobName)), this);
+                    AbstractMobMessage mobMessage = MobMessage.getMobMessage(Objects.requireNonNull(pluginSection.getConfigurationSection(mobName)));
                     if (mobMessage.mobs != null) {
                         for (String mob : mobMessage.mobs) {
                             mobMessages.put(mob, mobMessage);

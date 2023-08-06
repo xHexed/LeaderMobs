@@ -1,6 +1,5 @@
 package com.github.xhexed.leadermobs.config.mobmessage;
 
-import com.github.xhexed.leadermobs.manager.ConfigManager;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class MobMessage extends AbstractMobMessage {
@@ -8,7 +7,7 @@ public class MobMessage extends AbstractMobMessage {
         super(config);
     }
 
-    public static AbstractMobMessage getMobMessage(ConfigurationSection config, ConfigManager configManager) {
+    public static AbstractMobMessage getMobMessage(ConfigurationSection config) {
         return new MobMessage(config);
     }
 }

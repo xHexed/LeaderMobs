@@ -15,8 +15,10 @@ public class MobDamageTracker {
     private double damageTakenRequired;
 
     public MobDamageTracker(AbstractMobMessage mobMessage) {
-        damageDealtRequired = mobMessage.totalDamageRequirement.damageDealtRequired;
-        damageTakenRequired = mobMessage.totalDamageRequirement.damageTakenRequired;
+        if (mobMessage.totalDamageRequirement != null) {
+            damageDealtRequired = mobMessage.totalDamageRequirement.damageDealtRequired;
+            damageTakenRequired = mobMessage.totalDamageRequirement.damageTakenRequired;
+        }
     }
 
     public Map<UUID, Double> getDamageDealt() {
