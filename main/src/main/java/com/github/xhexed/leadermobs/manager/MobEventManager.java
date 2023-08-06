@@ -13,14 +13,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
-import static com.github.xhexed.leadermobs.util.Util.*;
+import static com.github.xhexed.leadermobs.util.Util.NAME;
+import static com.github.xhexed.leadermobs.util.Util.replaceMobPlaceholder;
 import static org.bukkit.Bukkit.getScheduler;
 
 public class MobEventManager {
@@ -65,32 +64,19 @@ public class MobEventManager {
     }
 
     public void handlePlayerDamage(UUID player, Entity entity, Double damage, AbstractMobMessage mobMessage) {
-        MobDamageTracker info;
-        if (entity.hasMetadata("leadermobs")) {
-            List<MetadataValue> metadataValues = entity.getMetadata("leadermobs");
-            info = metadataValues.stream().filter(metadata -> plugin.equals(metadata.getOwningPlugin())).findFirst().map(metadata -> (MobDamageTracker) metadata.value()).orElse(new MobDamageTracker(mobMessage));
-        }
-        else {
-            info = new MobDamageTracker(mobMessage);
-        }
-        Map<UUID, Double> damageDealtList = Objects.requireNonNull(info).getDamageDealt();
+        if (!entity.hasMetadata("leadermobs")) return;
+        MobDamageTracker info = entity.getMetadata("leadermobs").stream().filter(metadata -> plugin.equals(metadata.getOwningPlugin())).findFirst().map(metadata -> (MobDamageTracker) metadata.value()).orElse(new MobDamageTracker(mobMessage));
+        Map<UUID, Double> damageDealtList = info.getDamageDealt();
         damageDealtList.put(player, damage + damageDealtList.getOrDefault(player, 0D));
         info.setDamageDealt(damageDealtList);
-        entity.setMetadata("leadermobs", new FixedMetadataValue(plugin, info));
     }
 
     public void handleMobDamage(Entity entity, UUID player, Double damage, AbstractMobMessage mobMessage) {
-        MobDamageTracker info;
-        if (entity.hasMetadata("leadermobs")) {
-            info = entity.getMetadata("leadermobs").stream().filter(metadata -> plugin.equals(metadata.getOwningPlugin())).findFirst().map(metadata -> (MobDamageTracker) metadata.value()).orElse(new MobDamageTracker(mobMessage));
-        }
-        else {
-            info = new MobDamageTracker(mobMessage);
-        }
+        if (!entity.hasMetadata("leadermobs")) return;
+        MobDamageTracker info = entity.getMetadata("leadermobs").stream().filter(metadata -> plugin.equals(metadata.getOwningPlugin())).findFirst().map(metadata -> (MobDamageTracker) metadata.value()).orElse(new MobDamageTracker(mobMessage));
         Map<UUID, Double> damageTakenList = info.getDamageTaken();
         damageTakenList.put(player, damage + damageTakenList.getOrDefault(player, 0D));
         info.setDamageTaken(damageTakenList);
-        entity.setMetadata("leadermobs", new FixedMetadataValue(plugin, info));
     }
 
     public void handleMobDeath(String pluginName, Entity entity, String mobName, String mobDisplayName) {
