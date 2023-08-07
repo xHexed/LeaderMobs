@@ -27,11 +27,8 @@ jobs:
           name: Artifacts
           path: build/libs/LeaderMobs*.jar
       - name: Release build artifacts
-        uses: marvinpinto/action-automatic-releases@latest
+        uses: softprops/action-gh-release@v1
         with:
-          title: Development Build
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          automatic_release_tag: latest
-          prerelease: true
-          files: |
-            build/libs/LeaderMobs*.jar
+          name: Development Build
+          tag_name: latest
+          files: build/libs/LeaderMobs*.jar
