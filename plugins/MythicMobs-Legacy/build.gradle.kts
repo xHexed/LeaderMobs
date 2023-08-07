@@ -7,6 +7,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.lumine.xikage:MythicMobs:4.8.0")
+    compileOnly("io.lumine.xikage:MythicMobs:4.12.0")
     compileOnly(project(":leadermobs-main"))
 }
