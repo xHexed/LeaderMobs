@@ -1,7 +1,7 @@
 author: xHexed
 name: LeaderMobs
 main: com.github.xhexed.leadermobs.LeaderMobs
-version: ${project.version}
+version: ${version}
 api-version: "1.13"
 softdepend: [MythicMobs]
 commands:
