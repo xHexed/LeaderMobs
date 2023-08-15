@@ -58,11 +58,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                         }
                         FileConfiguration config = plugin.getPlayerDataManager().getPlayerData();
                         if (!config.contains(sender.getName()) || config.getBoolean(sender.getName())) {
-                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().toggleBroadcastOff);
+                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().getToggleBroadcastOffMessage());
                             config.set(sender.getName(), false);
                         }
                         else {
-                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().toggleBroadcastOn);
+                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().getToggleBroadcastOnMessage());
                             config.set(sender.getName(), true);
                         }
 

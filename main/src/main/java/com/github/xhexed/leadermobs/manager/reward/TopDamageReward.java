@@ -10,7 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.*;
 import java.util.regex.Pattern;
 
-import static com.github.xhexed.leadermobs.util.Util.*;
+import static com.github.xhexed.leadermobs.util.PlaceholderParser.*;
 
 public class TopDamageReward {
     private LeaderMobs plugin;
@@ -29,22 +29,28 @@ public class TopDamageReward {
 
     public void giveRewards(MobDamageTracker info) {
         if (damageDealtRewards != null) {
-            giveRewards(damageDealtRewards.placeRewards, info.getTopDamageDealt(), info.getTotalDamageDealt(), DAMAGE_DEALT, DAMAGE_DEALT_PERCENTAGE);
+            giveRewards(damageDealtRewards.placeRewards,
+                    info.getDealtDamageTracker().getTopDamageResult().getDamageData(),
+                    info.getDealtDamageTracker().getTopDamageResult().getTotalDamage(),
+                    DAMAGE_DEALT, DAMAGE_DEALT_PERCENTAGE);
         }
         if (damageTakenRewards != null) {
-            giveRewards(damageTakenRewards.placeRewards, info.getTopDamageTaken(), info.getTotalDamageTaken(), DAMAGE_TAKEN, DAMAGE_TAKEN_PERCENTAGE);
+            giveRewards(damageTakenRewards.placeRewards,
+                    info.getTakenDamageTracker().getTopDamageResult().getDamageData(),
+                    info.getDealtDamageTracker().getTopDamageResult().getTotalDamage(),
+                    DAMAGE_TAKEN, DAMAGE_TAKEN_PERCENTAGE);
         }
     }
 
     private void giveRewards(List<DamageReward.DamagePlaceReward> rewards,
-                             List<DamageTracker> topList,
+                             List<DamageTracker.DamageData> topList,
                              double totalDamage,
                              Pattern damageFormat,
                              Pattern percentageFormat) {
         for (DamageReward.DamagePlaceReward reward : rewards) {
             int i = reward.place - 1;
             if (i >= topList.size()) break;
-            DamageTracker info = topList.get(i);
+            DamageTracker.DamageData info = topList.get(i);
             UUID uuid = info.getTracker();
             OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
             for (String command : reward.commands) {
@@ -52,7 +58,7 @@ public class TopDamageReward {
                 command = DAMAGE_POS.matcher(command).replaceAll(Integer.toString(i + 1));
                 command = damageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(info.getTotalDamage()));
                 command = percentageFormat.matcher(command).replaceAll(DOUBLE_FORMAT.format(getPercentage(info.getTotalDamage(), totalDamage)));
-                command = plugin.getPluginUtil().replacePlaceholder(player, command);
+                command = plugin.getMessageParser().replacePlaceholder(player, command);
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
             }
         }

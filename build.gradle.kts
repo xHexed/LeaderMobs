@@ -13,7 +13,6 @@ allprojects {
 tasks {
     jar {
         dependsOn(shadowJar)
-        enabled = false
     }
     shadowJar {
         subprojects.forEach { include ->

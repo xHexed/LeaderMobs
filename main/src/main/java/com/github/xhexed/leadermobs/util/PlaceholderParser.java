@@ -2,16 +2,12 @@ package com.github.xhexed.leadermobs.util;
 
 import com.github.xhexed.leadermobs.data.MobDamageTracker;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.TNTPrimed;
-import org.bukkit.projectiles.ProjectileSource;
 
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Util {
+public class PlaceholderParser {
     public static Pattern PLAYER_NAME = Pattern.compile("%player_name%");
     public static Pattern NAME = Pattern.compile("%mob_name%");
     public static Pattern PLACE_PREFIX = Pattern.compile("%place_prefix%");
@@ -46,7 +42,7 @@ public class Util {
             int pos;
             try { pos = Integer.parseInt(params); } catch (NumberFormatException ignored) { return ""; }
 
-            try { return DOUBLE_FORMAT.format(info.getTopDamageDealt().get(pos - 1).getTotalDamage()); }
+            try { return DOUBLE_FORMAT.format(info.getDealtDamageTracker().getTopDamageResult().getDamageData().get(pos - 1).getTotalDamage()); }
             catch (IndexOutOfBoundsException e) { return ""; }
         }
         if (params.startsWith("top_dealt_")) {
@@ -55,7 +51,7 @@ public class Util {
             int pos;
             try { pos = Integer.parseInt(params); } catch (NumberFormatException ignored) { return ""; }
 
-            try { return Bukkit.getOfflinePlayer(info.getTopDamageDealt().get(pos - 1).getTracker()).getName(); }
+            try { return Bukkit.getOfflinePlayer(info.getDealtDamageTracker().getTopDamageResult().getDamageData().get(pos - 1).getTracker()).getName(); }
             catch (IndexOutOfBoundsException e) { return ""; }
         }
         if (params.startsWith("top_taken_damage_")) {
@@ -64,7 +60,7 @@ public class Util {
             int pos;
             try { pos = Integer.parseInt(params); } catch (NumberFormatException ignored) { return ""; }
 
-            try { return DOUBLE_FORMAT.format(info.getTopDamageTaken().get(pos - 1).getTotalDamage()); }
+            try { return DOUBLE_FORMAT.format(info.getTakenDamageTracker().getTopDamageResult().getDamageData().get(pos - 1).getTotalDamage()); }
             catch (IndexOutOfBoundsException e) { return ""; }
         }
         if (params.startsWith("top_taken_")) {
@@ -73,21 +69,9 @@ public class Util {
             int pos;
             try { pos = Integer.parseInt(params); } catch (NumberFormatException ignored) { return ""; }
 
-            try { return Bukkit.getOfflinePlayer(info.getTopDamageTaken().get(pos - 1).getTracker()).getName(); }
+            try { return Bukkit.getOfflinePlayer(info.getTakenDamageTracker().getTopDamageResult().getDamageData().get(pos - 1).getTracker()).getName(); }
             catch (IndexOutOfBoundsException e) { return ""; }
         }
         return "";
-    }
-
-    public static Entity getDamageSource(Entity entity) {
-        if (entity instanceof Projectile) {
-            ProjectileSource shooter = ((Projectile) entity).getShooter();
-            if (shooter instanceof Entity) entity = (Entity) shooter;
-        }
-        if (entity instanceof TNTPrimed) {
-            Entity source = ((TNTPrimed) entity).getSource();
-            if (source != null) entity = source;
-        }
-        return entity;
     }
 }

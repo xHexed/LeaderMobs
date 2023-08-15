@@ -1,5 +1,6 @@
 package com.github.xhexed.leadermobs.manager;
 
+import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -10,6 +11,7 @@ import java.io.IOException;
 public class PlayerDataManager {
     private Plugin plugin;
     private File dataFile;
+    @Getter
     private FileConfiguration playerData;
 
     public PlayerDataManager(Plugin plugin) {
@@ -27,14 +29,6 @@ public class PlayerDataManager {
             }
         }
         playerData = YamlConfiguration.loadConfiguration(dataFile);
-    }
-
-    public File getDataFile() {
-        return dataFile;
-    }
-
-    public FileConfiguration getPlayerData() {
-        return playerData;
     }
 
     public void saveData() {
