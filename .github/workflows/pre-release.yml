@@ -33,4 +33,5 @@ jobs:
         with:
           name: Development Build
           tag_name: latest
+          generate_release_notes: true
           files: build/libs/LeaderMobs*.jar
