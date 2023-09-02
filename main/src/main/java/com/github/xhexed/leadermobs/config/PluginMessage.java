@@ -10,6 +10,7 @@ import java.util.Objects;
 public class PluginMessage {
     private String toggleBroadcastOnMessage;
     private String toggleBroadcastOffMessage;
+    private String noPermissionMessage;
 
     public PluginMessage(ConfigurationSection config) {
         ConfigurationSection toggleBroadcast = config.getConfigurationSection("toggle-broadcast");
@@ -17,5 +18,6 @@ public class PluginMessage {
             toggleBroadcastOnMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(toggleBroadcast.getString("true")));
             toggleBroadcastOffMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(toggleBroadcast.getString("false")));
         }
+        noPermissionMessage = ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(config.getString("no-permission")));
     }
 }

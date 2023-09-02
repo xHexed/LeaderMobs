@@ -174,3 +174,4 @@ plugin-messages:
   toggle-broadcast:
     true: "&8<&a!&8>&7 Successfully enabled broadcaster messages."
     false: "&8<&c!&8>&7 Successfully disabled broadcaster messages."
+  no-permission: "&cYou don't have permission..."

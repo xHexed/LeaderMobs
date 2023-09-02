@@ -53,7 +53,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                     }
                     case "toggle": {
                         if (!sender.hasPermission("lm.toggle")) {
-                            sender.sendMessage("§cYou don't have permission!");
+                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().getNoPermissionMessage());
                             return true;
                         }
                         FileConfiguration config = plugin.getPlayerDataManager().getPlayerData();
