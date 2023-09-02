@@ -10,12 +10,20 @@ public class MobDeathMessage {
     private DamageMessage damageTakenMessage;
 
     public MobDeathMessage(MobMessage mobMessage, ConfigurationSection config) {
-        damageDealtMessage = new DamageMessage(mobMessage.getPlugin(), mobMessage, config.getConfigurationSection("damage-dealt"));
-        damageTakenMessage = new DamageMessage(mobMessage.getPlugin(), mobMessage, config.getConfigurationSection("damage-taken"));
+        ConfigurationSection damageDealtSection = config.getConfigurationSection("damage-dealt");
+        if (damageDealtSection != null) {
+            damageDealtMessage = new DamageMessage(mobMessage.getPlugin(), mobMessage, damageDealtSection);
+        }
+        ConfigurationSection damageTakenSection = config.getConfigurationSection("damage-taken");
+        if (damageTakenSection != null) {
+            damageTakenMessage = new DamageMessage(mobMessage.getPlugin(), mobMessage, damageTakenSection);
+        }
     }
 
     public void sendMessages(MobDamageTracker tracker, MobData data) {
-        damageDealtMessage.sendMessages(tracker.getDealtDamageTracker(), data);
-        damageTakenMessage.sendMessages(tracker.getTakenDamageTracker(), data);
+        if (damageDealtMessage != null)
+            damageDealtMessage.sendMessages(tracker.getDealtDamageTracker(), data);
+        if (damageTakenMessage != null)
+            damageTakenMessage.sendMessages(tracker.getTakenDamageTracker(), data);
     }
 }

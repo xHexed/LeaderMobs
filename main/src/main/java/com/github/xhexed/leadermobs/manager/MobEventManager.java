@@ -67,7 +67,8 @@ public class MobEventManager {
 
         if (damageInfo.getDealtDamageTracker().getDamageTracker().size() < mobMessage.getPlayersRequired()) return;
         damageInfo.calculateTop(mobMessage.getTotalDamageRequirement());
-        mobDeathMessage.sendMessages(damageInfo, new MobData(entity, mobName, mobDisplayName));
+        if (mobDeathMessage != null)
+            mobDeathMessage.sendMessages(damageInfo, new MobData(entity, mobName, mobDisplayName));
 
         plugin.getRewardManager().giveReward(pluginName, mobName, damageInfo);
         entity.removeMetadata("leadermobs", plugin);
