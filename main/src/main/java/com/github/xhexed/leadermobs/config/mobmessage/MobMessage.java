@@ -29,9 +29,9 @@ public class MobMessage {
         if (config.contains("mobs"))
             mobs = config.getStringList("mobs");
         if (config.contains("players-required"))
-            playersRequired = config.getInt("players-required");
+            playersRequired = config.getInt("players-required", 0);
         if (config.contains("places-to-broadcast"))
-            placesToBroadcast = config.getInt("places-to-broadcast");
+            placesToBroadcast = config.getInt("places-to-broadcast", Integer.MAX_VALUE);
         if (config.contains("total-damage-requirement")) {
             totalDamageRequirement = new TotalDamageRequirement(Objects.requireNonNull(config.getConfigurationSection("total-damage-requirement")));
         } else {
