@@ -7,7 +7,7 @@ plugins {
 
 allprojects {
     group = "com.github.xhexed"
-    version = "2.2.1"
+    version = "2.2.2"
 }
 
 tasks {
