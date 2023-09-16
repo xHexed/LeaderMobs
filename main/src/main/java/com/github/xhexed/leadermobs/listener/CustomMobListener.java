@@ -2,13 +2,19 @@ package com.github.xhexed.leadermobs.listener;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.config.mobmessage.MobMessage;
+import com.github.xhexed.leadermobs.config.mobmessage.message.MobDeathMessage;
+import com.github.xhexed.leadermobs.data.MobDamageTracker;
+import com.github.xhexed.leadermobs.data.MobData;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.Map;
+import java.util.UUID;
 
 public abstract class CustomMobListener {
     protected LeaderMobs plugin;
@@ -24,7 +30,11 @@ public abstract class CustomMobListener {
     public abstract boolean isMob(Entity entity);
 
     public void handleMobSpawn(Entity entity, String mobName, String mobDisplayName) {
-        plugin.getMobEventManager().handleMobSpawn(name, entity, mobName, mobDisplayName);
+        Map<String, MobMessage> mobMessages = plugin.getConfigManager().getPluginMobMessages().get(name);
+        if (!mobMessages.containsKey(mobName)) return;
+        MobMessage mobMessage = mobMessages.get(mobName);
+        entity.setMetadata("leadermobs", new FixedMetadataValue(plugin, new MobDamageTracker()));
+        mobMessage.getMobSpawnMessage().sendMessages(new MobData(entity, mobName, mobDisplayName));
     }
 
     public void handleMobDamage(Entity attacker, Entity victim, double damage) {
@@ -35,19 +45,62 @@ public abstract class CustomMobListener {
         if (attacker instanceof Player && !attacker.hasMetadata("NPC") && isMob(victim)) {
             String mobName = getMobName(victim);
             if (mobMessages.containsKey(mobName)) {
-                plugin.getMobEventManager().handlePlayerDamage(attacker.getUniqueId(), victim, damage);
+                handlePlayerDamage(attacker.getUniqueId(), victim, damage);
             }
         }
         if (victim instanceof Player && !victim.hasMetadata("NPC") && isMob(attacker)) {
             String mobName = getMobName(attacker);
             if (mobMessages.containsKey(mobName)) {
-                plugin.getMobEventManager().handleMobDamage(attacker, victim.getUniqueId(), damage);
+                handleMobDamage(attacker, victim.getUniqueId(), damage);
+            }
+        }
+    }
+
+    public void handlePlayerDamage(UUID player, Entity entity, Double damage) {
+        if (!entity.hasMetadata("leadermobs")) return;
+        for (MetadataValue metadataValue : entity.getMetadata("leadermobs")) {
+            if (plugin.equals(metadataValue.getOwningPlugin())) {
+                MobDamageTracker tracker = (MobDamageTracker) metadataValue.value();
+                if (tracker != null) tracker.getDealtDamageTracker().addDamage(player, damage);
+                return;
+            }
+        }
+    }
+
+    public void handleMobDamage(Entity entity, UUID player, Double damage) {
+        if (!entity.hasMetadata("leadermobs")) return;
+        for (MetadataValue metadataValue : entity.getMetadata("leadermobs")) {
+            if (plugin.equals(metadataValue.getOwningPlugin())) {
+                MobDamageTracker tracker = (MobDamageTracker) metadataValue.value();
+                if (tracker != null) tracker.getTakenDamageTracker().addDamage(player, damage);
+                return;
             }
         }
     }
 
     public void handleMobDeath(Entity entity, String mobName, String mobDisplayName) {
-        plugin.getMobEventManager().handleMobDeath(name, entity, mobName, mobDisplayName);
+        if (!entity.hasMetadata("leadermobs")) return;
+        MobDamageTracker damageInfo = null;
+        for (MetadataValue metadataValue : entity.getMetadata("leadermobs")) {
+            if (plugin.equals(metadataValue.getOwningPlugin())) {
+                damageInfo = (MobDamageTracker) metadataValue.value();
+                break;
+            }
+        }
+        if (damageInfo == null) return;
+
+        Map<String, MobMessage> mobMessages = plugin.getConfigManager().getPluginMobMessages().get(name);
+        if (!mobMessages.containsKey(mobName)) return;
+        MobMessage mobMessage = mobMessages.get(mobName);
+        MobDeathMessage mobDeathMessage = mobMessage.getMobDeathMessage();
+
+        if (damageInfo.getDealtDamageTracker().getDamageTracker().size() < mobMessage.getPlayersRequired()) return;
+        damageInfo.calculateTop(mobMessage.getTotalDamageRequirement());
+        if (mobDeathMessage != null)
+            mobDeathMessage.sendMessages(damageInfo, new MobData(entity, mobName, mobDisplayName));
+
+        plugin.getRewardManager().giveReward(name, mobName, damageInfo);
+        entity.removeMetadata("leadermobs", plugin);
     }
 
     private Entity getDamageSource(Entity entity) {

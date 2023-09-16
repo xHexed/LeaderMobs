@@ -2,7 +2,6 @@ package com.github.xhexed.leadermobs;
 
 import com.github.xhexed.leadermobs.command.CommandManager;
 import com.github.xhexed.leadermobs.manager.ConfigManager;
-import com.github.xhexed.leadermobs.manager.MobEventManager;
 import com.github.xhexed.leadermobs.manager.PlayerDataManager;
 import com.github.xhexed.leadermobs.manager.RewardManager;
 import com.github.xhexed.leadermobs.util.MessageParser;
@@ -19,7 +18,6 @@ public class LeaderMobs extends JavaPlugin {
     private ConfigManager configManager;
     private PlayerDataManager playerDataManager;
     private MessageParser messageParser;
-    private MobEventManager mobEventManager;
     private RewardManager rewardManager;
     public boolean papi;
 
@@ -28,7 +26,6 @@ public class LeaderMobs extends JavaPlugin {
         configManager = new ConfigManager(this);
         playerDataManager = new PlayerDataManager(this);
         messageParser = new MessageParser(this);
-        mobEventManager = new MobEventManager(this);
         rewardManager = new RewardManager(this);
 
         PluginCommand command = Objects.requireNonNull(getCommand("lm"));
