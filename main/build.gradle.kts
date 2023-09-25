@@ -9,7 +9,7 @@ repositories {
 
 dependencies {
     implementation("com.bgsoftware.common.config:CommentedConfiguration:1.0.3")
-    compileOnly("me.clip:placeholderapi:2.11.3")
+    compileOnly("me.clip:placeholderapi:2.11.4")
 
     compileOnly("org.projectlombok:lombok:1.18.26")
     annotationProcessor("org.projectlombok:lombok:1.18.28")
