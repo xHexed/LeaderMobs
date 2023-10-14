@@ -7,6 +7,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.lumine:Mythic-Dist:5.3.5")
+    compileOnly("io.lumine:Mythic-Dist:5.4.1")
     compileOnly(project(":leadermobs-main"))
 }
