@@ -8,12 +8,11 @@ mob-messages:
         mobs:
           - "SkeletalKnight"
           - "test"
-        # This is to prevent spam if there's only 1 or 2 people killing the mob
+        # This is to prevent spam if there's only one or two people killing the mob
         players-required: 1
-        # How many places to broadcast
         places-to-broadcast: 10
         total-damage-requirement:
-          # How much damage the player has to dealt to get included to the leaderboard, set to 0 to disable
+          # How much damage the player has to deal to get included to the leaderboard, set to 0 to disable
           dealt-damage-required: 0
           # Same with above but with taken
           taken-damage-required: 0
@@ -55,13 +54,13 @@ mob-messages:
           # Placeholders available: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
           # You can remove this section
           damage-dealt:
-            # Will it hide the header-footer message when no one is in the list?
             default-place-prefix: "&6"
             place-prefix:
               1: "&a"
               2: "&b"
               3: "&e"
               123: "This pos will have long prefix!"
+            # Will it hide the header-footer message when no one is in the list?
             hide-empty-header: true
             hide-empty-footer: true
             delay: 10
