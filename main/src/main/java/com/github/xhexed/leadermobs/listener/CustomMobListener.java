@@ -5,10 +5,7 @@ import com.github.xhexed.leadermobs.config.mobmessage.MobMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.message.MobDeathMessage;
 import com.github.xhexed.leadermobs.data.MobDamageTracker;
 import com.github.xhexed.leadermobs.data.MobData;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.projectiles.ProjectileSource;
@@ -111,6 +108,10 @@ public abstract class CustomMobListener {
         if (entity instanceof TNTPrimed) {
             Entity source = ((TNTPrimed) entity).getSource();
             if (source != null) entity = source;
+        }
+        if (entity instanceof Tameable) {
+            AnimalTamer source = ((Tameable) entity).getOwner();
+            if (source instanceof Entity) entity = (Entity) source;
         }
         return entity;
     }
