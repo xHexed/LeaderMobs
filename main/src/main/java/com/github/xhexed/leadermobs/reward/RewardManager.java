@@ -1,9 +1,8 @@
-package com.github.xhexed.leadermobs.manager;
+package com.github.xhexed.leadermobs.reward;
 
 import com.bgsoftware.common.config.CommentedConfiguration;
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.data.MobDamageTracker;
-import com.github.xhexed.leadermobs.manager.reward.TopDamageReward;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;

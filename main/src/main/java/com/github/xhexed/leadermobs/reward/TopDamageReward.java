@@ -1,4 +1,4 @@
-package com.github.xhexed.leadermobs.manager.reward;
+package com.github.xhexed.leadermobs.reward;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.data.DamageTracker;

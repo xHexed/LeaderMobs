@@ -1,4 +1,4 @@
-package com.github.xhexed.leadermobs.manager;
+package com.github.xhexed.leadermobs.data;
 
 import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;

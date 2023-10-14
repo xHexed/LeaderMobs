@@ -1,8 +1,7 @@
-package com.github.xhexed.leadermobs.manager;
+package com.github.xhexed.leadermobs.config;
 
 import com.bgsoftware.common.config.CommentedConfiguration;
 import com.github.xhexed.leadermobs.LeaderMobs;
-import com.github.xhexed.leadermobs.config.PluginMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.MobMessage;
 import lombok.AccessLevel;
 import lombok.Getter;

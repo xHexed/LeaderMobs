@@ -1,9 +1,9 @@
 package com.github.xhexed.leadermobs;
 
 import com.github.xhexed.leadermobs.command.CommandManager;
-import com.github.xhexed.leadermobs.manager.ConfigManager;
-import com.github.xhexed.leadermobs.manager.PlayerDataManager;
-import com.github.xhexed.leadermobs.manager.RewardManager;
+import com.github.xhexed.leadermobs.config.ConfigManager;
+import com.github.xhexed.leadermobs.data.PlayerDataManager;
+import com.github.xhexed.leadermobs.reward.RewardManager;
 import com.github.xhexed.leadermobs.util.MessageParser;
 import lombok.Getter;
 import org.bukkit.command.PluginCommand;
