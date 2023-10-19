@@ -8,5 +8,8 @@ repositories {
 
 dependencies {
     compileOnly("io.lumine.xikage:MythicMobs:4.12.0")
-    compileOnly(project(":leadermobs-main"))
+    compileOnly("org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT") {
+        isTransitive = false
+    }
+    compileOnly(project(":main"))
 }

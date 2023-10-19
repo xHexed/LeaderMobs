@@ -1,10 +1,15 @@
 rootProject.name = "LeaderMobs"
 
-include(":leadermobs-mythicmobs-latest")
-project(":leadermobs-mythicmobs-latest").projectDir = file("plugins/MythicMobs-Latest")
+fun createProject(name: String, path: String) {
+    include(name)
+    project(name).projectDir = file(path)
+}
 
-include(":leadermobs-mythicmobs-legacy")
-project(":leadermobs-mythicmobs-legacy").projectDir = file("plugins/MythicMobs-Legacy")
+createProject(":main", "main")
+createProject(":common", "common")
 
-include(":leadermobs-main")
-project(":leadermobs-main").projectDir = file("main")
+createProject(":mythicmobs-latest", "plugins/mythicmobs-latest")
+createProject(":mythicmobs-legacy", "plugins/mythicmobs-legacy")
+
+createProject(":platform-legacy", "platform/legacy")
+createProject(":platform-paper-native", "platform/paper-native")

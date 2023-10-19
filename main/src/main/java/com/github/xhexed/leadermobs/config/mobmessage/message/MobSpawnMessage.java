@@ -18,7 +18,7 @@ public class MobSpawnMessage extends MobEventMessage {
             for (String message : getMessages()) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
                     if (getPlugin().getPlayerDataManager().getPlayerData().getBoolean(p.getName(), false)) continue;
-                    p.sendMessage(getPlugin().getMessageParser().parseMobEventMessage(message, data, p));
+                    getPlugin().getMessageManager().sendMessage(p, getPlugin().getMessageParser().parseMobEventMessage(message, data, p));
                 }
             }
         }, getDelay());

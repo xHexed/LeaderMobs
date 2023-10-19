@@ -4,7 +4,8 @@ import com.github.xhexed.leadermobs.command.CommandManager;
 import com.github.xhexed.leadermobs.config.ConfigManager;
 import com.github.xhexed.leadermobs.data.PlayerDataManager;
 import com.github.xhexed.leadermobs.reward.RewardManager;
-import com.github.xhexed.leadermobs.util.MessageParser;
+import com.github.xhexed.leadermobs.util.MessageManager;
+import com.github.xhexed.leadermobs.util.TextMessageParser;
 import lombok.Getter;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.event.Listener;
@@ -17,7 +18,8 @@ import java.util.Objects;
 public class LeaderMobs extends JavaPlugin {
     private ConfigManager configManager;
     private PlayerDataManager playerDataManager;
-    private MessageParser messageParser;
+    private TextMessageParser messageParser;
+    private MessageManager messageManager;
     private RewardManager rewardManager;
     public boolean papi;
 
@@ -25,7 +27,8 @@ public class LeaderMobs extends JavaPlugin {
     public void onEnable() {
         configManager = new ConfigManager(this);
         playerDataManager = new PlayerDataManager(this);
-        messageParser = new MessageParser(this);
+        messageParser = new TextMessageParser(this);
+        messageManager = new MessageManager(this);
         rewardManager = new RewardManager(this);
 
         PluginCommand command = Objects.requireNonNull(getCommand("lm"));
