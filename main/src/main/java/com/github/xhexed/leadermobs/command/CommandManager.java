@@ -53,16 +53,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
                     }
                     case "toggle": {
                         if (!sender.hasPermission("lm.toggle")) {
-                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().getNoPermissionMessage());
+                            plugin.getMessageManager().sendMessage(sender, plugin.getConfigManager().getPluginMessage().getNoPermissionMessage());
                             return true;
                         }
                         FileConfiguration config = plugin.getPlayerDataManager().getPlayerData();
                         if (!config.contains(sender.getName()) || config.getBoolean(sender.getName())) {
-                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().getToggleBroadcastOffMessage());
+                            plugin.getMessageManager().sendMessage(sender, plugin.getConfigManager().getPluginMessage().getToggleBroadcastOffMessage());
                             config.set(sender.getName(), false);
                         }
                         else {
-                            sender.sendMessage(plugin.getConfigManager().getPluginMessage().getToggleBroadcastOnMessage());
+                            plugin.getMessageManager().sendMessage(sender, plugin.getConfigManager().getPluginMessage().getToggleBroadcastOnMessage());
                             config.set(sender.getName(), true);
                         }
 

@@ -7,10 +7,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-public class MessageParser {
+public class TextMessageParser {
     private LeaderMobs plugin;
 
-    public MessageParser(LeaderMobs plugin) {
+    public TextMessageParser(LeaderMobs plugin) {
         this.plugin = plugin;
     }
 

@@ -33,7 +33,7 @@ public class TitleMessage {
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             for (Player player : Bukkit.getOnlinePlayers()) {
                 if (plugin.getPlayerDataManager().getPlayerData().getBoolean(player.getName(), false)) continue;
-                player.sendTitle(
+                plugin.getMessageManager().sendTitle(player,
                         filter.apply(plugin.getMessageParser().parseMobEventMessage(title, data, player)),
                         filter.apply(plugin.getMessageParser().parseMobEventMessage(subtitle, data, player)),
                         fadeIn, stay, fadeOut);

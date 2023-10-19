@@ -92,7 +92,7 @@ public class DamageMessage extends MobEventMessage {
             if (getPlugin().getPlayerDataManager().getPlayerData().getBoolean(p.getName(), false)) continue;
             message = getPlugin().getMessageParser().parseMobEventMessage(message, data, p);
             message = PlaceholderParser.replaceMobPlaceholder(message, tracker);
-            p.sendMessage(message);
+            getPlugin().getMessageManager().sendMessage(p, message);
         }
     }
 }
