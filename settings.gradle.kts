@@ -10,6 +10,7 @@ createProject(":common", "common")
 
 createProject(":mythicmobs-latest", "plugins/mythicmobs-latest")
 createProject(":mythicmobs-legacy", "plugins/mythicmobs-legacy")
+createProject(":elitemobs", "plugins/elitemobs")
 
 createProject(":platform-legacy", "platform/legacy")
 createProject(":platform-paper-native", "platform/paper-native")
