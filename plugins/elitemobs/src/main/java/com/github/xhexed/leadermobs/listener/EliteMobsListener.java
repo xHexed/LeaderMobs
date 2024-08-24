@@ -4,6 +4,7 @@ import com.github.xhexed.leadermobs.LeaderMobs;
 import com.magmaguy.elitemobs.api.EliteMobDeathEvent;
 import com.magmaguy.elitemobs.api.EliteMobSpawnEvent;
 import com.magmaguy.elitemobs.entitytracker.EntityTracker;
+import com.magmaguy.elitemobs.mobconstructor.EliteEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,12 +13,14 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class EliteMobsListener extends CustomMobListener implements Listener {
     public EliteMobsListener(LeaderMobs plugin) {
-        super(plugin, "MythicMobs");
+        super(plugin, "EliteMobs");
     }
 
     @Override
     public String getMobName(Entity entity) {
-        return EntityTracker.getEliteMobEntity(entity).getName();
+        EliteEntity eliteEntity = EntityTracker.getEliteMobEntity(entity);
+        if (eliteEntity == null) return "";
+        return eliteEntity.getName();
     }
 
     @Override
