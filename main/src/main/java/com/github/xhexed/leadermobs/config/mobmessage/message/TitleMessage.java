@@ -2,6 +2,7 @@ package com.github.xhexed.leadermobs.config.mobmessage.message;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.data.MobData;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.function.Function;
 
+@Getter
 public class TitleMessage {
     private LeaderMobs plugin;
 

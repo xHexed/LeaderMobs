@@ -1,0 +1,102 @@
+debug: false
+
+PlayersRequired: 1 #This is to prevent spam if there's only 1 or 2 people killing the mob privately, there's no limit!
+PlacesToBroadcast: 10 #How much places to broadcast.
+PlacePrefix:
+  1: "&a"
+  2: "&b"
+  3: "&e"
+  123: "This pos will have long prefix!"
+  default: "&6"
+
+Damage:
+  #How much damage the player has to dealt to get included to the leaderboard, set to 0 to disable
+  required: 0
+
+Warmup:
+  #How much damage the mob have to take to start the leaderboard, set to 0 to disable
+  damage: 1
+  reset:
+    #Time for the leaderboard to reset, set to 0 to disable
+    interval: 600
+
+Reset:
+  #How much damage the mob have to take for the leaderboard to not get cleared
+  damage: 1
+  #Time for the leaderboard to reset
+  interval: 600
+  #Will the boss reset its health?
+  resetHealth: true
+
+Messages:
+  #Should the plugin broadcast the messages when mob spawns or dies
+  broadcast: true
+  #Placeholders avalable: %place_color%, %place%, %mob_name%, %percentage%
+  MobSpawn:
+    #Delay in ticks
+    delay: 10
+    messages:
+      - "&8&l&m------<--------------->------"
+      - "   &8<&a!&8> &7Mob named: %mob_name% spawned at (x: %x%, y: %y%, z: %z%)"
+      - "&8&l&m------<--------------->------"
+    title:
+      enabled: true
+      delay: 10
+      title: "%mob_name% spawned"
+      subTitle: "x: %x%, y: %y%, z: %z%"
+      fadeIn: 10
+      stay: 10
+      fadeOut: 10
+    actionbar:
+      enabled: true
+      delay: 10
+      message: "%mob_name% spawned"
+  MobDead:
+    delay: 10
+    #Placeholders avalable: %mob_top_taken_{pos}%, %mob_top_dealt_{pos}%
+    damageDealt:
+      delay: 10
+      header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
+      footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
+      #Placeholders avalable: %player_name%, %damage%, %percentage%, PlaceholderAPI and MvdWPlaceholderAPI placeholders
+      message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+      title:
+        enabled: true
+        delay: 10
+        title: "%mob_name% died."
+        subTitle: "1st damage dealt: %mob_top_dealt_1%"
+        fadeIn: 10
+        stay: 10
+        fadeOut: 10
+      actionbar:
+        enabled: true
+        delay: 10
+        message: "%mob_name% died"
+    damageTaken:
+      delay: 10
+      header: "&8&l&m------<&r &cMob %mob_name% has died! &8&l&m>------"
+      footer: "&8&l&m------&c&l<>&8&l&m---&8&l&m---&c&l<>&8&l&m------"
+      message: "    %place_prefix%#%place% - %player_name%&7, Damage: %damage% - %percentage%%"
+      title:
+        enabled: true
+        delay: 10
+        title: "%mob_name% died."
+        subTitle: "1st damage taken: %mob_top_taken_1%"
+        fadeIn: 10
+        stay: 10
+        fadeOut: 10
+      actionbar:
+        enabled: true
+        delay: 10
+        message: "%mob_name% died"
+  toggle:
+    true: "test1"
+    false: "test2"
+
+Blacklist:
+  #Should the blacklist acted as whitelist?
+  Whitelist: false
+  Boss:
+    - "test"
+  MythicMobs:
+    - "test"

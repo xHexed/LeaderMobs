@@ -3,8 +3,10 @@ package com.github.xhexed.leadermobs.config.mobmessage.message;
 import com.github.xhexed.leadermobs.config.mobmessage.MobMessage;
 import com.github.xhexed.leadermobs.data.MobDamageTracker;
 import com.github.xhexed.leadermobs.data.MobData;
+import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 
+@Getter
 public class MobDeathMessage {
     private DamageMessage damageDealtMessage;
     private DamageMessage damageTakenMessage;

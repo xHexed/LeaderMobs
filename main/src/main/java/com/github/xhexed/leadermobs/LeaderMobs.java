@@ -25,6 +25,7 @@ public class LeaderMobs extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
         configManager = new ConfigManager(this);
         playerDataManager = new PlayerDataManager(this);
         messageParser = new TextMessageParser(this);

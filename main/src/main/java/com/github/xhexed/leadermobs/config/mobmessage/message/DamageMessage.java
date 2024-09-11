@@ -6,6 +6,7 @@ import com.github.xhexed.leadermobs.data.DamageTracker;
 import com.github.xhexed.leadermobs.data.MobDamageTracker;
 import com.github.xhexed.leadermobs.data.MobData;
 import com.github.xhexed.leadermobs.util.PlaceholderParser;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+@Getter
 public class DamageMessage extends MobEventMessage {
     private MobMessage mobMessage;
     private boolean hideEmptyHeader;

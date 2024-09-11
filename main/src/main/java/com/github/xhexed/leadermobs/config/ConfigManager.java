@@ -1,63 +1,93 @@
 package com.github.xhexed.leadermobs.config;
 
-import com.bgsoftware.common.config.CommentedConfiguration;
 import com.github.xhexed.leadermobs.LeaderMobs;
 import com.github.xhexed.leadermobs.config.mobmessage.MobMessage;
+import com.github.xhexed.leadermobs.config.mobmessage.checker.MobChecker;
+import com.github.xhexed.leadermobs.config.updater.ConfigUpdater;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.util.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 public class ConfigManager {
     @Getter(value = AccessLevel.NONE)
     private LeaderMobs plugin;
-    private Map<String, Map<String, MobMessage>> pluginMobMessages = new HashMap<>();
+
+    @Getter(value = AccessLevel.PACKAGE)
+    private final Set<MobMessage> mobMessages = new HashSet<>();
+
+    private final MobChecker mobChecker = new MobChecker();
     private PluginMessage pluginMessage;
+    private final File file;
 
     public ConfigManager(LeaderMobs plugin) {
+        this(plugin, new File(plugin.getDataFolder(), "config.yml"));
+    }
+
+    ConfigManager(LeaderMobs plugin, File file) {
         this.plugin = plugin;
-        plugin.saveDefaultConfig();
-        reloadConfig();
+        this.file = file;
     }
 
     public void reloadConfig() {
-        File file = new File(plugin.getDataFolder(), "config.yml");
         if (!file.exists())
             plugin.saveResource("config.yml", false);
-        CommentedConfiguration config = CommentedConfiguration.loadConfiguration(file);
-
+        YamlConfiguration config = checkConfigUpdates();
         if (config.getBoolean("auto-update", true)) {
             try {
-                config.syncWithConfig(file, plugin.getResource("config.yml"), "mob-messages.plugin-hooks");
+                com.tchristofferson.configupdater.ConfigUpdater.update(plugin, "config.yml", file, "mob-messages");
             } catch (IOException e) {
-                e.printStackTrace();
+                plugin.getLogger().fine("Error: " + e);
             }
         }
-        pluginMobMessages.clear();
-        ConfigurationSection pluginHooks = config.getConfigurationSection("mob-messages.plugin-hooks");
-        if (pluginHooks != null) {
-            pluginHooks.getKeys(false).forEach((pl -> {
-                Map<String, MobMessage> mobMessages = new HashMap<>();
-                ConfigurationSection pluginSection = pluginHooks.getConfigurationSection(pl);
-                for (String mobName : Objects.requireNonNull(pluginSection).getKeys(false)) {
-                    MobMessage mobMessage = new MobMessage(plugin, Objects.requireNonNull(pluginSection.getConfigurationSection(mobName))) {
-                    };
-                    if (mobMessage.getMobs() != null) {
-                        for (String mob : mobMessage.getMobs()) {
-                            mobMessages.put(mob, mobMessage);
-                        }
-                    }
-                    mobMessages.put(mobName, mobMessage);
-                }
-                pluginMobMessages.put(pl, mobMessages);
-            }));
+        loadConfig(config);
+    }
+
+    public MobMessage getMobMessage(String plugin, String mobName, Entity entity) {
+        for (MobMessage mobMessage : mobMessages) {
+            if (!mobChecker.check(mobMessage, plugin, mobName, entity))
+                continue;
+            return mobMessage;
         }
+        return null;
+    }
+
+    void loadConfig(ConfigurationSection config) {
+        mobMessages.clear();
+        ConfigurationSection mobs = config.getConfigurationSection("mob-messages");
+        if (mobs == null) return;
+        mobs.getKeys(false).forEach((pl -> {
+            MobMessage mobMessage = new MobMessage(plugin, mobs.getConfigurationSection(pl));
+            if (mobMessage.getMobConditions() != null) {
+                mobMessages.add(mobMessage);
+            }
+        }));
         pluginMessage = new PluginMessage(Objects.requireNonNull(config.getConfigurationSection("plugin-messages")));
+    }
+
+    YamlConfiguration checkConfigUpdates() {
+        YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+        if (!config.getBoolean("auto-update", true) ||
+            config.getInt("config-version", 0) == 2 //TODO: Remove this magic value
+        ) return config;
+        File backupFolder = new File(file.getParent(), "config-backup");
+        if (backupFolder.exists() || backupFolder.mkdir()) {
+            try {
+                File tempFile = File.createTempFile("config", ".yml", backupFolder);
+                FileUtil.copy(file, tempFile);
+                ConfigUpdater.updateConfig(config, plugin.getConfig());
+                config.save(file);
+            } catch (Exception e) {
+                plugin.getLogger().fine("Failed to create backup folder... aborting auto update:" + e);
+            }
+        }
+        return config;
     }
 }

@@ -1,21 +1,25 @@
 package com.github.xhexed.leadermobs.config.mobmessage;
 
 import com.github.xhexed.leadermobs.LeaderMobs;
+import com.github.xhexed.leadermobs.config.mobmessage.checker.MobCondition;
 import com.github.xhexed.leadermobs.config.mobmessage.message.MobDeathMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.message.MobSpawnMessage;
 import com.github.xhexed.leadermobs.config.mobmessage.requirement.ResetDamageRequirement;
 import com.github.xhexed.leadermobs.config.mobmessage.requirement.TotalDamageRequirement;
 import com.github.xhexed.leadermobs.config.mobmessage.requirement.WarmupDamageRequirement;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Getter
+@NoArgsConstructor
+@Data
 public class MobMessage {
     private LeaderMobs plugin;
-    private List<String> mobs;
+    private List<MobCondition> mobConditions;
     private int playersRequired;
     private int placesToBroadcast;
     private TotalDamageRequirement totalDamageRequirement;
@@ -26,8 +30,12 @@ public class MobMessage {
 
     public MobMessage(LeaderMobs plugin, ConfigurationSection config) {
         this.plugin = plugin;
-        if (config.contains("mobs"))
-            mobs = config.getStringList("mobs");
+        if (config.contains("mobs")) {
+            mobConditions = new ArrayList<>();
+            for (String mobCondition : config.getStringList("mobs")) {
+                mobConditions.add(new MobCondition(mobCondition));
+            }
+        }
         if (config.contains("players-required"))
             playersRequired = config.getInt("players-required", 0);
         if (config.contains("places-to-broadcast"))
