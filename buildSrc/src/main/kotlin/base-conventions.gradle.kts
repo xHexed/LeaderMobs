@@ -1,9 +1,12 @@
 plugins {
     `java-library`
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
 
 tasks {
     compileJava {

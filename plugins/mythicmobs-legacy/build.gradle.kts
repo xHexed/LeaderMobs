@@ -3,6 +3,7 @@ plugins {
 }
 
 repositories {
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://mvn.lumine.io/repository/maven-public/")
 }
 

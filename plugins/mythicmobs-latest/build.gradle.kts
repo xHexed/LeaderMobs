@@ -3,8 +3,11 @@ plugins {
 }
 
 repositories {
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://mvn.lumine.io/repository/maven-public/")
 }
+
+java.sourceCompatibility = JavaVersion.VERSION_17
 
 dependencies {
     compileOnly("io.lumine:Mythic-Dist:5.4.1")

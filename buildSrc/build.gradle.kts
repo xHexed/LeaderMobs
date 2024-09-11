@@ -7,6 +7,6 @@ repositories {
 }
 
 dependencies {
-    implementation("com.github.johnrengelman", "shadow", "8.1.1")
+    implementation("com.gradleup.shadow", "shadow-gradle-plugin", "8.3.0")
 }
 
