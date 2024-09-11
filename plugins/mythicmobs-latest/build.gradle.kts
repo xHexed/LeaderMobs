@@ -10,7 +10,9 @@ repositories {
 java.sourceCompatibility = JavaVersion.VERSION_17
 
 dependencies {
-    compileOnly("io.lumine:Mythic-Dist:5.4.1")
-    compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT") {
+        isTransitive = false
+    }
+    compileOnly("io.lumine:Mythic-Dist:5.6.2")
     compileOnly(project(":main"))
 }
