@@ -24,8 +24,6 @@ public abstract class CustomMobListener {
         this.name = name;
     }
 
-    public abstract String getMobName(Entity entity);
-
     public abstract boolean isMob(Entity entity);
 
     public void registerMobChecker(String condition, BiFunction<Entity, MobMessage, String> checker) {
@@ -41,7 +39,7 @@ public abstract class CustomMobListener {
         spawnMessage.sendMessages(new MobData(entity, mobName, mobDisplayName));
     }
 
-    public void handleMobDamage(Entity attacker, Entity victim, double damage) {
+    public void handleDamage(Entity attacker, Entity victim, double damage) {
         attacker = getDamageSource(attacker);
         victim = getDamageSource(victim);
 

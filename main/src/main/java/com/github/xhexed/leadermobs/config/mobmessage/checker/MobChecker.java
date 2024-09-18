@@ -22,11 +22,11 @@ public class MobChecker {
     public boolean check(MobMessage mobMessage, String pluginName, String mobName, Entity mobEntity) {
         for (MobCondition mobCondition : mobMessage.getMobConditions()) {
             Pattern pluginCondition = mobCondition.getPluginName();
-            if (pluginCondition != null && !pluginCondition.matcher(pluginName).matches())
+            if (pluginCondition != null && !pluginCondition.matcher(pluginName).find())
                 continue;
 
             Pattern mobNameCondition = mobCondition.getMobName();
-            if (mobNameCondition != null && !mobNameCondition.matcher(mobName).matches())
+            if (mobNameCondition != null && !mobNameCondition.matcher(mobName).find())
                 continue;
 
             Map<String, Pattern> mobConditions = mobCondition.getConditions();
@@ -42,7 +42,7 @@ public class MobChecker {
             Pattern value = entry.getValue();
             if (!checker.containsKey(condition))
                 return false;
-            if (!value.matcher(checker.get(condition).apply(entity, mobMessage)).matches())
+            if (!value.matcher(checker.get(condition).apply(entity, mobMessage)).find())
                 return false;
         }
         return true;

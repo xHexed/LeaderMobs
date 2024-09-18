@@ -4,6 +4,7 @@ import com.github.xhexed.leadermobs.LeaderMobs;
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.bukkit.events.MythicMobDeathEvent;
 import io.lumine.mythic.bukkit.events.MythicMobSpawnEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,11 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 public class MythicMobsListener extends CustomMobListener implements Listener {
     public MythicMobsListener(LeaderMobs plugin) {
         super(plugin, "MythicMobs");
-    }
-
-    @Override
-    public String getMobName(Entity entity) {
-        return MythicBukkit.inst().getAPIHelper().getMythicMobInstance(entity).getType().getInternalName();
+        Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
     @Override
@@ -32,7 +29,7 @@ public class MythicMobsListener extends CustomMobListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDamage(EntityDamageByEntityEvent event) {
-        handleMobDamage(event.getDamager(), event.getEntity(), event.getFinalDamage());
+        handleDamage(event.getDamager(), event.getEntity(), event.getFinalDamage());
     }
 
     @EventHandler(ignoreCancelled = true)

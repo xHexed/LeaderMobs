@@ -16,16 +16,16 @@ public class MobCheckerTest {
         checker = new MobChecker();
     }
 
-    public void testOnlyMobNameCondition() {
+    public void testMobNameCondition() {
         MobMessage mobMessage = new MobMessage();
         mobMessage.setMobConditions(List.of(
                 new MobCondition("test")
         ));
         Assert.assertTrue(checker.check(mobMessage, "", "test", null));
-        Assert.assertFalse(checker.check(mobMessage, "", "tester", null));
+        Assert.assertTrue(checker.check(mobMessage, "", "tester", null));
     }
 
-    public void testOnlyPluginName() {
+    public void testPluginName() {
         MobMessage mobMessage = new MobMessage();
         mobMessage.setMobConditions(List.of(
                 new MobCondition("MythicMobs;")
@@ -34,7 +34,7 @@ public class MobCheckerTest {
         Assert.assertFalse(checker.check(mobMessage, "mYtHiCmObS", "", null));
     }
 
-    public void testOnlyMobCondition() {
+    public void testMobCondition() {
         checker.addChecker("name", ((entity, mobMessage) -> "a"));
         checker.addChecker("type", ((entity, mobMessage) -> "c"));
         MobMessage mobMessage = new MobMessage();

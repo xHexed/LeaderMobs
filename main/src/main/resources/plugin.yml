@@ -3,7 +3,7 @@ name: LeaderMobs
 main: com.github.xhexed.leadermobs.LeaderMobs
 version: ${version}
 api-version: "1.13"
-softdepend: [MythicMobs]
+softdepend: [MythicMobs, EliteMobs]
 commands:
   lm:
     usage: /lm

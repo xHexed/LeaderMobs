@@ -4,14 +4,14 @@ plugins {
 
 repositories {
     mavenCentral()
-    //EliteMobs
-    maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
+    maven("https://repo.magmaguy.com/releases")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
+java.sourceCompatibility = JavaVersion.VERSION_17
+
 dependencies{
-    //EliteMobs
-    compileOnly("com.magmaguy:EliteMobs:8.7.4-SNAPSHOT")
-    compileOnly("org.spigotmc:spigot-api:1.20.2-R0.1-SNAPSHOT")
+    compileOnly("com.magmaguy:EliteMobs:9.1.10")
+    compileOnly("org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT")
     compileOnly(project(":main"))
 }
