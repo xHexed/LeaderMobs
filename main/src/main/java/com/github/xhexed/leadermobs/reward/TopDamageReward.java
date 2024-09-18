@@ -37,7 +37,7 @@ public class TopDamageReward {
         if (damageTakenRewards != null) {
             giveRewards(damageTakenRewards.placeRewards,
                     info.getTakenDamageTracker().getTopDamageResult().getDamageData(),
-                    info.getDealtDamageTracker().getTopDamageResult().getTotalDamage(),
+                    info.getTakenDamageTracker().getTopDamageResult().getTotalDamage(),
                     DAMAGE_TAKEN, DAMAGE_TAKEN_PERCENTAGE);
         }
     }
