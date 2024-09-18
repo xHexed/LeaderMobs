@@ -24,7 +24,10 @@ public class PlaceholderParser {
     private static Pattern PLACEHOLDER_PATTERN = Pattern.compile("%(mob_)([^%]+)%");
     public static DecimalFormat DOUBLE_FORMAT = new DecimalFormat("#.##");
 
-    public static float getPercentage(Double damage, Double health) { return (float) (damage / health * 100.0f); }
+    public static double getPercentage(double damage, double health) {
+        if (health == 0) return 0;
+        return (damage / health * 100.0f);
+    }
 
     public static String replaceMobPlaceholder(String message, MobDamageTracker info) {
         Matcher m = PLACEHOLDER_PATTERN.matcher(message);
