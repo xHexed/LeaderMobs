@@ -10,6 +10,7 @@ public class MessageManager implements MessageSender {
     public MessageManager(Plugin plugin) {
         try {
             Class.forName("net.kyori.adventure.text.Component");
+            Class.forName("net.kyori.adventure.text.minimessage.MiniMessage").getDeclaredMethod("miniMessage");
             plugin.getLogger().info("Using native paper message sender (1.16.5+)");
             sender = new PaperNativeMessageSender();
         } catch (Exception e) {
